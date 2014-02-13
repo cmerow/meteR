@@ -36,9 +36,37 @@ mete.phi <- function(n,la1,la2,Z,S0,N0,E0) {
 	return((exp(-beta*n) - exp(-sigma*n))/(la2*Z*n))
 }
 
+## not sure if we're allowed to have multiple functions in the same file if we use roxygen
+#' @title Title of function
+#'
+#' @description   function to return Z, the normalizing constant of R as well as the simplifying parameters beta and sigma
+#' \code{function.name} what it does
+#'
+#' @details
+#' how it works
+#' etc.
+#' 
+#' @param la1 description of arg
+#' @param la2 description of arg
+#' @param S0 description of arg
+#' @param N0 description of arg
+#' @param E0 description of arg
 
-##	function to return Z, the normalizing constant of R as well as
-##	the simplifying parameters beta and sigma
+#' @keywords manip
+#' @export
+#' 
+#' @examples
+#' #code to run
+#' 
+#' @return - the type of object that the function returns
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>
+#  @note other junk to mention
+#  @seealso - to provide pointers to other related topics
+#  @references - references to scientific literature on this topic
+#  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.
+#  @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
 
 meteZ <- function(la1,la2,S0,N0,E0) {
 	beta <- la1 + la2

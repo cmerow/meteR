@@ -5,12 +5,12 @@
 makeMete(otu, abund, power, min.e)
 }
 \arguments{
-  \item{arg}{description of arg}
+  \item{arg}{description of arg blah blah blah blah}
 
-  \item{arg}{description of arg}
+  \item{arg}{description of arg blah blahblah blah}
 }
 \value{
-- the type of object that the function returns
+An object of class "mete"
 }
 \description{
 \code{function.name} what it does
