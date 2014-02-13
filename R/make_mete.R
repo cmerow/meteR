@@ -7,7 +7,7 @@
 #' how it works
 #' etc.
 #' 
-#' @param arg description of arg
+#' @param arg description of arg blah blah
 #' @param arg description of arg blah blah
 #' @keywords manip
 #' @export
