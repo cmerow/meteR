@@ -15,7 +15,7 @@
 #' @examples
 #' #code to run
 #' 
-#' @return - the type of object that the function returns
+#' @return An object of class "mete"
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
 #  @note other junk to mention
