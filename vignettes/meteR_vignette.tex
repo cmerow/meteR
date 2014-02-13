@@ -1,0 +1,54 @@
+\documentclass[10pt]{article}
+
+\usepackage{Sweave}
+\usepackage{fullpage}
+\usepackage{float} 
+\usepackage{enumerate}
+\usepackage[utf8]{inputenc}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{titling}
+% \usepackage[demo]{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+% \usepackage{graphix}
+\setlength{\droptitle}{-4em} 
+% for hyperlinks in table of contents
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=blue,
+    urlcolor=black
+}
+
+\begin{document}
+\input{meteR_vignette-concordance}
+% \DefineVerbatimEnvironment{Sinput}{Verbatim} {xleftmargin=2em}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=2em}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+
+
+\title{ meteR: \\ Analysis with the Maximum Entropy Theory of Ecology \\ v. 1.0 }
+\author{Andy Rominger, Cory Merow, John Harte}
+\maketitle
+\tableofcontents
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SETUP 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INTRO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Introduction}
+meteR is really amazing and will forever change the universe.
+
+
+\end{document}

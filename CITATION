@@ -1,0 +1,11 @@
+bibentry("Manual",
+   title = "meteR: Analysis with the Maximum Entropy Theory of Ecology",
+   author = c(person("Andy Rominger"),person("Cory Merow"),person("John Harte")),
+   organization = "",
+   address      = "",
+   year   = "2014",
+   note   = "R package version 1.0",
+   url    = "",
+
+   mheader = "To cite meteR in publications use:"
+)
