@@ -1,4 +1,4 @@
-#' @title Title of function TEST2
+#' @title Title of function
 #'
 #' @description
 #' \code{function.name} what it does
