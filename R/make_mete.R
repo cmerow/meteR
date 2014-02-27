@@ -1,5 +1,5 @@
 #' @title Title of function
-#'
+#'  
 #' @description
 #' \code{function.name} what it does
 #'
@@ -38,14 +38,25 @@ makeMete <- function(otu,abund,power,min.e) {
 	
 	if(!(class(abund) %in% c("numeric","integer","double"))) stop("argument `abund' must be numeric")
 	if(!(class(power) %in% c("numeric","integer","double"))) stop("argument `power' must be numeric")
-	
+	## should put in a warning message saying if individuals aren't aggregated each abundance should = 1
+  
 	if(missing(min.e)) min.e <- min(power)
 	power <- power/min.e
-	
+	# browser()
+  
 	thisS0 <- length(unique(otu))
 	thisN0 <- sum(abund)
+  
+  ## account for possible aggregation of individuals
+  if(thisS0 == length(otu)) {
+    otu <- rep(otu, abund)
+    power <- rep(power, abund)
+    abund <- rep(1, length(otu))
+  }
+  
+  ## calculate E0 after accounting for aggregation, otherwise sum(power) = sum(mean power)
 	thisE0 <- sum(power)
-	
+  
 	thisESF <- makeESF(s0=thisS0, n0=thisN0, e0=thisE0)
 	thisESF$emin <- min.e
 	SAD <- makeMeteDist(x=abund, otu=otu, esf=thisESF, type="abund")
