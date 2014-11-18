@@ -20,6 +20,7 @@ FIX latex
 -WHY ARE THE Z-SCORES SO DIFFERENT for arth SAD?
 -how to handle plotting when just the state varaibles are specified? - make it so you can add this to the the plot via just a line?
 -figure out how to access .ecdf within the plot function. does it need to be exported? why doesn't just putting export in work?
+-test compiling with image
 
 <!--========================================================================-->
 #Introduction
