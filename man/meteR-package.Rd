@@ -25,11 +25,11 @@ Andy Rominger, Cory Merow, John Harte
 Maintainer: Cory Merow \email{cory.merow@gmail.com}
 }
 \references{
-  Harte, J., Zillio, T., Conlisk, E. & Smith, A. (2008). Maximum entropy and the state-variable approach to macroecology. Ecology, 89, 2700–2711.
+  Harte, J., Zillio, T., Conlisk, E. & Smith, A. (2008). Maximum entropy and the state-variable approach to macroecology. Ecology, 89, 2700-2711.
   
-  Harte, J. (2008). From Spatial Pattern in the Distribution and Abundance of Species to a Unified Theory of Ecology: The Role of Maximum Entropy Methods. Applied Optimization pp. 243–272. Applied Optimization. Springer Berlin Heidelberg, Berlin, Heidelberg.
+  Harte, J. (2008). From Spatial Pattern in the Distribution and Abundance of Species to a Unified Theory of Ecology: The Role of Maximum Entropy Methods. Applied Optimization pp. 243-272. Applied Optimization. Springer Berlin Heidelberg, Berlin, Heidelberg.
   
-  Harte, J., Smith, A.B. & Storch, D. (2009). Biodiversity scales from plots to biomes with a universal species-area curve. Ecology Letters, 12, 789–797.
+  Harte, J., Smith, A.B. & Storch, D. (2009). Biodiversity scales from plots to biomes with a universal species-area curve. Ecology Letters, 12, 789-797.
   
   Harte, J. (2011). Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press, Oxford, UK.
   
@@ -37,10 +37,10 @@ Maintainer: Cory Merow \email{cory.merow@gmail.com}
 %~~ Optionally other standard keywords, one per line, ~~
 %~~ from file KEYWORDS in the R documentation directory ~~
 % \keyword{ entropy  }
-\seealso{
+%\seealso{
 %~~ Optional links to other man pages, e.g. ~~
 %~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
+%}
+%\examples{
 %~~ simple examples of the most important functions ~~
-}
+%}

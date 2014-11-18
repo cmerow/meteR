@@ -1,0 +1,9 @@
+x <- rnorm(100)
+y <- rnorm(100)
+logLik(lm(y~x))
+nlm
+nleqslv
+library(nleqslv)
+? nleqslv
+install.packages('dismo')
+install.packages('rgbif')

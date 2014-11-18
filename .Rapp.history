@@ -1,0 +1,420 @@
+4343.939/5
+oldwd <- setwd('~/Desktop/Research/paleo_supStat/pbdb/pbdb_3Tpub')#
+#
+##	function for plotting desnities#
+source("~/R_functions/den_fill.R")#
+#
+##	depends on .../make_pbdb_3Tpub.R#
+if(!(exists("pbdb.ord.div") & exists("pbdb.gen.occ3TP") & exists("pbdb.sstat.ord.cor"))) {#
+	makePlot <- FALSE#
+	source("make_pbdb_3Tpub.R")#
+}#
+#
+##	load permuted d-stat#
+load("ordperm_dstat.RData")
+pbdb.ord.dstat <- with(pbdb.sstat.ord.cor,ks.stat.pfun(unlist(raw.pk),function(x) 0.5 + 0.5*PPx(x,FALSE)))#
+pbdb.cls.dstat <- with(pbdb.sstat.cls.cor,ks.stat.pfun(unlist(raw.pk),function(x) 0.5 + 0.5*PPx(x,FALSE)))#
+pbdb.phy.dstat <- NA	# STUB!!!#
+#
+##	plot it!#
+source('../../code/sstat_plotting_par.R')
+source("~/R_functions/ks_stat_pfun.R")
+pbdb.ord.dstat <- with(pbdb.sstat.ord.cor,ks.stat.pfun(unlist(raw.pk),function(x) 0.5 + 0.5*PPx(x,FALSE)))#
+pbdb.cls.dstat <- with(pbdb.sstat.cls.cor,ks.stat.pfun(unlist(raw.pk),function(x) 0.5 + 0.5*PPx(x,FALSE)))#
+pbdb.phy.dstat <- NA	# STUB!!!
+source("~/R_functions/ks_stat_pfun.R")
+!(exists("pbdb.ord.div") & exists("pbdb.gen.occ3TP") & exists("pbdb.sstat.ord.cor"))
+PPx
+oldwd <- setwd('~/Desktop/Research/paleo_supStat')#
+#
+##	needed functions and data#
+source("code/sstat_methods.R")
+if(!exists("pbdb.sstat.ord.cor")) {#
+	cat('making sstat objects','\n')#
+	makePlot <- FALSE#
+	source("pbdb/pbdb_3Tpub/make_pbdb_3Tpub.R")#
+}
+ls()
+if(!exists("makePlot")) makePlot <- TRUE#
+oldwd <- setwd('~/Desktop/Research/paleo_supStat')#
+#
+##  convenience function to produce a matrix of time by ord with cells#
+##  of corrected diversity#
+source('code/pbdb_3t_pub.R')#
+#
+##	load other needed funcitons#
+source("~/R_functions/paleoPlot.R")#
+source("~/R_functions/samp2site_spp.R")#
+source("~/R_functions/logPlot.R")#
+source("~/R_functions/my_ecdf.R")#
+source("code/sstat_comp.R")#
+source('code/sstat_methods.R')#
+#
+##########  load data  ###########
+setwd("data/pbdb_2013-05-28")#
+#
+##	raw occurence data#
+pbdb.dat <- read.csv("marInv-occs.csv")#
+#
+## get rid of poor temporal resolution#
+pbdb.dat <- pbdb.dat[pbdb.dat$collections.10_my_bin != "",]#
+#
+##	get rid of bad taxonomy#
+pbdb.dat <- pbdb.dat[pbdb.dat$occurrences.order_name != "",]#
+#
+##	drop missing levels#
+pbdb.dat$collections.10_my_bin <- as.factor(as.character(pbdb.dat$collections.10_my_bin))#
+pbdb.dat$occurrences.order_name <- as.factor(as.character(pbdb.dat$occurrences.order_name))#
+pbdb.dat$occurrences.genus_name <- as.factor(as.character(pbdb.dat$occurrences.genus_name))#
+pbdb.dat$collections.reference_no <- as.factor(as.character(pbdb.dat$collections.reference_no))#
+pbdb.dat$collection_no <- as.factor(as.character(pbdb.dat$collection_no))#
+##	subsampled diversity (for comparison's sake)#
+pbdb.samp <- read.csv("subsampled_curve_data.csv")#
+#
+##	raw diversity curve (for 3 timer stat, etc)#
+pbdb.curv <- read.csv("raw_curve_data.csv")#
+#
+##	get bin times#
+pbdb.time <- pbdb.samp$Midpoint.Ma#
+names(pbdb.time) <- pbdb.samp$Bin.name#
+pbdb.time <- pbdb.time[levels(pbdb.samp$Bin.name)]#
+#
+##  data.frame of publication, diversity and 3T stat#
+ord.tbin.bias <- aggregate(list(div=pbdb.dat$occurrences.genus_name),#
+						   list(ord=pbdb.dat$occurrences.order_name,#
+						   		tbin=pbdb.dat$collections.10_my_bin),#
+						   function(x) length(unique(x)))#
+#
+ord.tbin.bias$T3.stat <- pbdb.curv$Three.timer.sampling.stat[match(ord.tbin.bias$tbin,pbdb.curv$Bin.name)]#
+ord.tbin.bias$T3.div <- ord.tbin.bias$div/ord.tbin.bias$T3.stat#
+head(ord.tbin.bias)#
+#
+##	record pubs per tbin#
+tbin.pub <- tapply(pbdb.dat$collections.reference_no,pbdb.dat$collections.10_my_bin,function(x) length(unique(x)))#
+ord.tbin.bias$tbin.pub <- tbin.pub[ord.tbin.bias$tbin]
+setwd('../../code')#
+## makes `figSupp_divByPubOrd.pdf'#
+#
+##	calculate corrected diversity#
+if(makePlot) {#
+	source('sstat_plotting_par.R')#
+	with(plot.pars, {#
+		quartz(width=width,height=height)#
+		par(mar=mar,mgp=mgp)#
+	})#
+}#
+pbdb.ord.div <- with(ord.tbin.bias,#
+	pbdb.3t.pub(div,T3.stat,tbin.pub,ord,tbin,pbdb.time,min.pub=10,plotit=makePlot)#
+)#
+rownames(pbdb.ord.div)
+makePlot
+makePlot <- TRUE
+pbdb.ord.div <- with(ord.tbin.bias,#
+	pbdb.3t.pub(div,T3.stat,tbin.pub,ord,tbin,pbdb.time,min.pub=10,plotit=makePlot)#
+)#
+rownames(pbdb.ord.div)
+pbdb.pub.lm#
+#
+##	using correction on genus occurances#
+pbdb.gen.occ <- with(pbdb.dat,samp2site.spp(collections.10_my_bin,occurrences.genus_name,rep(1,nrow(pbdb.dat))))#
+pbdb.gen.occ <- pbdb.gen.occ[rownames(pbdb.ord.div),]#
+pbdb.gen.occ <- pbdb.gen.occ[,colSums(pbdb.gen.occ) > 0]#
+pbdb.gen.occ <- 1*(pbdb.gen.occ > 0)#
+#
+# # fill-in Lazzarous taxa...might not be best idea#
+# pbdb.gen.occ <- apply(pbdb.gen.occ,2,function(x) {#
+	# occInd <- which(x > 0)#
+	# x[min(occInd):max(occInd)] <- 1#
+	# return(x)#
+# })#
+#
+##  data.frame for predicting from pbdb.pub.lm#
+pub.data <- with(ord.tbin.bias,data.frame(log(tbin.pub[match(rownames(pbdb.gen.occ),tbin)])))#
+rownames(pub.data) <- NULL#
+colnames(pub.data) <- names(pbdb.pub.lm$coeff)[2]#
+#
+##  corrected genus-level data#
+pbdb.gen.occ3TP <- pbdb.gen.occ / pbdb.curv$Three.timer.sampling.stat[match(rownames(pbdb.gen.occ),pbdb.curv$Bin.name)]#
+pbdb.gen.occ3TP <- pbdb.gen.occ3TP * exp(-predict(pbdb.pub.lm,newdata=pub.data))#
+#
+# gen2ord <- as.character(with(pbdb.dat,#
+	# occurrences.order_name[match(colnames(pbdb.gen.occ3TP),occurrences.genus_name)]))#
+##  data.frame of different diversity measures#
+pbdb.div <- aggregate(list(raw=pbdb.dat$occurrences.genus_name),#
+					   list(tbin=pbdb.dat$collections.10_my_bin),#
+					   function(x) length(unique(x)))#
+pbdb.div$time <- pbdb.time[as.character(pbdb.div$tbin)]#
+#
+pbdb.div$sqs <- pbdb.samp[match(pbdb.div$tbin,pbdb.samp$Bin.name), "Mean.sampled.diversity"]#
+#
+pbdb.div$pub3t <- rowSums(pbdb.ord.div)[match(pbdb.div$tbin,rownames(pbdb.ord.div))]#
+#
+pbdb.div <- pbdb.div[order(pbdb.div$time, decreasing=TRUE),]
+if(makePlot) {#
+	source('sstat_plotting_par.R')#
+	with(plot.pars, {#
+		quartz(width=width*2.1,height=height)#
+		par(mar=mar, mgp=mgp, mfrow=c(1,2))#
+#
+		with(pbdb.div[2:48,], {#
+			paleoPlot(time[-1], scale(diff(pub3t)),type='l',col='red',#
+					  y.lim=c(-3,3),ylab="Scaled diversity fluctuations")#
+			lines(time[-1], scale(diff(sqs)))#
+			lines(time[-1], scale(diff(raw)), lty=2)#
+			text(par("usr")[2],par("usr")[4],labels="A",adj=adj,cex=cex.txt)#
+			logPlot(my.ecdf(abs(scale(pub3t)),complement=TRUE),type="l",log="xy",col="red",#
+					xlab="|Scaled fluctuations|", ylab="Cumulative density")#
+			lines(my.ecdf(abs(scale(sqs)),complement=TRUE))#
+			lines(my.ecdf(abs(scale(raw)),complement=TRUE),lty=2)#
+			text(10^par("usr")[2],10^par("usr")[4],labels="B",adj=adj,cex=cex.txt)#
+		})#
+	})#
+}
+pbdb.ord.div[[1]]
+pbdb.ord.div[1:10]
+pbdb.ord.div
+apply(pbdb.ord.div, 2, function(x) sum(x[x > 0]))
+apply(pbdb.ord.div, 2, function(x) sum(x > 0))
+apply(pbdb.ord.div, 2, function(x) sum(x > 0)) > 10
+pbdb.ord.div[, apply(pbdb.ord.div, 2, function(x) sum(x > 0)) > 10]
+x <- pbdb.ord.div[, apply(pbdb.ord.div, 2, function(x) sum(x > 0)) > 10]
+geom <- qgeom(seq(1-1/330,0,by=-1/330),.04)
+plot(geom,type='l',log='y')
+plot(geom,type='l',log='x')
+plot(geom,type='l',log='y')
+for(i in ncol(x)) {#
+	pdf(paste('~/Dropbox/Research/paleo_supStat/ms/science/orderPlots4miguel/', #
+	          colnames(x)[i], '.pdf', sep=''), #
+	    width=4, height=4)#
+	plot(x[,i], xaxt='', xlab='Time', type='l')#
+	dev.off()#
+}
+for(i in ncol(x)) {#
+	pdf(paste('~/Dropbox/Research/paleo_supStat/ms/science/orderPlots4miguel/', #
+	          colnames(x)[i], '.pdf', sep=''), #
+	    width=4, height=4)#
+	plot(x[,i], xaxt='n', xlab='Time', type='l')#
+	dev.off()#
+}
+x <- pbdb.ord.div[, apply(pbdb.ord.div, 2, function(x) sum(x > 0)) > 10]#
+for(i in 1:ncol(x)) {#
+	pdf(paste('~/Dropbox/Research/paleo_supStat/ms/science/orderPlots4miguel/', #
+	          colnames(x)[i], '.pdf', sep=''), #
+	    width=4, height=4)#
+	plot(x[,i], xaxt='n', xlab='Time', type='l')#
+	dev.off()#
+}
+rm(list=ls(*))
+rm(list=ls())
+system('open Cory/Model_Output/Figures/sar_data_2_28.pdf')
+setwd('~/Dropbox/mete')
+system('open Cory/Model_Output/Figures/sar_data_2_28.pdf')
+makeSSF is not vectorized and too slow so make special#
+## function to extract \lambda_\Pi and make it vectorized#
+## over n0#
+getPi0 <- function(n0,A,A0) {#
+	if(A/A0 == 0.5) {#
+		pi0 <- 1/(1+n0)#
+	} else {#
+		eq52 <- useEq52(n0,A,A0)#
+		pi0 <- numeric(length(eq52))#
+		if(any(eq52)) {#
+			# cat(sprintf('using eq52 approx %s times \n', sum(eq52)))#
+			pi0[eq52] <- 1 - n0[eq52]/(n0[eq52] + A0/A)#
+		}#
+		if(any(!eq52)) {#
+			# cat(sprintf('using exact sol %s times \n', sum(!eq52)))#
+			pi0[!eq52] <- sapply(n0[!eq52], function(n) {#
+				mete.Pi(0, makeSSF(n, A, A0, FALSE)$La, n)#
+			})#
+		}#
+	}#
+	return(pi0)#
+}
+' @title Title of function#
+#'#
+#' @description#
+#' \code{function.name} what it does#
+#'#
+#' @details#
+#' how it works#
+#' etc.#
+#' #
+#' @param arg description of arg#
+#' @param arg description of arg#
+#' @keywords manip#
+#' @export#
+#' #
+#' @examples#
+#' #code to run#
+#' #
+#' @return - the type of object that the function returns#
+#'#
+#' @author Andy Rominger <ajrominger@@gmail.com>#
+#  @note other junk to mention#
+#  @seealso - to provide pointers to other related topics#
+#  @references - references to scientific literature on this topic#
+#  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.#
+#  @family - a family name. All functions that have the same family tag will be linked in the documentation.#
+#
+##	function to return the species abundance distribution (phi)#
+##	predicted by METE; vectorized in n#
+#
+mete.phi <- function(n,la1,la2,Z,S0,N0,E0) {#
+	if(missing(Z)) Z <- meteZ(la1,la2,S0,N0,E0)#
+	beta <- la1 + la2#
+	sigma <- la1 + E0*la2#
+	return((exp(-beta*n) - exp(-sigma*n))/(la2*Z*n))#
+}#
+#
+## not sure if we're allowed to have multiple functions in the same file if we use roxygen#
+#' @title Title of function#
+#'#
+#' @description   function to return Z, the normalizing constant of R as well as the simplifying parameters beta and sigma#
+#' \code{function.name} what it does#
+#'#
+#' @details#
+#' how it works#
+#' etc.#
+#' #
+#' @param la1 description of arg#
+#' @param la2 description of arg#
+#' @param S0 description of arg#
+#' @param N0 description of arg#
+#' @param E0 description of arg#
+#
+#' @keywords manip#
+#' @export#
+#' #
+#' @examples#
+#' #code to run#
+#' #
+#' @return - the type of object that the function returns#
+#'#
+#' @author Andy Rominger <ajrominger@@gmail.com>#
+#  @note other junk to mention#
+#  @seealso - to provide pointers to other related topics#
+#  @references - references to scientific literature on this topic#
+#  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.#
+#  @family - a family name. All functions that have the same family tag will be linked in the documentation.#
+meteZ <- function(la1,la2,S0,N0,E0) {#
+	beta <- la1 + la2#
+	sigma <- la1 + E0*la2#
+	t1 <- S0/(la2*N0)#
+	t2 <- (exp(-beta) - exp(-beta*(N0+1)))/(1-exp(-beta))#
+	t3 <- (exp(-sigma) - exp(-sigma*(N0+1)))/(1-exp(-sigma))#
+	Z <- t1*(t2 - t3)#
+	return(Z)#
+}
+makeSSF is not vectorized and too slow so make special#
+## function to extract \lambda_\Pi and make it vectorized#
+## over n0#
+getPi0 <- function(n0,A,A0) {#
+	if(A/A0 == 0.5) {#
+		pi0 <- 1/(1+n0)#
+	} else {#
+		eq52 <- useEq52(n0,A,A0)#
+		pi0 <- numeric(length(eq52))#
+		if(any(eq52)) {#
+			# cat(sprintf('using eq52 approx %s times \n', sum(eq52)))#
+			pi0[eq52] <- 1 - n0[eq52]/(n0[eq52] + A0/A)#
+		}#
+		if(any(!eq52)) {#
+			# cat(sprintf('using exact sol %s times \n', sum(!eq52)))#
+			pi0[!eq52] <- sapply(n0[!eq52], function(n) {#
+				mete.Pi(0, makeSSF(n, A, A0, FALSE)$La, n)#
+			})#
+		}#
+	}#
+	return(pi0)#
+}#
+#
+## function to calculate theoretical SAR#
+getSAR <- function(x, A, A0) {#
+	n0 <- 1:x$ESF$state.var['N0']#
+	sapply(A, function(a) {#
+		probs <- (1 = getPi0(n0, a, A0)) * #
+		         with(xESF, #
+		              mete.phi(n0, La[1], La[2], Z, #
+		                       state.var['S0'], state.var['N0'], state.var['E0']))#
+		return(x$ESF$state.var['S0'] * sum(probs))#
+	})#
+}
+data.path <- '~/Research/meteR/Dimensions-Data/data_base'#
+my.path <- '~/Dropbox/mete/meteR'#
+# data.path <- '~/Documents/Dimensions-Data/data_base'#
+# my.path <- getwd()#
+setwd(my.path)#
+#
+## just cape point abundance #
+cp <- read.csv(paste(data.path,'Releve_CP.csv', sep='/'))#
+#
+## make data frame with all the info for mete#
+cp.d <- cp[,c(1:10, 13)]#
+#
+## use cover/individual as a measure of size#
+cp.d$size.pc <- cp.d$PercCover/cp.d$Abundance#
+#
+## subset 2010 since that's what we have size info for now#
+cp10 <- cp.d[cp.d$Year==2010,]#
+#
+## load neccesary stuff#
+library(nleqslv)#
+library(distr)#
+sapply(paste('R', list.files(paste(my.path, 'R', sep='/')), sep='/'), source)#
+#
+## make a mete object for 1 site#
+cp10.1 <- cp10[cp10$Plot=='CP_2',]#
+abund <- cp10.1$Abundance#
+otu <- cp10.1$Species#
+power <- cp10.1$size.p#
+min.e <- min(cp10.1$size.pc)#
+#
+m <- makeMete(otu, abund, power, min.e)#
+m # see how the print method looks#
+#
+## plot SAD different ways#
+plot(m$SAD, ptype='cdf', log='xy')#
+plot(m$SAD, ptype='rad', log='y')
+plot(m$SAD, ptype='cdf', log='xy')
+getSAR(m, 100*(1/2^(1:8)), 100)
+getSAR <- function(x, A, A0) {#
+	n0 <- 1:x$ESF$state.var['N0']#
+	sapply(A, function(a) {#
+		probs <- (1 - getPi0(n0, a, A0)) * #
+		         with(xESF, #
+		              mete.phi(n0, La[1], La[2], Z, #
+		                       state.var['S0'], state.var['N0'], state.var['E0']))#
+		return(x$ESF$state.var['S0'] * sum(probs))#
+	})#
+}
+getSAR(m, 100*(1/2^(1:8)), 100)
+function to calculate theoretical SAR#
+getSAR <- function(x, A, A0) {#
+	n0 <- 1:x$ESF$state.var['N0']#
+	sapply(A, function(a) {#
+		probs <- (1 - getPi0(n0, a, A0)) * #
+		         with(x$ESF, #
+		              mete.phi(n0, La[1], La[2], Z, #
+		                       state.var['S0'], state.var['N0'], state.var['E0']))#
+		return(x$ESF$state.var['S0'] * sum(probs))#
+	})#
+}
+getSAR(m, 100*(1/2^(1:8)), 100)
+useEq52 <- function(n0,A,A0) {#
+	test <- exp(4.9 -1.36*log(n0) + 0.239*log(n0)^2 -0.0154*log(n0)^3)#
+	res <- A0/A >= test#
+	res[n0 > 2^16 & A/A0 < 0.5] <- TRUE#
+	return(res)#
+}
+useEq52(1,10,20)
+useEq52(10000,10,20)
+useEq52(1000,10,20)
+useEq52(1000,100,200)
+useEq52(1000,1,2)
+useEq52(10000,1,2)
+useEq52(10000,0.1,2)
+makeSSF(10, 1, 2)
+log(8/2)/log(2)
+3.6*2^8
+log(921.6/3.6)/log(2)

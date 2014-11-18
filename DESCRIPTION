@@ -10,6 +10,11 @@ Description: Fits and plots macroecological patterns predicted by the Maximum
     Entropy Theory of Ecology (METE)
 License: GPL-2
 LazyLoad: yes
+LazyData: true
 Depends:
+    R (>= 2.10)
+Imports:
     nleqslv,
     distr
+Suggests:
+    testthat
