@@ -16,17 +16,15 @@ FIX latex
 -->
 
 -ADD data refs
--make image work
 -WHY ARE THE Z-SCORES SO DIFFERENT for arth SAD?
 -how to handle plotting when just the state varaibles are specified? - make it so you can add this to the the plot via just a line?
 -figure out how to access .ecdf within the plot function. does it need to be exported? why doesn't just putting export in work?
--practice change for git
 
 <!--========================================================================-->
 #Introduction
 The package meteR is designed to facilitate fitting the Maximum Entropy Theory of Ecology (METE) from data. For an overview of METE, see Harte et al. (2008), Harte (2011), and Harte and Newman (2014). Note that throughout this tutorial we use the notation for quantities used by the theory from these sources without extensive explanation. `meteR` can use data input in multiple formats and predict all the fundamental distributions of the theory (see Figure 1). Our objective is to facilitate tests of METE with empirical data sets. 
 
-![](/Users/ctg/Dropbox/METE/meteR/vignettes/METE_Fig.png) figure out caption. An overview of METE's predictions. Figure taken from Harte and Newman (2014) TREE 29: 384–389.
+![fig1](/Users/ctg/Dropbox/METE/meteR/vignettes/METE_Fig.png) figure out caption. An overview of METE's predictions. Figure taken from Harte and Newman (2014) TREE 29: 384–389.
 
 <!--========================================================================-->
 #Case Study 1 - Abundance and Power Distributions
