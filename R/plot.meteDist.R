@@ -85,19 +85,22 @@ plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red",
 	if(ptype=="cdf") {
 	  this.curve <- x$p
     ## if no data, don't plot it, just plot the curve
-# 	  if(is.null(x$data)) {
-# 	    xmax <- max(x$data)
-# 	    X <- .ecdf(x$data, !lower.tail)
-# 	    plot.par$type <- 'n'
-# 	  } else {
+	  #if(is.null(x$data)) {
+	  if(!is.null(x$data)) {
+	    xmax <- max(x$data)
+	    #X <- .ecdf(x$data, !lower.tail)
+	    X <- .ecdf(x$data, !lower.tail)[,2]
+	    plot.par$type <- 'n'
+	  } else {
 	    xmax <- ifelse(is.finite(max(plot.par$xlim)), 
 	                   max(plot.par$xlim), 
 	                   x$state.var['N0']/x$state.var['S0'])
 	    X <- cbind(c(1, floor(xmax)), this.curve(c(1, floor(xmax))))
-# 	  }
+ 	  }
 	  
-	  do.call(plot, c(list(x=X, plot.par)))
-	  
+	  #do.call(plot, c(list(x=X, plot.par)))
+    do.call(plot, append(list(x=X),plot.par))
+
 	  if(x$type %in% c("gsd", "sad")) {
 	    this.supp <- 1:xmax
 	    points(this.supp, this.curve(this.supp,lower.tail=lower.tail),
@@ -120,7 +123,8 @@ plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red",
 	  }
 	  
 	  ## do plotting
-	  do.call(plot, list(x=X, plot.par))
+	  #do.call(plot, list(x=X, plot.par))
+	  do.call(plot, append(list(x=X),plot.par))
 	  points(meteDist2Rank(x), type="l", col=th.col)
 	}
 
