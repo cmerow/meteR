@@ -24,7 +24,8 @@ FIX latex
 #Introduction
 The package meteR is designed to facilitate fitting the Maximum Entropy Theory of Ecology (METE) from data. For an overview of METE, see Harte et al. (2008), Harte (2011), and Harte and Newman (2014). Note that throughout this tutorial we use the notation for quantities used by the theory from these sources without extensive explanation. `meteR` can use data input in multiple formats and predict all the fundamental distributions of the theory (see Figure 1). Our objective is to facilitate tests of METE with empirical data sets. 
 
-![fig1](/Users/ctg/Dropbox/METE/meteR/vignettes/METE_Fig.png) figure out caption. An overview of METE's predictions. Figure taken from Harte and Newman (2014) TREE 29: 384–389.
+![fig1](/Users/ctg/Dropbox/METE/meteR/vignettes/METE_Fig.png) 
+Figure 1 was taken from Harte and Newman (2014) TREE 29: 384–389.
 
 <!--========================================================================-->
 #Case Study 1 - Abundance and Power Distributions

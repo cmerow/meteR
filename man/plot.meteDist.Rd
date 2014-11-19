@@ -3,8 +3,8 @@
 \alias{plot.meteDist}
 \title{Plot to compare METE predictions to data}
 \usage{
-plot.meteDist(x, ptype = c("cdf", "rad"), th.col = "red",
-  lower.tail = TRUE, add.legend = TRUE, ...)
+\method{plot}{meteDist}(x, ptype = c("cdf", "rad"), th.col = "red",
+  lower.tail = TRUE, add.legend = TRUE, add.line = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{meteDist} object}
@@ -16,6 +16,8 @@ plot.meteDist(x, ptype = c("cdf", "rad"), th.col = "red",
 \item{lower.tail}{logical; choose TRUE to highlight differences between data and theory at low abundance; choose FALSE to highlight differences at high abundance.}
 
 \item{add.legend}{logical; add a legend}
+
+\item{add.line}{add the curve for a fitted model to the existing plot}
 
 \item{...}{arguments to be passed to \code{plot}}
 }

@@ -1,7 +1,7 @@
 
 #' @title meteDist2Rank
 #'  
-#' @description \code{meteESF} calculate the rank distribution of a meteDist object and 
+#' @description \code{meteESF} calculate the rank distribution of a meteDist object 
 #'
 #' @details
 #' Used, e.g., in \code{plot.meteDist}

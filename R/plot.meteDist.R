@@ -85,16 +85,16 @@ plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red",
 	if(ptype=="cdf") {
 	  this.curve <- x$p
     ## if no data, don't plot it, just plot the curve
-	  if(is.null(x$data)) {
-	    xmax <- max(x$data)
-	    X <- .ecdf(x$data, !lower.tail)
-	    plot.par$type <- 'n'
-	  } else {
+# 	  if(is.null(x$data)) {
+# 	    xmax <- max(x$data)
+# 	    X <- .ecdf(x$data, !lower.tail)
+# 	    plot.par$type <- 'n'
+# 	  } else {
 	    xmax <- ifelse(is.finite(max(plot.par$xlim)), 
 	                   max(plot.par$xlim), 
 	                   x$state.var['N0']/x$state.var['S0'])
 	    X <- cbind(c(1, floor(xmax)), this.curve(c(1, floor(xmax))))
-	  }
+# 	  }
 	  
 	  do.call(plot, c(list(x=X, plot.par)))
 	  
