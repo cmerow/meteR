@@ -30,7 +30,7 @@
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 logLik.meteDist <- function(object,...) {
-	lik <- sum(object$d(object$data),log=TRUE)
+	lik <- sum(object$d(object$data,log=TRUE))
 	attr(lik, 'df') <- 1
 	class(lik) <- 'logLik'
 	return(lik)
@@ -81,8 +81,8 @@ logLik.meteDist <- function(object,...) {
 logLikZ.meteDist <- function(x, nrep, return.sim=FALSE) {
 	lik.obs <- logLik(x)
 	lik.sim <- replicate(nrep, {
-		new.dat <- x$r(length(x$data))
-		sum(x$d(new.dat, log=TRUE))
+		                  new.dat <- x$r(length(x$data))
+		                  sum(x$d(new.dat, log=TRUE))
 	})
 	
 	if(return.sim) {

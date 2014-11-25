@@ -77,6 +77,7 @@ logLik(sad1)
 #== randomly generate 100 data sets from the fitted distribution and calculate
 #== the z-score of the data w.r.t. these simulations
 llz=logLikZ.meteDist(sad1, nrep=100, return.sim=TRUE)
+llz$z
 #== plot the distributions
 plot(density(llz$sim),
      xlim=range(c(llz$sim,llz$obs)),
