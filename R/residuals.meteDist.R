@@ -134,6 +134,7 @@ mse.meteDist <- function(x, type=c("rank","cumulative"),
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
                           type=c("rank","cumulative")) {
+  #seems like this should default to relative resid, since that's what is produced by residuals() for the data. need to add an arg for relative=TRUE?s
   if(type=='rank') {
     thr <- function(dat) {
       mean((sort(dat, TRUE) - meteDist2Rank(x))^2)

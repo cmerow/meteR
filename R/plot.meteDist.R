@@ -35,31 +35,6 @@
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
-#   if(length(x$data)==0 | add.line){ # diffent routine if no data...
-#     if(ptype=="cdf") {
-#       this.curve <- x$p
-#       # start with an empty plot
-#       if(!add.line){do.call(plot, c(list(this.supp,y=this.curve(this.supp,lower.tail=lower.tail), plot.par,col='white')))}
-#       if(x$type %in% c("gsd", "sad")) {
-#         this.supp <- 1:sum(x$data)
-#         points(this.supp, this.curve(this.supp,lower.tail=lower.tail),
-#                type="l", col=th.col)
-#       } else {
-#         curve(this.curve(x,lower.tail=lower.tail), add=TRUE, col=th.col)
-#       }
-#     }
-#     else {
-#       if(!('ylim' %in% names(plot.par))) {
-#         plot.par$ylim <- x$q(c(1-1/x$state.var['S0'],1/x$state.var['S0']))
-#       }
-#       if(!add.line){do.call(plot, c(list(x=sort(x$data,decreasing=TRUE)), plot.par))}
-#       points(meteDist2Rank(x), type="l", col=th.col)
-#     }
-#       
-# 
-#   } else { # for plotting with data
-
-
 plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red", 
                           lower.tail=TRUE, add.legend=TRUE, add.line=FALSE, ...) {
 	ptype <- match.arg(ptype,c("cdf", "rad"))
@@ -85,17 +60,16 @@ plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red",
 	if(ptype=="cdf") {
 	  this.curve <- x$p
     ## if no data, don't plot it, just plot the curve
-	  #if(is.null(x$data)) {
 	  if(!is.null(x$data)) {
 	    xmax <- max(x$data)
 	    #X <- .ecdf(x$data, !lower.tail)
-	    X <- .ecdf(x$data, !lower.tail)[,2]
-	    plot.par$type <- 'n'
+	    X <- .ecdf(x$data, !lower.tail)
 	  } else {
 	    xmax <- ifelse(is.finite(max(plot.par$xlim)), 
 	                   max(plot.par$xlim), 
 	                   x$state.var['N0']/x$state.var['S0'])
 	    X <- cbind(c(1, floor(xmax)), this.curve(c(1, floor(xmax))))
+	    plot.par$type <- 'n'
  	  }
 	  
 	  #do.call(plot, c(list(x=X, plot.par)))
@@ -110,8 +84,9 @@ plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red",
 	  }
 	} else {
 	  ## if no data, don't plot it, just plot the rank fun
-	  if(is.null(x$data)) {
-	    X <- x$rankFun
+	  #browser()
+    if(is.null(x$data)) {
+	    X <- meteDist2Rank(x)
 	    plot.par$type <- 'n'
 	  } else {
 	    X <- x$data

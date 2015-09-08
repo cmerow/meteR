@@ -16,9 +16,8 @@ FIX latex
 -->
 
 -ADD data refs
--WHY ARE THE Z-SCORES SO DIFFERENT for arth SAD?
 -how to handle plotting when just the state varaibles are specified? - make it so you can add this to the the plot via just a line?
--figure out how to access .ecdf within the plot function. does it need to be exported? why doesn't just putting export in work?
+
 
 <!--========================================================================-->
 #Introduction
@@ -37,7 +36,7 @@ data(arth)
 dim(arth)
 head(arth)
 ```
-This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that metabolic rate=mass^(3/4)).If multiple individuals of the same size are observed, these can be specified as well (i.e., `arth$count` is something other than 1.) See the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables (N (# indivdiuals), S (# species), E (total metabolic rate), A (total area)) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
+This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that metabolic rate=mass^(3/4)).If multiple individuals of the same size are observed, these can be specified as well (i.e., `arth$count` is something other than 1.) See the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables (N (# individuals), S (# species), E (total metabolic rate), A (total area)) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
 
 Analysis begins by building the ecosystem structure function (ESF; R(n,e)). 
 ```{r}
@@ -86,6 +85,11 @@ abline(v=llz$obs,lty=2)
 legend('top',legend=c('data','simulated\nfrom METE'),
        col=c('black','red'), lty=c(1,1),bty='n') 
 ```
+Note that other utilities that extract liklihoods from model objects are also useful:
+
+```{r}
+AIC(sad1)
+```
 
 Next, we illustrate methods relying on residuals.
 
@@ -100,7 +104,6 @@ mse.meteDist(sad1, type='rank', relative=FALSE)
 mseZ.meteDist(sad1, nrep=100,return.sim=TRUE)
 
 ```
-WHY ARE THE Z-SCORES SO DIFFERENT?
 
 ## IPD
 
@@ -123,16 +126,25 @@ Next, assess the fit of the IPD.
 head(residuals(ipd1))
 logLik(ipd1)
 logLikZ.meteDist(ipd1, nrep=100)
-llz=logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
+(llz=logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE))
 plot(density(llz$sim),xlim=range(c(llz$sim,llz$obs)),xlab='log(likelihood)',col='red')
 abline(v=llz$obs,lty=2)
 legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
        lty=c(1,1),bty='n') 
 
-mse.meteDist(ipd1, type='rank', relative=FALSE)
-mseZ.meteDist(ipd1, nrep=100)
 ```
 
+Interestingly, although it appears that the data are unlikely to have been drawn from the METE distribution based on the z-score of the likelood, the mean squared error suggests otherwise.
+
+```{r fig.width=5, fig.cap="Mean squared error-based z-score."}
+mse.meteDist(ipd1, type='rank', relative=FALSE)
+mseZ=mseZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
+mseZ$z
+plot(density(mseZ$sim),xlim=range(c(mseZ$sim,mseZ$obs)),xlab='mse',col='red')
+abline(v=llz$obs,lty=2)
+legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
+       lty=c(1,1),bty='n') 
+```
 <!--discuss residuals vs. likelihoods. arth ipd is supported by residauls z but not liklihood. -->
 
 
@@ -156,6 +168,8 @@ str(esf2)
 #sad2=sad.meteESF(esf2)
 #sad2
 ```
+Note that when metabolic rate data are absent, meteR assumes a very large value for the state variable E0, such that terms involiving E0 can be safely ignored in distriutions and relationships involving abundance.
+
 ```{r,fig.width=7}
 #sad=sad.meteESF(esf1)
 #par(mfrow=c(1,2))
@@ -170,9 +184,9 @@ str(esf2)
 esf3=meteESF(N0=4000,S0=50,E0=1e5,minE=1)
 sad3=sad.meteESF(esf3)
 ipd3=ipd.meteESF(esf3)
-#par(mfrow=c(1,2))
-#plot(sad3)
-#plot(ipd3)
+par(mfrow=c(1,2))
+plot(sad3)
+plot(ipd3)
 ```
 
 <!--========================================================================-->
