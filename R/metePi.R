@@ -7,6 +7,7 @@ metePi <- function(n, n0=sum(n), A, A0) {
 	# SSAD <- makeSSAD(n, thisSSF)
 	
 	out <- thisSSF
+	out$data$n <- n
 	class(out) <- 'metePi'
 	return(out)
 }
