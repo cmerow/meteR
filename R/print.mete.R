@@ -76,13 +76,11 @@ print.meteESF <- function(x,...) {
 
 ##  print and summary methods for METE object
 
-print.metePi <- function(x,...) {
-  cat("METE object with state variables:\n")
-  print(x$state.var)
+## now depricated because output from `metePi' inherits from class `meteESF'
+# print.metePi <- function(x,...) {
+  # cat("METE object with state variables:\n")
+  # print(x$state.var)
   
-  cat("\n");cat("with Lagrange multipliers:\n")
-  print(x$La)
-  
-  #   cat("\n");cat("predicting the distributions:\n")
-  #   cat(names(x)[-1]);cat("\n")
-}
+  # cat("\n");cat("with Lagrange multipliers:\n")
+  # print(x$La)
+# }

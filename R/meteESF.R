@@ -45,6 +45,12 @@ meteESF <- function(spp, abund, power,
     ## factors will mess things up
     spp <- as.character(spp)
     
+    ## account for possible 0 abundances
+    abund0 <- abund == 0
+    spp <- spp[!abund0]
+    abund <- abund[!abund0]
+    if(!missing(power)) power <- power[!abund0]
+    
     ## if power missing, set large for numeric approx
     if(missing(power)) {
       power <- rep(1000, length(spp))
@@ -54,6 +60,8 @@ meteESF <- function(spp, abund, power,
     } else {
       e.given <- TRUE
     }
+    
+    # browser()
     
     ## account for possible aggregation of individuals
     if(any(abund > 1)) {

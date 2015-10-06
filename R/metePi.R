@@ -1,14 +1,14 @@
 ##	function to make Pi distribution
 ##	based on function for R(n,epsilon) in `makeMete'
-metePi <- function(n, n0=sum(n), A, A0) {
+metePi <- function(abund, n0=sum(abund), A, A0) {
 	# n0 <- sum(n)
 	
 	thisSSF <- .makeSSF(n0, A, A0)
 	# SSAD <- makeSSAD(n, thisSSF)
 	
 	out <- thisSSF
-	out$data$n <- n
-	class(out) <- 'metePi'
+	out$data$n <- abund
+	class(out) <- c('metePi', 'meteESF')
 	return(out)
 }
 
