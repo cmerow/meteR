@@ -29,7 +29,7 @@ metePi <- function(abund, n0=sum(abund), A, A0) {
 ##	constraint function for Pi lagrange multiplier
 ##	function: x = e^(-la)
 ##  vectorized over `x'
-.pi.cons <- function(x,n0,A,A0) {
+.pi.cons <- function(x, n0, A, A0) {
 	lhs <- rep(NA,length(x))
 	
 	case1 <- x > 1 & (n0+1)*log(x) <= log(2e+64)
@@ -48,7 +48,6 @@ metePi <- function(abund, n0=sum(abund), A, A0) {
 
 ##	make *S*patial *S*tructure *F*unction, like the ESF slot in mete class
 .makeSSF <- function(n0, A, A0, eq52=.useEq52(n0,A,A0)) {
-	# browser()
 	if(A/A0 == 0.5) {
 		return(list(La=0, La.info='analytic solution',
                 state.var=c(n0=n0,A=A,A0=A0)))
@@ -62,10 +61,10 @@ metePi <- function(abund, n0=sum(abund), A, A0) {
 		} else {
 			upper <- 1.01*(n0*(A/A0-1)-1)/(n0*(A/A0-1))
 		}
-		
 		sol <- uniroot(.pi.cons,c(0,upper),
                    n0, A, A0,
                    tol=.Machine$double.eps^0.75)
+		
 		La <- -log(sol$root)
 		
 		return(list(La=La,La.info=sol[-1],

@@ -6,7 +6,6 @@ meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
     if(!upscale) {
         areaInfo <- .findAreas(spp, abund, row, col, x, y, Amin, A0)
         areas <- areaInfo$areas
-        areas <- areas[areas < A0] ## remove after bug fix ###############################
         row <- areaInfo$row
         col <- areaInfo$col
         nrow <- areaInfo$nrow
@@ -14,6 +13,8 @@ meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
         Amin <- areaInfo$Amin
         A0 <- areaInfo$A0
     }
+    
+    if(upscale & EAR) stop('upscaling EAR not currently supported')
     
     ## the ESF
     if(!missing(spp) & !missing(abund)) {
@@ -71,21 +72,32 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
     return(out)
 }
 
-
 ## function to calculate theoretical downscaled SAR
 ## x is output from meteESF
 downscaleSAR <- function(x, A, A0, EAR=FALSE) {
     n0 <- 1:x$state.var['N0']
-    
-    nspp <- sapply(A, function(a) {
-        probs <- (1 - .getPi0(n0, a, A0)) * 
+
+    ## difference between EAR and SAR is for EAR we get Pi(n0) [fun .getPin0]
+    ## and for SAR we get 1 - Pi(0) [1 - .getPi0]
+    if(EAR) {
+        piFun <- function(a) .getPin0(n0, a, A0)
+    } else {
+        piFun <- function(a) 1 - .getPi0(n0, a, A0)
+    }
+
+    ## function to get species number at scale `a'
+    getspp <- function(a) {
+        probs <- piFun(a) * 
             with(x, 
                  metePhi(n0, La[1], La[2], Z, 
                          state.var['S0'], state.var['N0'], 
                          ifelse(is.na(state.var['E0']), 1e+06, state.var['E0'])))
         
         return(x$state.var['S0'] * sum(probs))
-    })
+    }
+    
+    ## loop over A
+    nspp <- sapply(A, getspp)
 
     ## should return matrix with column for area and column for spp
     out <- cbind(A=A, S=nspp)

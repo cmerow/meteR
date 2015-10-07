@@ -1,3 +1,8 @@
+## generic method for sad
+sad <- function(x) {
+	UseMethod('sad')
+}
+
 #' @title METE species abundance distribution
 #'
 #' @description

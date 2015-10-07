@@ -142,43 +142,68 @@
 }
 
 ## makeSSF is not vectorized and too slow so make special
-## function to extract \lambda_\Pi and make it vectorized
-## over n0
+## function to extract Pi(0) and make it vectorized over n0
 .getPi0 <- function(n0,A,A0) {
-	if(A/A0 == 0.5) {
-		pi0 <- 1/(1+n0)
-	} else {
-		eq52 <- .useEq52(n0,A,A0)
-		pi0 <- numeric(length(eq52))
-		
-		if(any(eq52)) {
-			# cat(sprintf('using eq52 approx %s times \n', sum(eq52)))
-			pi0[eq52] <- 1 - n0[eq52]/(n0[eq52] + A0/A)
-		}
-		
-		if(any(!eq52)) {
-			# cat(sprintf('using exact sol %s times \n', sum(!eq52)))
-			pi0[!eq52] <- sapply(n0[!eq52], function(n) {
-				.mete.Pi(0, metePi(0, n0=n, A, A0)$La, n0=n)
-			})
-		}
-	}
-	
-	return(pi0)
+    if(A/A0 == 0.5) {
+        pi0 <- 1/(1+n0)
+    } else if(A == A0) {
+        pi0 <- 0
+    } else {
+        eq52 <- .useEq52(n0,A,A0)
+        pi0 <- numeric(length(eq52))
+        
+        if(any(eq52)) {
+            pi0[eq52] <- 1 - n0[eq52]/(n0[eq52] + A0/A)
+        }
+        
+        if(any(!eq52)) {
+            pi0[!eq52] <- sapply(n0[!eq52], function(n) {
+                .mete.Pi(0, metePi(0, n0=n, A, A0)$La, n0=n)
+            })
+        }
+    }
+    
+    return(pi0)
 }
+
+## makeSSF is not vectorized and too slow so make special
+## function to extract Pi(n0) make it vectorized over n0
+.getPin0 <- function(n0,A,A0) {
+    if(A/A0 == 0.5) {
+        pin0 <- 1/(1+n0)
+    } else if(A == A0) {
+        pin0 <- 1
+    } else {
+        eq52 <- .useEq52(n0,A,A0)
+        pin0 <- numeric(length(eq52))
+        
+        if(any(eq52)) {
+            pin0[eq52] <- ((n0[eq52]*A / (A0 + n0[eq52]*A))^n0[eq52]) / ((A0 + n0[eq52] * A) / A0)
+        }
+        
+        if(any(!eq52)) {
+            pin0[!eq52] <- sapply(n0[!eq52], function(n) {
+                .mete.Pi(n, metePi(n, n0=n, A, A0)$La, n0=n)
+            })
+        }
+    }
+    
+    return(pin0)
+}
+
 
 ## two helper functions giving upscaling constraints
 .upCon1 <- function(beta, Sup, N0, S0) {
-	## eq 8 in Harte et al. 2009 Ecol Lett
-	2*Sup*exp(beta) - 2*N0 * 
-	    (1 - exp(-beta))/(exp(-beta) - exp(-beta*(2*N0+1))) * 
+    ## eq 8 in Harte et al. 2009 Ecol Lett
+    2*Sup*exp(beta) - 2*N0 * 
+        (1 - exp(-beta))/(exp(-beta) - exp(-beta*(2*N0+1))) * 
 	    (1 - exp(-beta*2*N0) / (2*N0+1)) -
-	    S0 # when solved should return 0
+                S0 # when solved should return 0
 }
 
 .upCon2 <- function(beta, N0, Sup) {
-	## simplification of eq 9 in Harte et al. 2009 Ecol Lett
-	Sup/(2*N0) *
-	    ((1-exp(-beta)^(2*N0-1))/(1-exp(-beta)) - 1) -
+    ## simplification of eq 9 in Harte et al. 2009 Ecol Lett
+    Sup/(2*N0) *
+        ((1-exp(-beta)^(2*N0-1))/(1-exp(-beta)) - 1) -
 	    log(1/beta)
 }

@@ -7,3 +7,362 @@ library(nleqslv)
 ? nleqslv
 install.packages('dismo')
 install.packages('rgbif')
+## function to compute mete SAR#
+meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,#
+                    Amin, A0, upscale=FALSE, EAR=FALSE) {    #
+    ## figure out vector of sizes in units of cells; right now only doublings supported#
+    ## not needed if upscale is TRUE#
+    if(!upscale) {#
+        areaInfo <- .findAreas(spp, abund, row, col, x, y, Amin, A0)#
+        areas <- areaInfo$areas#
+        # areas <- areas[areas < A0] ## remove after bug fix ################################
+        row <- areaInfo$row#
+        col <- areaInfo$col#
+        nrow <- areaInfo$nrow#
+        ncol <- areaInfo$ncol#
+        Amin <- areaInfo$Amin#
+        A0 <- areaInfo$A0#
+    }#
+    ## the ESF#
+    if(!missing(spp) & !missing(abund)) {#
+        S0 <- length(unique(spp))#
+        N0 <- sum(abund)#
+    }#
+    if(is.null(S0) | is.null(N0)) stop('must provide spp and abund data or state variables S0 and N0')#
+    thisESF <- meteESF(S0=S0, N0=N0)#
+    ## calculate empirical SAR#
+    if(!missing(spp) & !missing(abund)) {#
+        eSAR <- empiricalSAR(spp, abund, row=row, col=col, Amin=Amin, A0=A0, EAR=EAR)#
+    } else {#
+        eSAR <- NULL#
+    }#
+#
+    ## calculate theoretical SAR#
+    if(upscale) {#
+        thrSAR <- upscaleSAR(thisESF, Amin, A0, EAR)#
+    } else {#
+        thrSAR <- downscaleSAR(thisESF, areas*Amin, A0, EAR)#
+    }#
+#
+    out <- list(obs=eSAR, pred=thrSAR)#
+    class(out) <- 'meteRelat'#
+#
+    return(out)#
+}#
+## empirical SAR#
+empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {#
+    ## figure out vector of sizes in units of cells; right now only doublings supported#
+    areaInfo <- .findAreas(spp, abund, row, col, x, y, Amin, A0)#
+    areas <- areaInfo$areas#
+    row <- areaInfo$row#
+    col <- areaInfo$col#
+    nrow <- areaInfo$nrow#
+    ncol <- areaInfo$ncol#
+    Amin <- areaInfo$Amin#
+    A0 <- areaInfo$A0#
+#
+    ## loop over areas#
+    out <- lapply(areas, function(a) {#
+        nspp <- .getSppInGroups(spp, abund, row, col, .getNeighbors(a, nrow, ncol), EAR)#
+        cbind(A=a*Amin, S=nspp)#
+    })#
+    out <- do.call(rbind, out)#
+    ## make output of class `sar' and tell it about empirical v. theoretical and ear v. sar#
+    attr(out, 'source') <- 'empirical'#
+    attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')#
+    class(out) <- 'sar'#
+#
+    return(out)#
+}#
+## function to calculate theoretical downscaled SAR#
+## x is output from meteESF#
+downscaleSAR <- function(x, A, A0, EAR=FALSE) {#
+    n0 <- 1:x$state.var['N0']#
+    nspp <- sapply(A, function(a) {#
+        probs <- (1 - .getPi0(n0, a, A0)) * #
+            with(x, #
+                 metePhi(n0, La[1], La[2], Z, #
+                         state.var['S0'], state.var['N0'], #
+                         ifelse(is.na(state.var['E0']), 1e+06, state.var['E0'])))#
+        return(x$state.var['S0'] * sum(probs))#
+    })#
+#
+    ## should return matrix with column for area and column for spp#
+    out <- cbind(A=A, S=nspp)#
+    attr(out, 'source') <- 'theoretical'#
+    attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')#
+    class(out) <- 'sar'#
+    return(out)#
+}#
+## upscale SAR ######### NOT DONE!!!#
+upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {#
+    Aups <- A0 * 2^(0:ceiling(log(A0/Aup)/log(2)))#
+    N0s <- x$ESF$state.var['N0'] * 2^(0:ceiling(log(A0/Aup)/log(2)))#
+    S0s <- numeric(length(Aups))#
+    S0s[1] <- x$ESF$state.var['S0']#
+    ## need to recursively solve two constraint funs up to Aup#
+    for(i in 2:length(Aups)) {#
+        this.sol <- nleqslv(c(beta=0.1, Sup=S0s[i-1]), #
+                            fn=function(beta, Sup) {#
+                            })#
+    }#
+#
+    ## should return matrix with column for area and column for spp#
+    out <- cbind(A=Aups, S=S0s)#
+    attr(out, 'source') <- 'theoretical'#
+    attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')#
+    class(out) <- 'sar'#
+}
+devtools::load_all('/Users/ajr/Dropbox/mete/meteR')
+meteSAR
+data(anbo)#
+head(anbo)#
+#
+## note: abundance of each spp needs to be recorded in each cell#
+## even if that abundance is 0....so might need to do that in some#
+## data sets#
+#
+samp2mat <- function(site,spp,abund) {#
+    y <- tapply(abund, list(site, spp), sum)#
+    y[is.na(y)] <- 0#
+    return(y)#
+}#
+#
+anbo.mat <- samp2mat(paste(anbo[, 1], anbo[,2]), anbo$spp, anbo$count)#
+anbo.new <- data.frame(t(sapply(strsplit(rownames(anbo.mat), ' ', fixed=TRUE), as.numeric)), #
+                       spp = rep(colnames(anbo.mat), each=nrow(anbo.mat)), #
+                       count = as.vector(anbo.mat))#
+colnames(anbo.new)[1:2] <- colnames(anbo)[1:2]
+anbo.obs.sar <- empiricalSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+plot(anbo.obs.sar)
+## function to plot objects of class sar#
+#
+plot.sar <- function(x, ...) {#
+    plot(x[, 'A'], x[, 'S'], xlab='Area', #
+         ylab=sprintf('Number of %s', ifelse(attr(x, 'type') == 'ear', 'endemics', 'species')), #
+         type=ifelse(attr(x, 'source')=='empirical', 'p', 'l'), ...)	#
+}
+## function to plot objects of class sar#
+#
+plot.sar <- function(x, ...) {#
+    plot(x[, 'A'], x[, 'S'], xlab='Area', #
+         ylab=sprintf('Number of %s', ifelse(attr(x, 'type') == 'ear', 'endemics', 'species')), #
+         type=ifelse(attr(x, 'source')=='empirical', 'p', 'l'), ...)	#
+}
+plot(anbo.obs.sar)
+anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+traceback()
+##	function to make Pi distribution#
+##	based on function for R(n,epsilon) in `makeMete'#
+metePi <- function(abund, n0=sum(abund), A, A0) {#
+	# n0 <- sum(n)#
+	thisSSF <- .makeSSF(n0, A, A0)#
+	# SSAD <- makeSSAD(n, thisSSF)#
+	out <- thisSSF#
+	out$data$n <- abund#
+	class(out) <- c('metePi', 'meteESF')#
+	return(out)#
+}#
+#
+##	PMF for Pi#
+.mete.Pi <- function(n,la,n0) {#
+	1/.mete.Pi.Z(la, n0) * exp(-la*n)#
+}#
+#
+##	normalization constant for Pi#
+.mete.Pi.Z <- function(la,n0) {#
+	if(la != 0) {#
+		return((1-exp(-la*(n0+1)))/(1-exp(-la)))#
+	} else {#
+		return(n0+1)#
+	}#
+}#
+#
+##	constraint function for Pi lagrange multiplier#
+##	function: x = e^(-la)#
+##  vectorized over `x'#
+.pi.cons <- function(x,n0,A,A0) {#
+	lhs <- rep(NA,length(x))#
+	case1 <- x > 1 & (n0+1)*log(x) <= log(2e+64)#
+	case2 <- x > 1 & (n0+1)*log(x) > log(2e+64)#
+	case3 <- x < 1#
+	case4 <- x == 1#
+	case0 <- case1 | case3#
+	lhs[case0] <- x[case0]/(1-x[case0]) - ((n0 + 1)*x[case0]^(n0+1))/(1-x[case0]^(n0+1))#
+	lhs[case2] <- x[case2]/(1-x[case2]) + n0 + 1#
+	lhs[case4] <- n0/2#
+	return(lhs - n0*A/A0)#
+}#
+##	make *S*patial *S*tructure *F*unction, like the ESF slot in mete class#
+.makeSSF <- function(n0, A, A0, eq52=.useEq52(n0,A,A0)) {#
+	# browser()#
+	if(A/A0 == 0.5) {#
+		return(list(La=0, La.info='analytic solution',#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	} else if(eq52) {#
+		La <- -log((n0*A/A0)/(1+n0*A/A0))#
+		return(list(La=La, La.info='analytic solution',#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	} else {#
+		if(.pi.cons(1-.Machine$double.eps^0.45,n0,A,A0) > 0) {#
+			upper <- 1-.Machine$double.eps^0.45#
+		} else {#
+			upper <- 1.01*(n0*(A/A0-1)-1)/(n0*(A/A0-1))#
+		}#
+		sol <- try(uniroot(.pi.cons,c(0,upper),#
+                   n0, A, A0,#
+                   tol=.Machine$double.eps^0.75), silent=TRUE)#
+		if(inherits(sol, 'try-error')) browser()#
+		La <- -log(sol$root)#
+		return(list(La=La,La.info=sol[-1],#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	}#
+}#
+## anything with n0 > 8000 and A/A0 < 0.5 use approx,#
+## otherwise follow this eq (validation in `check_eq52.R')#
+## vectorized over `n0'#
+.useEq52 <- function(n0,A,A0) {#
+	test <- exp(4.9 -1.36*log(n0) + #
+                0.239*log(n0)^2 -0.0154*log(n0)^3)#
+	res <- A0/A >= test#
+	res[n0 > 2^16 & A/A0 < 0.5] <- TRUE#
+	res[A/A0 == 0.5] <- TRUE#
+	return(res)#
+}
+anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+traceback()
+.makeSSF <- function(n0, A, A0, eq52=.useEq52(n0,A,A0)) {#
+	# browser()#
+	if(A/A0 == 0.5) {#
+		return(list(La=0, La.info='analytic solution',#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	} else if(eq52) {#
+		La <- -log((n0*A/A0)/(1+n0*A/A0))#
+		return(list(La=La, La.info='analytic solution',#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	} else {#
+		if(.pi.cons(1-.Machine$double.eps^0.45,n0,A,A0) > 0) {#
+			upper <- 1-.Machine$double.eps^0.45#
+		} else {#
+			upper <- 1.01*(n0*(A/A0-1)-1)/(n0*(A/A0-1))#
+		}#
+		sol <- try(uniroot(.pi.cons,c(0,upper),#
+                   n0, A, A0,#
+                   tol=.Machine$double.eps^0.75), silent=TRUE)#
+		if(inherits(sol, 'try-error')) browser()#
+		La <- -log(sol$root)#
+		return(list(La=La,La.info=sol[-1],#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	}#
+}
+anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+.makeSSF
+?inherits
+x
+x <- 1:4
+inherits(x, 'numeric')
+class(x)
+inherits(x, 'integer')
+try(print(z))
+x <- try(print(z))
+x
+class(x)
+inherits(x, 'try-error')
+.makeSSF <- function(n0, A, A0, eq52=.useEq52(n0,A,A0)) {#
+	# browser()#
+	if(A/A0 == 0.5) {#
+		return(list(La=0, La.info='analytic solution',#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	} else if(eq52) {#
+		La <- -log((n0*A/A0)/(1+n0*A/A0))#
+		return(list(La=La, La.info='analytic solution',#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	} else {#
+		if(.pi.cons(1-.Machine$double.eps^0.45,n0,A,A0) > 0) {#
+			upper <- 1-.Machine$double.eps^0.45#
+		} else {#
+			upper <- 1.01*(n0*(A/A0-1)-1)/(n0*(A/A0-1))#
+		}#
+		print(sprintf('A = %s', A))#
+		sol <- try(uniroot(.pi.cons,c(0,upper),#
+                   n0, A, A0,#
+                   tol=.Machine$double.eps^0.75), silent=TRUE)#
+		if(inherits(sol, 'try-error')) browser()#
+		La <- -log(sol$root)#
+		return(list(La=La,La.info=sol[-1],#
+                state.var=c(n0=n0,A=A,A0=A0)))#
+	}#
+}
+anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+traceback()
+.makeSSF
+downscaleSAR <- function(x, A, A0, EAR=FALSE) {#
+    n0 <- 1:x$state.var['N0']#
+    nspp <- sapply(A, function(a) {#
+        print(a)#
+        probs <- (1 - .getPi0(n0, a, A0)) * #
+            with(x, #
+                 metePhi(n0, La[1], La[2], Z, #
+                         state.var['S0'], state.var['N0'], #
+                         ifelse(is.na(state.var['E0']), 1e+06, state.var['E0'])))#
+        return(x$state.var['S0'] * sum(probs))#
+    })#
+#
+    ## should return matrix with column for area and column for spp#
+    out <- cbind(A=A, S=nspp)#
+    attr(out, 'source') <- 'theoretical'#
+    attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')#
+    class(out) <- 'sar'#
+    return(out)#
+}
+anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+downscaleSAR <- function(x, A, A0, EAR=FALSE) {#
+    n0 <- 1:x$state.var['N0']#
+    nspp <- sapply(A, function(a) {#
+        probs <- try((1 - .getPi0(n0, a, A0)) * #
+            with(x, #
+                 metePhi(n0, La[1], La[2], Z, #
+                         state.var['S0'], state.var['N0'], #
+                         ifelse(is.na(state.var['E0']), 1e+06, state.var['E0']))))#
+        if(inherits(probs, 'try-error')) browser()#
+        return(x$state.var['S0'] * sum(probs))#
+    })#
+#
+    ## should return matrix with column for area and column for spp#
+    out <- cbind(A=A, S=nspp)#
+    attr(out, 'source') <- 'theoretical'#
+    attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')#
+    class(out) <- 'sar'#
+    return(out)#
+}
+anbo.esf <- meteESF(spp=anbo.new$spp, abund=anbo.new$count) # need ESF for meteSAR
+downscaleSAR(anbo.esf, 16, 16)
+a
+A0
+n0
+.getPi0(n0, a, A0))
+.getPi0(n0, a, A0)
+n0
+A
+A0
+a
+eq52 <- .useEq52(n0,A,A0)
+eq52
+pi0 <- numeric(length(eq52))
+any(eq52)
+pi0[!eq52]
+pi0[!eq52] <- sapply(n0[!eq52], function(n) {#
+				.mete.Pi(0, metePi(0, n0=n, A, A0)$La, n0=n)#
+			})
+n0
+A
+A0
+upper
+1-.Machine$double.eps^0.45
+1.01*(n0*(A/A0-1)-1)/(n0*(A/A0-1))
+A/A0
+A/A0-1
+1.01*(n0*(A/A0-1)-1)/(n0*(A/A0-1))
+1.01*(n0*((A0-0.01)/A0-1)-1)/(n0*((A0-0.01)/A0-1))
+1.01*(n0*((A0-0.0001)/A0-1)-1)/(n0*((A0-0.0001)/A0-1))
+Q

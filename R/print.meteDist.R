@@ -35,6 +35,7 @@ print.meteDist <- function(x,...) {
              'sad' = 'Species abundance distribution',
              'ipd' = 'Individual metabolic rate distribution',
              'spd' = 'Species metabolic rate distribuiton',
+             'sipd' = 'Species level metabolic rate distribuiton',
              'ssad' = 'Spatial species abundance distribution'), 
       sprintf('predicted using %s', ifelse(is.null(x$data), 
                                            'state variables only', 
