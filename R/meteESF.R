@@ -17,8 +17,8 @@
 #' @param power A vector giving metabolic rates for each entry
 #' @param S0 Total number of species
 #' @param N0 Total number of individuals
-#' @param E0 Total metabolic rate; defaults to N0*1e5 if not specified or 
-#'        calculated from \code{power}
+#' @param E0 Total metabolic rate; defaults to N0*1e6 if not specified or 
+#'        calculated from \code{power} to allow one to fit models that do not depend on metabolic rates
 #' @param minE Minimum possible metabolic rate
 #' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
 #' @export
@@ -38,7 +38,7 @@
 #  @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 meteESF <- function(spp, abund, power,
-                    S0=NULL, N0=NULL, E0=NULL,
+                    S0=NULL, N0=NULL, E0=N0 * 1e+06,
                     minE) {
     ## case where spp (and abund) provided
     if(!missing(spp) & !missing(abund)) {

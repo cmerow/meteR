@@ -120,7 +120,7 @@ upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {
     
     ## need to recursively solve two constraint funs up to Aup
     for(i in 2:length(Aups)) {
-        this.sol <- nleqslv(c(beta=0.1, Sup=S0s[i-1]), 
+        this.sol <- nleqslv::nleqslv(c(beta=0.1, Sup=S0s[i-1]), 
                             fn=function(beta, Sup) {
                                 
                             })
