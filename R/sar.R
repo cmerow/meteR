@@ -109,28 +109,31 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
 }
 
 
-## upscale SAR ######### NOT DONE!!!
+## upscale SAR
 upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {
-    Aups <- A0 * 2^(0:ceiling(log(A0/Aup)/log(2)))
-    
-    N0s <- x$ESF$state.var['N0'] * 2^(0:ceiling(log(A0/Aup)/log(2)))
-    
-    S0s <- numeric(length(Aups))
-    S0s[1] <- x$ESF$state.var['S0']
-    
-    ## need to recursively solve two constraint funs up to Aup
-    for(i in 2:length(Aups)) {
-        this.sol <- nleqslv::nleqslv(c(beta=0.1, Sup=S0s[i-1]), 
-                            fn=function(beta, Sup) {
-                                
-                            })
-    }
-
-    ## should return matrix with column for area and column for spp
-    out <- cbind(A=Aups, S=S0s)
-    attr(out, 'source') <- 'theoretical'
-    attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')
-    class(out) <- 'sar'
+  ## vector of areas starting with anchor area A0
+  Aups <- A0 * 2^(0:ceiling(log(Aup/A0)/log(2)))
+  
+  ## vector of abundances at each area
+  N0s <- x$state.var['N0'] * 2^(0:ceiling(log(Aup/A0)/log(2)))
+  
+  ## vector of number of species at each area
+  S0s <- numeric(length(Aups))
+  S0s[1] <- x$state.var['S0']
+  
+  ## vector to hold termination codes from nleqslv about whether optimization succeeded
+  termcodes <- numeric(length(Aups))
+  
+  ## need to recursively solve constraint fun (solution in `.solveUpscale') up to Aup
+  for(i in 2:length(Aups)) {
+    S0s[i] <- .solveUpscale(S0s[i-1], N0s[i-1])
+  }
+  
+  ## should return matrix with column for area and column for spp
+  out <- cbind(A=Aups, S=S0s)
+  attr(out, 'source') <- 'theoretical'
+  attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')
+  class(out) <- 'sar'
+  
+  return(out)
 }
-
-
