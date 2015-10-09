@@ -7,10 +7,11 @@
 #'
 #' @details
 #' Uses either data or state variables to calculate the Ecosystem Structure 
-#' Function (ESF). \code{power} need not be specified; if missing an arbitrarily
-#'  large value is assigned to E0 (N0*1e5) such that it will minimally affect 
-#'  estimation of Lagrange multipliers. Consider using sensitivity analysis to 
-#'  confirm this assumption.
+#' Function (ESF). \code{power} nor \code{E0} need not be specified; if missing an arbitrarily
+#' large value is assigned to E0 (N0*1e5) such that it will minimally affect 
+#' estimation of Lagrange multipliers. Consider using sensitivity analysis to 
+#' confirm this assumption. Examples show different ways of combining data and state
+#' variables to specify constraints
 #' 
 #' @param spp A vector of species names for each entry
 #' @param abund A vector giving abundances of each entry
@@ -18,24 +19,44 @@
 #' @param S0 Total number of species
 #' @param N0 Total number of individuals
 #' @param E0 Total metabolic rate; defaults to N0*1e6 if not specified or 
-#'        calculated from \code{power} to allow one to fit models that do not depend on metabolic rates
+#'                  calculated from \code{power} to allow one to fit models that 
+#'                  do not depend on metabolic rates
 #' @param minE Minimum possible metabolic rate
 #' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
 #' @export
 #' 
 #' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' @return An object of class \code{esf}
+#' ## case where complete data availible
+#' esf1 <- meteESF(spp=arth$spp,
+#'                 abund=arth$count,
+#'                 power=arth$mass^(.75),
+#'                 minE=min(arth$mass^(.75)))
+#' esf1
+#' 
+#' ## excluding metabolic rate data
+#' esf2 <- meteESF(spp=arth$spp,
+#'                 abund=arth$count)
+#' esf2
+#' 
+#' ## using state variables only
+#' esf3 <- meteESF(S0=50, N0=500, E0=5000)
+#' esf3
+#' esf4 <- meteESF(S0=50, N0=500)
+#' esf4
+#' 
+#' @return An object of class \code{meteESF} with elements
+#' \describe{
+#'   \item{\code{data}}{The data used to construct the ESF}
+#'   \item{\code{emin}}{The minimum metabolic rate used to rescale metabolic rates}
+#'   \item{\code{La}}{Vector of Lagrange multipliers}
+#'   \item{\code{La.info}}{Termination information from optimization procedure}
+#'   \item{\code{state.var}}{State variables used to constrain entropy maximization}
+#'   \item{\code{Z}}{Normalization constant for ESF}
+#' }
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-#  @note other junk to mention
-# @seealso add pi
+#' @seealso metePi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
-#  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.
-#  @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 meteESF <- function(spp, abund, power,
                     S0=NULL, N0=NULL, E0=N0 * 1e+06,
