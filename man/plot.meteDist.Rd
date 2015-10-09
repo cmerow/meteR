@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.meteDist.R
 \name{plot.meteDist}
 \alias{plot.meteDist}
-\title{Plot to compare METE predictions to data}
+\title{Plot METE distributions and associated data}
 \usage{
 \method{plot}{meteDist}(x, ptype = c("cdf", "rad"), th.col = "red",
   lower.tail = TRUE, add.legend = TRUE, add.line = FALSE, ...)
@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{a \code{meteDist} object}
 
-\item{ptype}{either "cdf" or "rad"}
+\item{ptype}{type of plot; either "cdf" or "rad"}
 
 \item{th.col}{line color of theoretical prediction}
 
@@ -23,17 +23,20 @@
 \item{...}{arguments to be passed to \code{plot}}
 }
 \description{
-\code{plot.meteDist} plots both the theoretical prediction and data for a \code{meteDist} object using either a rank or cumulative distribution plot
+\code{plot.meteDist} plots both the theoretical prediction and data for a
+\code{meteDist} object using either a rank or cumulative distribution plot
 }
 \details{
-\code{plot.meteDist} automatically extracts the prediction and data from the \code{meteDist} objects. Additional plotting arguments can be passed from \code{par}.
+\code{plot.meteDist} automatically extracts the prediction and data (if used
+in \code{meteESF}) from the \code{meteDist} object. Additional plotting
+arguments can be passed to \code{...}.
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
-ipd1=ipd.meteESF(esf1)
+esf1 <- meteESF(spp=arth$spp,
+               abund=arth$count,
+               power=arth$mass^(.75),
+               minE=min(arth$mass^(.75)))
+ipd1 <- ipd(esf1)
 plot(ipd1)
 plot(ipd1, ptype='rad')
 }
@@ -42,5 +45,8 @@ Andy Rominger <ajrominger@gmail.com>, Cory Merow
 }
 \references{
 Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+}
+\seealso{
+sad, ipd, ssad, sipd, print.meteDist
 }
 

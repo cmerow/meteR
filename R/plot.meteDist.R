@@ -1,13 +1,16 @@
-#' @title Plot to compare METE predictions to data 
+#' @title Plot METE distributions and associated data
 #'
 #' @description
-#' \code{plot.meteDist} plots both the theoretical prediction and data for a \code{meteDist} object using either a rank or cumulative distribution plot
+#' \code{plot.meteDist} plots both the theoretical prediction and data for a 
+#' \code{meteDist} object using either a rank or cumulative distribution plot
 #'
 #' @details
-#' \code{plot.meteDist} automatically extracts the prediction and data from the \code{meteDist} objects. Additional plotting arguments can be passed from \code{par}.
+#' \code{plot.meteDist} automatically extracts the prediction and data (if used 
+#' in \code{meteESF}) from the \code{meteDist} object. Additional plotting 
+#' arguments can be passed to \code{...}.
 #' 
 #' @param x a \code{meteDist} object
-#' @param ptype either "cdf" or "rad"
+#' @param ptype type of plot; either "cdf" or "rad"
 #' @param th.col line color of theoretical prediction 
 #' @param lower.tail logical; choose TRUE to highlight differences between data and theory at low abundance; choose FALSE to highlight differences at high abundance.
 #' @param add.legend logical; add a legend
@@ -17,23 +20,20 @@
 #' @export
 #' 
 #' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' ipd1=ipd.meteESF(esf1)
+#' esf1 <- meteESF(spp=arth$spp,
+#'                abund=arth$count,
+#'                power=arth$mass^(.75),
+#'                minE=min(arth$mass^(.75)))
+#' ipd1 <- ipd(esf1)
 #' plot(ipd1)
 #' plot(ipd1, ptype='rad')
 #' 
 # @return list
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-# @seealso sad.mete, metePsi
+#' @seealso sad, ipd, ssad, sipd, print.meteDist
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
-# @aliases - a list of additional topic names that will be mapped to
-# this documentation when the user looks them up from the command
-# line.
-# @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
 
 plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red", 
                           lower.tail=TRUE, add.legend=TRUE, add.line=FALSE, ...) {
