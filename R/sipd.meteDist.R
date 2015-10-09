@@ -1,10 +1,70 @@
-## generic
+
+#' @title Generic method to obtain the species-level individual power distribution (SIPD)
+#'
+#' @description Extract species level individual power distribution 
+#' from ESF object and return object inheriting from meteDist
+#'
+# @details
+#' 
+#' 
+#' @param esf 
+#' @param sppID
+#' @param n 
+#' 
+#' @export
+#' 
+#' @examples
+#' esf1=meteESF(spp=arth$spp,
+#'               abund=arth$count,
+#'               power=arth$mass^(.75),
+#'               minE=min(arth$mass^(.75)))
+#' sipd1 <- sipd(arth.esf, sppID=5)
+# @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# @seealso sad.mete, metePsi
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# @aliases - a list of additional topic names that will be mapped to
+# this documentation when the user looks them up from the command
+# line.
+# @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
 sipd <- function(x, ...) {
 	UseMethod('sipd')
 }
 
-## function to extract species level individual power distribution 
-## from ESF object and return object inheriting from meteDist
+#================================================================
+#' @title Obtain the species-level individual power distribution (SIPD)
+#'
+#' @description Extract species level individual power distribution 
+#' from ESF object and return object inheriting from meteDist
+#'
+# @details
+#' 
+#' 
+#' @param esf 
+#' @param sppID
+#' @param n 
+#' 
+#' @export
+#' 
+#' @examples
+#' esf1=meteESF(spp=arth$spp,
+#'               abund=arth$count,
+#'               power=arth$mass^(.75),
+#'               minE=min(arth$mass^(.75)))
+#' test.sipd <- sipd(arth.esf, sppID=5)
+# plot(test.sipd) # not working yet
+# @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# @seealso sad.mete, metePsi
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# @aliases - a list of additional topic names that will be mapped to
+# this documentation when the user looks them up from the command
+# line.
+# @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
 sipd.meteESF <- function(esf, sppID, n) {
     if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
     
@@ -56,33 +116,34 @@ sipd.meteESF <- function(esf, sppID, n) {
     return(out)
 }
 
-#' @title Title of function
+#================================================================
+#' @title Intra-specific metabolic rate distribution
 #'
-#' @description
-#' \code{function.name} what it does
-#'
-#' @details
-#' how it works
-#' etc.
+#' @description Distribu􏴜on of metabolic rates over individuals within a species of abundance n0 (Theta)
+ 
+# $\Theta (\epsilon | n0,S0,N0,E0) = \dfrac{R}{\phi}$#'
+# @details \#' 
 #' 
-#' @param arg description of arg
-#' @param arg description of arg
-#' @keywords manip
+#' @param e 
+#' @param n
+#' @param la2 
 #' @export
 #' 
 #' @examples
-#' #code to run
-#' 
-#' @return - the type of object that the function returns
-#'
-#' @author Andy Rominger <ajrominger@@gmail.com>
-                                        #  @note other junk to mention
-                                        #  @seealso - to provide pointers to other related topics
-                                        #  @references - references to scientific literature on this topic
-                                        #  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.
-                                        #  @family - a family name. All functions that have the same family tag will be linked in the documentation.
+#' esf1=meteESF(spp=arth$spp,
+#'               abund=arth$count,
+#'               power=arth$mass^(.75),
+#'               minE=min(arth$mass^(.75)))
 
-##	Intra-specific metabolic rate distribution
+# @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# @seealso sad.mete, metePsi
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# @aliases - a list of additional topic names that will be mapped to
+# this documentation when the user looks them up from the command
+# line.
+# @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 meteTheta <- function(e, n, la2) {
     la2 * n * exp(-la2 * n * (e-1))

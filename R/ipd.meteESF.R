@@ -1,4 +1,31 @@
-## generic function for ipd
+
+#' @title Generic function for Individual Power Distribution 
+#'  
+#' @description \code{ipd.meteESF} calculates the distribution Psi(e | N0, S0, E0) (the distribution of metabolic rates across all individuals in a commmunity) 
+#' @details
+#' See examples.
+#' 
+#' @param esf an object of class mete. 
+#' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
+#' @export
+#' 
+#' @examples
+#' esf1=meteESF(spp=arth$spp,
+#'               abund=arth$count,
+#'               power=arth$mass^(.75),
+#'               minE=min(arth$mass^(.75)))
+#' ipd1=ipd(esf1)
+#' 
+#' @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# @seealso 
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# @aliases - a list of additional topic names that will be mapped to
+#' this documentation when the user looks them up from the command
+#' line.
+# @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
 ipd <- function(x) {
 	UseMethod('ipd')
 }
@@ -19,7 +46,7 @@ ipd <- function(x) {
 #'               abund=arth$count,
 #'               power=arth$mass^(.75),
 #'               minE=min(arth$mass^(.75)))
-#' ipd1=ipd.meteESF(esf1)
+#' ipd1=ipd(esf1)
 #' 
 #' @return list
 #'
@@ -109,11 +136,11 @@ ipd.meteESF <- function(esf) {
 #' @return numeric
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-#'  @note other junk to mention
+#  @note other junk to mention
 #' @seealso \code{ipd.mete}
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
-#'  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.
-#'  @family - a family name. All functions that have the same family tag will be linked in the documentation.
+#  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.
+#  @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 metePsi <- function(e,la1,la2,Z,S0,N0,E0) {
     gamma <- la1 + e*la2

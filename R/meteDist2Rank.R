@@ -6,7 +6,7 @@
 #' @details
 #' Used, e.g., in \code{plot.meteDist}
 #' 
-#' @param a \code{meteDist} object
+#' @param x \code{meteDist} object
 # @keywords 
 #' @export
 #' 

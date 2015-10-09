@@ -192,18 +192,41 @@
 }
 
 
-## two helper functions giving upscaling constraints
-.upCon1 <- function(beta, Sup, N0, S0) {
-    ## eq 8 in Harte et al. 2009 Ecol Lett
-    2*Sup*exp(beta) - 2*N0 * 
-        (1 - exp(-beta))/(exp(-beta) - exp(-beta*(2*N0+1))) * 
-	    (1 - exp(-beta*2*N0) / (2*N0+1)) -
-                S0 # when solved should return 0
+## FOR UPSCALING:
+## the following two equations form a system that has to be solved to get upscaled
+## species richness at an area Aup == 2*A0
+
+## eq (8) from Harte et al. 2009 Ecol Lett and eq (7.70) from Harte 2011 Oxford Press
+## solved for Sup so it can be plugged into eq (9)
+.Sup <- function(beta, S0, N0) {
+	exp(-beta) * (S0 + 2*N0*(1-exp(-beta)) / (exp(-beta) - exp(-beta*(2*N0+1))) * (1 - exp(-beta*2*N0) / (2*N0-1)))
 }
 
-.upCon2 <- function(beta, N0, Sup) {
-    ## simplification of eq 9 in Harte et al. 2009 Ecol Lett
-    Sup/(2*N0) *
-        ((1-exp(-beta)^(2*N0-1))/(1-exp(-beta)) - 1) -
-	    log(1/beta)
+## eq (9) from Harte et al. 2009 Ecol Lett and eq (7.71) from Harte 2011 Oxford Press
+.eq9 <- function(beta, S0, N0) {
+	ns <- 1:(2*N0)
+	sapply(beta, function(b) {
+		sum(exp(-b*ns) * (.Sup(b, S0, N0)/(2*N0) - 1/ns))
+	})
+}
+
+
+## figure out range in which to find solution for beta
+.solRng <- function(S0, N0) {
+	## empirically derived
+	a0 <- -1
+	a1 <- -1.38
+	
+	lwr <- exp(3*a0) * (N0/S0)^(1.5*a1)
+	upr <- exp(0.1*a0)*2.5 * (N0/S0)^(0.9*a1)
+	
+	return(c(lwr=lwr, upr=upr))
+}
+
+## find the root to the upscale constraint and return solution
+.solveUpscale <- function(S0, N0) {
+	beta <- uniroot(.eq9, .solRng(S0, N0), S0=S0, N0=N0, tol=.Machine$double.eps)$root
+	Sup <- .Sup(beta, S0, N0)
+	
+	return(Sup)
 }
