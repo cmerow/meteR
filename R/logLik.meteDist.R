@@ -31,7 +31,7 @@
 
 logLik.meteDist <- function(object,...) {
   lik <- sum(object$d(object$data,log=TRUE))
-	attr(lik, 'df') <- 1
+	attr(lik, 'df') <- length(object$La)
 	class(lik) <- 'logLik'
 	return(lik)
 }
