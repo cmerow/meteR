@@ -1,6 +1,6 @@
 ## figure out areas
 .findAreas <- function(spp, abund, row, col, x, y, Amin, A0) {
-    if(missing(spp) | missing(abund)) { # no data
+    if(is.null(spp) | is.null(abund)) { # no data
         if(missing(Amin)) { # use row and col as nrow and ncol
             if(length(row) == 1 & length(col) == 1) {
                 ## for simplicity make sure nrow <= ncol
@@ -12,11 +12,27 @@
             }
         } else { # use Amin to figure out nrow and ncol
             nrow <- ncol <- floor(sqrt(A0/Amin))
+            Amin <- A0/(nrow*ncol)
         }
         row <- col <- NULL
     } else { # data provided
-        if(!missing(x) & !missing(y)) { # case where x,y data provided turn point data into row col data
-            if(!missing(row) & !missing(col)) { # if row and col given use them to get nrow and ncol
+        if(!is.null(x) & !is.null(y)) { # case where x,y data provided turn point data into row col data
+            ## calculate areas, ranges, etc
+            xrng <- diff(range(x))
+            yrng <- diff(range(y))
+            
+            ## make sure row (=y) <= col (=x)
+            if(xrng < yrng) {
+                temp <- y
+                y <- x
+                x <- temp
+                rng <- diff(range(x))
+                yrng <- diff(range(y))
+            }
+            
+            A0 <- xrng*yrng
+            
+            if(!is.null(row) & !is.null(col)) { # if row and col given use them to get nrow and ncol
                 if(length(row) == 1 & length(col) == 1) {
                     ## for simplicity make sure nrow <= ncol
                     nrow <- min(row, col)
@@ -26,29 +42,32 @@
                     stop('if using x,y location data, row and col should be scalers indicating number of desired rows and columns')
                 }
             } else { # if row and col not given use max extent of x,y data and Amin to make grid
-                xrng <- diff(range(x))
-                yrng <- diff(range(y))
-                ## make sure row (=y) <= col (=x)
-                if(xrng < yrng) {
-                    temp <- y
-                    y <- x
-                    x <- temp
-                    rng <- diff(range(x))
-                    yrng <- diff(range(y))
-                }
-
                 ## try to get nrow and ncol such that min cell is as close to square as possible
-                A0 <- xrng*yrng
                 ncell <- floor(A0/Amin)
                 nrow <- floor(yrng/sqrt(Amin))
                 ncol <- round(ncell/nrow)
-                ncell <- nrow * ncol
-                Amin <- A0/ncell
             }
             
-            ## now we have nrow and ncol, use those to make grid ##############  NEED TO DO  ################
+            ## now we have nrow and ncol, use those to make grid
+            Amin <- A0/(nrow*ncol) # needs to be done even if Amin given cause fitting rows and cols
+                                   # in ranges might have changed area slightly
+            rowEndPoints <- seq(min(y)-.Machine$double.eps, max(y)+.Machine$double.eps, length=nrow+1)[-1]
+            colEndPoints <- seq(min(x)-.Machine$double.eps, max(x)+.Machine$double.eps, length=ncol+1)[-1]
+            rowcol <- apply(cbind(x, y), 1, function(X) {
+                rowPos <- X[2] - rowEndPoints
+                colPos <- X[1] - colEndPoints
+                rowPos[rowPos > 0] <- min(rowPos) - 1
+                colPos[colPos > 0] <- min(rowPos) - 1
+                r <- which.max(rowPos)
+                c <- which.max(colPos)
+
+                return(c(r, c))
+            })
             
-        } else if(length(row) != length(spp) | length(col) != length(spp)) { # case where `row' and `col' provided but not for all records
+            row <- rowcol[1, ]
+            col <- rowcol[2, ]
+            
+        } else if(length(row) != length(spp) | length(col) != length(spp)) {
             stop('either row and column must be given for each spp or individual, or x,y coordinates given')
         } else { # case where row and col provided for each record
             ## make sure row and col IDs are 1:nrow and 1:ncol
@@ -68,14 +87,13 @@
         }
     }
     
-    ## now regardless of input we have nrow and ncol and if there are real
-    ## data we have row and col identities for each entry in the data.
-    
     ## figure out vector of sizes in units of cells; right now only doublings supported
     maxDoubling <- .calcMaxDoubling(floor(log(nrow*ncol) / log(2)), nrow)
     
     return(list(areas = 2^(0:maxDoubling), row=row, col=col, nrow=nrow, ncol=ncol, Amin=Amin, A0=A0))
 }
+
+
 
 ## funciton uses recursion to calculate maximum possible doubling for an area with 
 ## given minimum dimension
@@ -128,7 +146,7 @@
 .getSppInGroups <- function(spp, abund, row, col, groups, endemics=FALSE) {
     cellID <- paste(row, col, sep=',')
     cellGroup <- groups$group[match(cellID, groups$cells)]
-
+    # browser()
     sppByGroup <- tapply(abund, list(cellGroup, spp), sum)
     sppByGroup[is.na(sppByGroup)] <- 0
     sppByGroup[sppByGroup > 0] <- 1

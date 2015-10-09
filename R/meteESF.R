@@ -38,7 +38,7 @@
 #  @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 meteESF <- function(spp, abund, power,
-                    S0=NULL, N0=NULL, E0=N0 * 1e+06,
+                    S0=NULL, N0=NULL, E0=NULL,
                     minE) {
     ## case where spp (and abund) provided
     if(!missing(spp) & !missing(abund)) {
