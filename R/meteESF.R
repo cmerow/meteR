@@ -1,8 +1,7 @@
-
 #' @title meteESF
 #'  
 #' @description \code{meteESF} Calculates the ``ecosystem structure
-#' function'' which forms the core of the Maximum Entropy Theory of
+#' function'' $R(n, epsilon)$ which forms the core of the Maximum Entropy Theory of
 #' Ecology
 #'
 #' @details

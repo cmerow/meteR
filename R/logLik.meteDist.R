@@ -13,7 +13,6 @@
 #' @export
 #' 
 #' @examples
-#' \examples{
 #' data(arth)
 #' ## object holding ecosystem structure function
 #' esf1 <- meteESF(spp=arth$spp,
@@ -23,7 +22,6 @@
 #' ## calculate individual power distribution and its likelihood
 #' ipd1 <- ipd.meteESF(esf1)
 #' logLik(ipd1)
-#' }
 #' 
 #' @return object of class \code{logLik}
 #'
@@ -79,7 +77,7 @@ logLik.meteDist <- function(object,...) {
 #' \describe{
 #'    \item{z}{The z-score}
 #'    \item{obs}{The observed log-likelihood of the actual data set}
-#'    \item{sim}{\code{nrep} Simulated values}
+#'    \item{sim}{\code{nrep} Simulated values if return.sim=TRUE, NULL otherwise}
 #' }
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
