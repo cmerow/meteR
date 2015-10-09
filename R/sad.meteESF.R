@@ -58,7 +58,7 @@ sad.meteESF <- function(esf) {
     this.eq <- function(n, log=FALSE) {
       out <- metePhi(n=n,la1=esf$La[1],la2=esf$La[2],Z=esf$Z,
                      S0=esf$state.var[1],N0=esf$state.var[2],
-                     E0=esf$state.var[3])
+                     E0=ifelse(is.na(esf$state.var[3]), esf$state.var[2]*10^2, esf$state.var[3]))
       if(log) out <- log(out)
       return(out)
     }
