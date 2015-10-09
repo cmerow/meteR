@@ -1,4 +1,4 @@
-#' @title Compute METE species abundance distribution (SAR)
+#' @title Compute METE species area relationship (SAR)
 #'
 # @description
 #'
@@ -38,7 +38,7 @@
 
 meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
                     Amin, A0, upscale=FALSE, EAR=FALSE) {    
-<<<<<<< HEAD
+#<<<<<<< HEAD
     ## figure out vector of sizes in units of cells; right now only doublings supported
     ## not needed if upscale is TRUE
     if(!upscale) {
@@ -108,6 +108,7 @@ meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
 #' @param Amin
 #' @param A0
 #' @param EAR logical. TRUE computes the endemics-area relatinship
+#' @param upscale logical. Do upscaling?
 #' 
 #' @export
 #' 
@@ -126,7 +127,8 @@ meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 
-empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
+empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0,upscale=FALSE,EAR=FALSE) {
+    ## CM: looks like you need to include upscale as an arg, so I did
     ## figure out vector of sizes in units of cells; right now only doublings supported
     areaInfo <- .findAreas(
         spp=if(missing(spp)) NULL else spp,
@@ -137,7 +139,7 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
         y=if(missing(y)) NULL else y, 
         Amin=if(missing(Amin)) NULL else Amin, 
         A0=if(missing(A0)) NULL else A0)
-=======
+#=======
   ## figure out vector of sizes in units of cells; right now only doublings supported
   ## not needed if upscale is TRUE
   if(!upscale) {
@@ -150,7 +152,7 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
       y=if(missing(y)) NULL else y, 
       Amin=if(missing(Amin)) NULL else Amin, 
       A0=if(missing(A0)) NULL else A0)
->>>>>>> b340378ea119a69fd2d4a2a451fcf56d6e4cdc68
+#>>>>>>> b340378ea119a69fd2d4a2a451fcf56d6e4cdc68
     areas <- areaInfo$areas
     row <- areaInfo$row
     col <- areaInfo$col
@@ -191,50 +193,50 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
 }
 
 
-## empirical SAR
-empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
-  ## figure out vector of sizes in units of cells; right now only doublings supported
-  areaInfo <- .findAreas(
-    spp=if(missing(spp)) NULL else spp,
-    abund=if(missing(abund)) NULL else abund, 
-    row=if(missing(row)) NULL else row, 
-    col=if(missing(col)) NULL else col, 
-    x=if(missing(x)) NULL else x, 
-    y=if(missing(y)) NULL else y, 
-    Amin=if(missing(Amin)) NULL else Amin, 
-    A0=if(missing(A0)) NULL else A0)
-  areas <- areaInfo$areas
-  row <- areaInfo$row
-  col <- areaInfo$col
-  nrow <- areaInfo$nrow
-  ncol <- areaInfo$ncol
-  Amin <- areaInfo$Amin
-  A0 <- areaInfo$A0
-  
-  ## loop over areas
-  out <- lapply(areas, function(a) {
-    nspp <- .getSppInGroups(spp, abund, row, col, .getNeighbors(a, nrow, ncol), EAR)
-    cbind(A=a*Amin, S=nspp)
-  })
-  out <- do.call(rbind, out)
-  
-  ## make output of class `sar' and tell it about empirical v. theoretical and ear v. sar
-  attr(out, 'source') <- 'empirical'
-  attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')
-  class(out) <- 'sar'
-  
-  return(out)
-}
+# ## empirical SAR
+# empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
+#   ## figure out vector of sizes in units of cells; right now only doublings supported
+#   areaInfo <- .findAreas(
+#     spp=if(missing(spp)) NULL else spp,
+#     abund=if(missing(abund)) NULL else abund, 
+#     row=if(missing(row)) NULL else row, 
+#     col=if(missing(col)) NULL else col, 
+#     x=if(missing(x)) NULL else x, 
+#     y=if(missing(y)) NULL else y, 
+#     Amin=if(missing(Amin)) NULL else Amin, 
+#     A0=if(missing(A0)) NULL else A0)
+#   areas <- areaInfo$areas
+#   row <- areaInfo$row
+#   col <- areaInfo$col
+#   nrow <- areaInfo$nrow
+#   ncol <- areaInfo$ncol
+#   Amin <- areaInfo$Amin
+#   A0 <- areaInfo$A0
+#   
+#   ## loop over areas
+#   out <- lapply(areas, function(a) {
+#     nspp <- .getSppInGroups(spp, abund, row, col, .getNeighbors(a, nrow, ncol), EAR)
+#     cbind(A=a*Amin, S=nspp)
+#   })
+#   out <- do.call(rbind, out)
+#   
+#   ## make output of class `sar' and tell it about empirical v. theoretical and ear v. sar
+#   attr(out, 'source') <- 'empirical'
+#   attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')
+#   class(out) <- 'sar'
+#   
+#   return(out)
+# }
 
 #================================================================
-#' @title Downscale the species abundance distribution (SAR)
+#' @title Downscale the species area relationship (SAR)
 #'
 # @description
 #'
 # @details
 #' 
 #' 
-#' @param x
+#' @param x an object of class meteESF
 #' @param A
 #' @param A0
 #' @param EAR logical. TRUE computes the endemics-area relatinship
@@ -255,8 +257,6 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
-## function to calculate theoretical downscaled SAR
-## x is output from meteESF
 downscaleSAR <- function(x, A, A0, EAR=FALSE) {
   n0 <- 1:x$state.var['N0']
   
@@ -292,7 +292,7 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
 }
 
 
-<<<<<<< HEAD
+#<<<<<<< HEAD
 #================================================================
 #' @title upscale SAR
 #'
@@ -301,7 +301,7 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
 # @details
 #' 
 #' 
-#' @param x
+#' @param x an object of class meteESF
 #' @param A0
 #' @param Aup
 #' @param EAR logical. TRUE computes the endemics-area relatinship
@@ -321,33 +321,33 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
 # this documentation when the user looks them up from the command
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
-upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {
-    ## vector of areas starting with anchor area A0
-    Aups <- A0 * 2^(0:ceiling(log(Aup/A0)/log(2)))
-    
-    ## vector of abundances at each area
-    N0s <- x$state.var['N0'] * 2^(0:ceiling(log(Aup/A0)/log(2)))
-    
-    ## vector of number of species at each area
-    S0s <- numeric(length(Aups))
-    S0s[1] <- x$state.var['S0']
-    
-    ## vector to hold termination codes from nleqslv about whether optimization succeeded
-    termcodes <- numeric(length(Aups))
-    
-    ## need to recursively solve constraint fun (solution in `.solveUpscale') up to Aup
-    for(i in 2:length(Aups)) {
-        S0s[i] <- .solveUpscale(S0s[i-1], N0s[i-1])
-    }
-
-    ## should return matrix with column for area and column for spp
-    out <- cbind(A=Aups, S=S0s)
-    attr(out, 'source') <- 'theoretical'
-    attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')
-    class(out) <- 'sar'
-    
-    return(out)
-=======
+# upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {
+#     ## vector of areas starting with anchor area A0
+#     Aups <- A0 * 2^(0:ceiling(log(Aup/A0)/log(2)))
+#     
+#     ## vector of abundances at each area
+#     N0s <- x$state.var['N0'] * 2^(0:ceiling(log(Aup/A0)/log(2)))
+#     
+#     ## vector of number of species at each area
+#     S0s <- numeric(length(Aups))
+#     S0s[1] <- x$state.var['S0']
+#     
+#     ## vector to hold termination codes from nleqslv about whether optimization succeeded
+#     termcodes <- numeric(length(Aups))
+#     
+#     ## need to recursively solve constraint fun (solution in `.solveUpscale') up to Aup
+#     for(i in 2:length(Aups)) {
+#         S0s[i] <- .solveUpscale(S0s[i-1], N0s[i-1])
+#     }
+# 
+#     ## should return matrix with column for area and column for spp
+#     out <- cbind(A=Aups, S=S0s)
+#     attr(out, 'source') <- 'theoretical'
+#     attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')
+#     class(out) <- 'sar'
+#     
+#     return(out)
+# #=======
 ## upscale SAR
 upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {
   ## vector of areas starting with anchor area A0
@@ -375,5 +375,5 @@ upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {
   class(out) <- 'sar'
   
   return(out)
->>>>>>> b340378ea119a69fd2d4a2a451fcf56d6e4cdc68
+#>>>>>>> b340378ea119a69fd2d4a2a451fcf56d6e4cdc68
 }
