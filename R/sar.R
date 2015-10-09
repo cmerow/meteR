@@ -1,4 +1,41 @@
-## function to compute mete SAR
+#' @title Compute METE species abundance distribution (SAR)
+#'
+# @description
+#'
+# @details
+#' 
+#' 
+#' @param spp
+#' @param abun 
+#' @param row 
+#' @param col
+#' @param x 
+#' @param y 
+#' @param S0
+#' @param N0
+#' @param Amin
+#' @param A0
+#' @param upscale
+#' @param EAR
+#' 
+#' @export
+#' 
+#' @examples
+#' esf1=meteESF(spp=arth$spp,
+#'               abund=arth$count,
+#'               power=arth$mass^(.75),
+#'               minE=min(arth$mass^(.75)))
+
+# @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# @seealso sad.mete, metePsi
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# @aliases - a list of additional topic names that will be mapped to
+# this documentation when the user looks them up from the command
+# line.
+# @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
 meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
                     Amin, A0, upscale=FALSE, EAR=FALSE) {    
     ## figure out vector of sizes in units of cells; right now only doublings supported
@@ -53,7 +90,41 @@ meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
 }
 
 
-## empirical SAR
+#================================================================
+#' @title Empirical SAR
+#'
+# @description
+#'
+# @details
+#' 
+#' 
+#' @param spp
+#' @param abun 
+#' @param row 
+#' @param col
+#' @param x 
+#' @param y 
+#' @param Amin
+#' @param A0
+#' @param EAR logical. TRUE computes the endemics-area relatinship
+#' 
+#' @export
+#' 
+#' @examples
+#' esf=meteESF(spp=anbo$spp,
+#'              abund=anbo$count)
+
+# @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# @seealso sad.mete, metePsi
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# @aliases - a list of additional topic names that will be mapped to
+# this documentation when the user looks them up from the command
+# line.
+# @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
+
 empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
     ## figure out vector of sizes in units of cells; right now only doublings supported
     areaInfo <- .findAreas(
@@ -87,6 +158,35 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
 
     return(out)
 }
+
+#================================================================
+#' @title Downscale the species abundance distribution (SAR)
+#'
+# @description
+#'
+# @details
+#' 
+#' 
+#' @param x
+#' @param A
+#' @param A0
+#' @param EAR logical. TRUE computes the endemics-area relatinship
+#'  
+#' @export
+#' 
+#' @examples
+#' esf=meteESF(spp=anbo$spp,
+#'              abund=anbo$count)
+#'              
+#' @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# @seealso sad.mete, metePsi
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# @aliases - a list of additional topic names that will be mapped to
+# this documentation when the user looks them up from the command
+# line.
+# @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 ## function to calculate theoretical downscaled SAR
 ## x is output from meteESF
@@ -125,7 +225,34 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
 }
 
 
-## upscale SAR
+#================================================================
+#' @title upscale SAR
+#'
+# @description
+#'
+# @details
+#' 
+#' 
+#' @param x
+#' @param A0
+#' @param Aup
+#' @param EAR logical. TRUE computes the endemics-area relatinship
+#' 
+#' @export
+#' 
+#' @examples
+#' esf=meteESF(spp=anbo$spp,
+#'              abund=anbo$count)
+#'              
+#' @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# @seealso sad.mete, metePsi
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# @aliases - a list of additional topic names that will be mapped to
+# this documentation when the user looks them up from the command
+# line.
+# @family - a family name. All functions that have the same family tag will be linked in the documentation.
 upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {
     ## vector of areas starting with anchor area A0
     Aups <- A0 * 2^(0:ceiling(log(Aup/A0)/log(2)))

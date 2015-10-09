@@ -1,5 +1,5 @@
 
-#' @title Generic function for Individual Power Distribution 
+#' @title Individual Power Distribution 
 #'  
 #' @description \code{ipd.meteESF} calculates the distribution Psi(e | N0, S0, E0) (the distribution of metabolic rates across all individuals in a commmunity) 
 #' @details
@@ -30,33 +30,10 @@ ipd <- function(x) {
 	UseMethod('ipd')
 }
 
-
-#' @title Individual Power Distribution 
-#'  
-#' @description \code{ipd.meteESF} calculates the distribution Psi(e | N0, S0, E0) (the distribution of metabolic rates across all individuals in a commmunity) 
-#' @details
-#' See examples.
+#' @rdname ipd
+#' @method ipd meteESF
+#' @S3method ipd meteESF
 #' 
-#' @param esf an object of class mete. 
-#' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
-#' @export
-#' 
-#' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' ipd1=ipd(esf1)
-#' 
-#' @return list
-#'
-#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-#' @seealso sad.meteESF, metePsi
-#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
-#' @aliases - a list of additional topic names that will be mapped to
-#' this documentation when the user looks them up from the command
-#' line.
-#' @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 ipd.meteESF <- function(esf) {
     if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')

@@ -159,7 +159,14 @@ legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
 ```
 <!--ANDY: What should the reader take away from this? discuss residuals vs. likelihoods. arth ipd is supported by residauls z but not liklihood. -->
 
+We can also obtain the distribution of metabolic rates of individuals in a species with $n$ individuals ($\Theta$):
+<!-- add if we figure out how to put equns in: (\eqn{\Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}) with `sipd` with (for species 5) -->
+```{r fig.width=5, fig.cap="Distribution of metabolic rates of individuals in a species with $n$ individuals"}
+(sipd1 <- sipd(esf1, sppID=5))
+plot(sipd1,xlab='metabolic rate')
+```
 
+<!--ANDY: we still get the plot error, even though it plots. also, what's the x axis? those aren't the right units for mass or energy... -->
 <!--========================================================================-->
 #Case Study 2 - Spatial distributions
 Next, we illustrate with data from a desert grassland community known as anza 

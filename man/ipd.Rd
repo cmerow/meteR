@@ -2,9 +2,12 @@
 % Please edit documentation in R/ipd.meteESF.R
 \name{ipd}
 \alias{ipd}
-\title{Generic function for Individual Power Distribution}
+\alias{ipd.meteESF}
+\title{Individual Power Distribution}
 \usage{
 ipd(x)
+
+\method{ipd}{meteESF}(esf)
 }
 \arguments{
 \item{esf}{an object of class mete.}

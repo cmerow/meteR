@@ -1,5 +1,5 @@
 
-#' @title generic method for METE species abundance distribution
+#' @title METE species abundance distribution
 #'
 #' @description
 #' \code{sad.mete} returns the species abundance distribution
@@ -14,11 +14,11 @@
 #' @export
 #' 
 #' @examples
-#' esf1=meteESF(spp=arth$spp,
+#' esf1 <- meteESF(spp=arth$spp,
 #'               abund=arth$count,
 #'               power=arth$mass^(.75),
 #'               minE=min(arth$mass^(.75)))
-#' sad=sad(esf1)
+#' sad <- sad(esf1)
 #' 
 #' @return An object of class \code{meteDist} which inherits from objects of class \code{sad}. The object contains a list with the following elements.
 #' \describe{
@@ -43,47 +43,10 @@ sad <- function(x) {
 	UseMethod('sad')
 }
 
-#======================================================================
-#' @title METE species abundance distribution
-#'
-#' @description
-#' \code{sad.mete} returns the species abundance distribution
-#' predicted by METE (Phi(n))
-#'
-#' @details
-#' See Examples.
+#' @rdname sad
+#' @method sad meteESF
+#' @S3method sad meteESF
 #' 
-#' @param esf an object of class mete. 
-#' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure 
-#' function
-#' @export
-#' 
-#' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' sad=sad(esf1)
-#' 
-#' @return An object of class \code{meteDist} which inherits from objects of class \code{sad}. The object contains a list with the following elements.
-#' \describe{
-#'    \item{\code{type}}{'sad'}
-#'    \item{\code{data}}{X}
-#'    \item{\code{d}}{this.eq}
-#'    \item{\code{p}}{FUNp}
-#'    \item{\code{q}}{FUNq}
-#'    \item{\code{r}}{FUNr}
-#' }
-#'
-#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-# @note
-#' @seealso metePhi
-#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
-# @aliases - a list of additional topic names that will be mapped to
-# this documentation when the user looks them up from the command
-# line.
-# @family - a family name. All functions that have the same family tag will be linked in the documentation.
-
 
 sad.meteESF <- function(esf) {
     x <- esf$data$n

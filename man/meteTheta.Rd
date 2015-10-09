@@ -14,12 +14,8 @@ meteTheta(e, n, la2)
 \item{la2}{}
 }
 \description{
-Distribu􏴜on of metabolic rates over individuals within a species of abundance n0 (Theta)
+Distributi􏴜on of metabolic rates over individuals within a species of abundance n0 (Theta)
 # $\Theta (\epsilon | n0,S0,N0,E0) = \dfrac{R}{\phi}$
-#
-}
-\details{
-\
 }
 \examples{
 esf1=meteESF(spp=arth$spp,

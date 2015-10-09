@@ -2,9 +2,12 @@
 % Please edit documentation in R/sad.meteESF.R
 \name{sad}
 \alias{sad}
-\title{generic method for METE species abundance distribution}
+\alias{sad.meteESF}
+\title{METE species abundance distribution}
 \usage{
 sad(x)
+
+\method{sad}{meteESF}(esf)
 }
 \arguments{
 \item{esf}{an object of class mete.}
@@ -28,11 +31,11 @@ predicted by METE (Phi(n))
 See Examples.
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
+esf1 <- meteESF(spp=arth$spp,
               abund=arth$count,
               power=arth$mass^(.75),
               minE=min(arth$mass^(.75)))
-sad=sad(esf1)
+sad <- sad(esf1)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

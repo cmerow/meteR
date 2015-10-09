@@ -2,26 +2,34 @@
 % Please edit documentation in R/sipd.meteDist.R
 \name{sipd}
 \alias{sipd}
+\alias{sipd.meteESF}
 \title{Generic method to obtain the species-level individual power distribution (SIPD)}
 \usage{
 sipd(x, ...)
+
+\method{sipd}{meteESF}(esf, sppID, n)
 }
 \arguments{
-\item{esf}{}
+\item{esf}{an object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
 
 \item{sppID}{}
 
-\item{n}{}
+\item{n}{integer. number of individuals in the species}
 }
 \description{
 Extract species level individual power distribution
-from ESF object and return object inheriting from meteDist
+from ESF object and return object inheriting from meteDist. This distribution (\eqn{\Theta}) describes the distribution of metabolic rates across the individuals of a species with n individuls
+}
+\details{
+\deqn{
+   \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
+}
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
+esf1 <- meteESF(spp=arth$spp,
+               abund=arth$count,
+               power=arth$mass^(.75),
+               minE=min(arth$mass^(.75)))
 sipd1 <- sipd(arth.esf, sppID=5)
 }
 \author{
