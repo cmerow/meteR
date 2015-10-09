@@ -1,8 +1,3 @@
-## generic function for ipd
-ipd <- function(x) {
-	UseMethod('ipd')
-}
-
 
 #' @title Individual Power Distribution 
 #'  
@@ -27,6 +22,15 @@ ipd <- function(x) {
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 #' @seealso meteDist, sad.meteESF, metePsi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+
+ipd <- function(x) {
+	UseMethod('ipd')
+}
+
+#' @rdname ipd
+#' @method ipd meteESF
+#' @S3method ipd meteESF
+#' 
 
 ipd.meteESF <- function(esf) {
     if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
@@ -106,11 +110,11 @@ ipd.meteESF <- function(esf) {
 #' @return numeric
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-#'  @note other junk to mention
+#  @note other junk to mention
 #' @seealso \code{ipd.mete}
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
-#'  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.
-#'  @family - a family name. All functions that have the same family tag will be linked in the documentation.
+#  @aliases - a list of additional topic names that will be mapped to this documentation when the user looks them up from the command line.
+#  @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 metePsi <- function(e,la1,la2,Z,S0,N0,E0) {
     gamma <- la1 + e*la2

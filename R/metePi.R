@@ -1,3 +1,4 @@
+
 #' @title metePi
 #'  
 #' @description \code{metePi} calculates the ``spatial structure
@@ -37,6 +38,8 @@
 
 ##	function to make Pi distribution
 ##	based on function for R(n,epsilon) in `makeMete'
+
+
 metePi <- function(abund, n0=sum(abund), A, A0) {
 	# n0 <- sum(n)
 	

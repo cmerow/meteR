@@ -3,12 +3,16 @@ title: "An Overview of meteR: testing the Maximum Entropy Theory of Ecology"
 author: "Andy Rominger, Cory Merow"
 date: "`r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette
+  pdf_document:
+    toc: true
+    toc_depth: 3
 vignette: >
   \VignetteIndexEntry{An Overview of meteR: testing the Maximum Entropy Theory of Ecology}
   \VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
+<!--  rmarkdown::html_vignette % this doesn't seem to allow TOC-->
+
 <!-- For more details on using R Markdown see <http://rmarkdown.rstudio.com>. 
 #TO DO
 ADD TOC
@@ -26,6 +30,7 @@ knitr::opts_chunk$set(cache=TRUE)
 The package meteR is designed to facilitate fitting the models for the Maximum Entropy Theory of Ecology (METE) from data. For an overview of METE, see Harte et al. (2008), Harte (2011), and Harte and Newman (2014). Note that throughout this tutorial we use the notation for quantities used by the theory from these sources without extensive explanation. `meteR` can use data input in multiple formats and predict all the fundamental distributions of the theory (see Figure 1). Our objective is to facilitate tests of METE with empirical data sets. 
 
 ![fig1](/Users/ctg/Dropbox/METE/meteR/vignettes/METE_Fig.png) 
+
 Figure 1 was taken from Harte and Newman (2014) TREE 29: 384–389.
 
 <!--========================================================================-->
@@ -38,7 +43,7 @@ data(arth)
 dim(arth)
 head(arth)
 ```
-This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that metabolic rate=mass^(3/4)).If multiple individuals of the same size are observed, these can be specified as well (i.e., `arth$count` is something other than 1.) See the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables (N (# individuals), S (# species), E (total metabolic rate), A (total area)) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
+This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that $metabolic_rate=mass^{3/4}$).If multiple individuals of the same size are observed, these can be specified as well (i.e., `arth$count` is something other than 1.) See the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables (N (# individuals), S (# species), E (total metabolic rate), A (total area)) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
 
 Analysis begins by building the ecosystem structure function (ESF; R(n,e)). 
 ```{r}
@@ -49,28 +54,28 @@ esf1=meteESF(spp=arth$spp,
 esf1
 str(esf1)
 ```
-The structure of the ESF contains some useful information. In addition to returning the inputs (in analogy, e.g., to common model fitting functions such as lm()), it returns the Lagrange multipliers as well as information about the fitting procedure. Note that we specified the mininmum value for the metabolic rate, but that the minimum observed value will be taken by default. <!-- explain mine? -->
-<!-- To fit the model, `meteESF` uses...explain the algorithm briefly and when it should work -->
+Note that we use the terms 'power' and 'metabolic rate' interchangeably. The structure of the ESF contains some useful information. In addition to returning the inputs (in analogy, e.g., to common model fitting functions such as lm()), it returns the Lagrange multipliers as well as information about the fitting procedure. Note that we specified the minimum value for the metabolic rate, but that the minimum observed value will be taken by default. <!-- explain mine? -->
+<!--ANDY: To fit the model, `meteESF` uses...explain the algorithm briefly and when it should or shouldn't work -->
 
-## SAD
+## Species Abundance Distribution (SAD)
 From the ESF, we can predict macroecological patterns. We begin with the species abundance distribution (SAD).
 ```{r}
-sad1=sad.meteESF(esf1)
+sad1=sad(esf1)
 sad1
 ```
-`sad.meteESF` fits the SAD and provides density (d), distribution function (p), quantile function (q), and random generation (r) for the distribution (see these with `str(sad1)`. This specification follows the conventions used by commonly used statistical distributions in the `stats` package (e.g. see `?rnorm`). These distributions allow us to use the model in a number of ways. You can access these directly as follows; e.g. randomly generating samples from the fitted distribution or determining the quantiles.
+`sad.meteESF` fits the SAD and provides density (d), distribution function (p), quantile function (q), and random generation (r) for the distribution (see these with `str(sad1)`. This specification follows the conventions used by commonly used statistical distributions in the `stats` package (e.g. see `?rnorm`). These distributions allow us to use the model in a number of ways. You can access these functions directly as follows; e.g. randomly generating samples from the fitted distribution or determining the quantiles.
 ```{r}
 sad1$r(20)
 sad1$q(seq(0,1,length=10))
 ```
-`meteR` readily plots the SAD (and other predicted distributions):
-```{r fig.width=7, fig.cap="Different ways of plotting the IPD"}
+`meteR` readily plots the SAD as either a rank-abundance distribution (`ptype=rad`) or a cumulative distribution (`ptype=cdf`) (and other predicted distributions):
+```{r fig.width=7, fig.cap="Different ways of plotting the SAD"}
 par(mfrow=c(1,2))
 plot(sad1, ptype='rad')
 plot(sad1, ptype='cdf')
 ```
 
-We provide functions to assess model fit based on likelihood and residuals. First, we illustrate likelihood methods:
+`meter` provides functions to assess model fit based on likelihood and residuals. First, we illustrate likelihood methods:
 
 ```{r, fig.width=5, fig.cap="Likelihood-based z-score."}
 #== calculate the liklihood of the data, given the fitted model
@@ -87,13 +92,16 @@ abline(v=llz$obs,lty=2)
 legend('top',legend=c('data','simulated\nfrom METE'),
        col=c('black','red'), lty=c(1,1),bty='n') 
 ```
+
+Because the likelihood of the observed data fall comfortably within this distribution, we have confidence that the model provides a good fit.
+<!--ANDY: this is what we want people to take away, right? or was there something more to explain? -->
 Note that other utilities that extract liklihoods from model objects are also useful:
 
 ```{r}
 AIC(sad1)
 ```
-
-Next, we illustrate methods relying on residuals.
+<!--ANDY: Any other such functions? -->
+Next, we illustrate methods relying on residuals to assess model fit.
 
 ```{r}
 #== calculate the residuals from the fitted distribution
@@ -107,12 +115,14 @@ mseZ.meteDist(sad1, nrep=100,return.sim=TRUE)
 
 ```
 
-## IPD
+<!--ANDY: I think we need to summarize what the reader should take away from these multiple approaches to assessing fit. When would you use each? These are the kind of fundamentals that i've never learned, so this is all you....-->
+
+## Individual Power Distribution (IPD)
 
 Similarly to the analyses illustrated above for the SAD, one can examine the individual power distribution (IPD; the distribution of metabolic rates over individauls in the community). We illustrate with an abbreviated version of the analyses above. First, fit and plot the IPD.
 
 ```{r fig.width=7, fig.cap="Different ways of plotting the IPD"}
-ipd1=ipd.meteESF(esf1)
+ipd1=ipd(esf1)
 ipd1
 str(ipd1) # analogous structure to sad1 above
 ipd1$r(8) # random number generation from fitted distribution
@@ -136,7 +146,7 @@ legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
 
 ```
 
-Interestingly, although it appears that the data are unlikely to have been drawn from the METE distribution based on the z-score of the likelood, the mean squared error suggests otherwise.
+Interestingly, although it appears that the data are unlikely to have been drawn from the METE distribution based on the z-score of the likelihood, the mean squared error suggests otherwise.
 
 ```{r fig.width=5, fig.cap="Mean squared error-based z-score."}
 mse.meteDist(ipd1, type='rank', relative=FALSE)
@@ -147,14 +157,20 @@ abline(v=llz$obs,lty=2)
 legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
        lty=c(1,1),bty='n') 
 ```
-<!--discuss residuals vs. likelihoods. arth ipd is supported by residauls z but not liklihood. -->
+<!--ANDY: What should the reader take away from this? discuss residuals vs. likelihoods. arth ipd is supported by residauls z but not liklihood. -->
 
+We can also obtain the distribution of metabolic rates of individuals in a species with $n$ individuals ($\Theta$):
+<!-- add if we figure out how to put equns in: (\eqn{\Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}) with `sipd` with (for species 5) -->
+```{r fig.width=5, fig.cap="Distribution of metabolic rates of individuals in a species with $n$ individuals"}
+(sipd1 <- sipd(esf1, sppID=5))
+plot(sipd1,xlab='metabolic rate')
+```
 
+<!--ANDY: we still get the plot error, even though it plots. also, what's the x axis? those aren't the right units for mass or energy... -->
 <!--========================================================================-->
 #Case Study 2 - Spatial distributions
 Next, we illustrate with data from a desert grassland community known as anza 
-borrego (data ref). This data is distributed as part of meteR. We will use it to 
-illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions. 
+borrego (ANDY: data ref). This data is distributed as part of meteR. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions. 
 ```{r}
 data(anbo)
 head(anbo)
@@ -165,32 +181,52 @@ data(anbo)
 head(anbo)
 
 esf2=meteESF(spp=anbo$spp,
-              abund=anbo$count)
+             abund=anbo$count)
 str(esf2)
-#sad2=sad.meteESF(esf2)
+#sad2=sad(esf2)
 #sad2
 ```
-Note that when metabolic rate data are absent, meteR assumes a very large value for the state variable E0, such that terms involiving E0 can be safely ignored in distriutions and relationships involving abundance.
+Note that when metabolic rate data are absent, `meteR` assumes a very large value for the state variable E0, such that terms involiving E0 can be safely ignored in distriutions and relationships involving abundance.
 
 ```{r,fig.width=7}
-#sad=sad.meteESF(esf1)
+#sad=sad(esf1)
 #par(mfrow=c(1,2))
 
 ```
 
 <!--========================================================================-->
 # Case Study 3 - Specifying the state variables
-`meteR` allows the user to manually specify the state variables, which can be useful to buld models from data structures not accomodated by `meteR` or to explore how METE predictions vary as a function of state variables.
+`meteR` allows the user to manually specify the state variables, which can be useful to buld models from data structures not accomodated by `meteR` or to explore how METE predictions vary as a function of state variables. 
 
 ```{r,fig.width=7}
+
 esf3=meteESF(N0=4000,S0=50,E0=1e5,minE=1)
-sad3=sad.meteESF(esf3)
-ipd3=ipd.meteESF(esf3)
+sad3=sad(esf3)
+ipd3=ipd(esf3)
 par(mfrow=c(1,2))
 plot(sad3)
 plot(ipd3)
 ```
+<!--
+For example, we could explore how the SAD and IPD vary as a function of N0.
+```{r,fig.width=7}
+#N0s=c(50,100,200,400,800,1600,3200,6400)
+#esf4=sad4=ipd4=vector('list',8)
+#for(i in 1:length(N0s)){
+#  esf4[[i]]=meteESF(N0=N0s[i],S0=50,E0=1e5,minE=1)
+#  sad4[[i]]=sad(esf4[[i]])
+#  ipd4[[i]]=ipd(esf4[[i]])
+#}
 
+#par(mfrow=c(1,2))
+#plot(sad4[[i]])
+#for(i in 1:length(N0s)){ 
+
+#}
+#plot(sad3)
+#plot(ipd3)
+```
+-->
 <!--========================================================================-->
 
 # References

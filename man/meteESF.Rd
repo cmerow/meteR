@@ -4,7 +4,7 @@
 \alias{meteESF}
 \title{meteESF}
 \usage{
-meteESF(spp, abund, power, S0 = NULL, N0 = NULL, E0 = N0 * 1e+06, minE)
+meteESF(spp, abund, power, S0 = NULL, N0 = NULL, E0 = NULL, minE)
 }
 \arguments{
 \item{spp}{A vector of species names for each entry}
