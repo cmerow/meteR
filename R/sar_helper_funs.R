@@ -48,9 +48,12 @@
         ncol <- round(ncell/nrow)
       }
       
+      ## Need to recalcualte Amin even if Amin given cause fitting rows and cols
+      ## in ranges might have changed area slightly
+      Amin <- A0/(nrow*ncol) 
+      
       ## now we have nrow and ncol, use those to make grid
-      Amin <- A0/(nrow*ncol) # needs to be done even if Amin given cause fitting rows and cols
-      # in ranges might have changed area slightly
+      
       rowEndPoints <- seq(min(y)-.Machine$double.eps, max(y)+.Machine$double.eps, length=nrow+1)[-1]
       colEndPoints <- seq(min(x)-.Machine$double.eps, max(x)+.Machine$double.eps, length=ncol+1)[-1]
       rowcol <- apply(cbind(x, y), 1, function(X) {
