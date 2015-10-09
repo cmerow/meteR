@@ -1,7 +1,40 @@
-plot.meteRelat <- function(x, legend=TRUE, ...) {
+#' @title Plot predicted METE relationships and associated observed relationship seen in data
+#'
+#' @description
+#' \code{plot.meteRelat} plots both the theoretical prediction and data for a 
+#' \code{meteRelat} object
+#'
+#' @details
+#' \code{plot.meteRelat} automatically extracts the prediction and data (if used 
+#' in \code{meteESF}) from the \code{meteDist} object. Additional plotting 
+#' arguments can be passed to \code{...}.
+#' 
+#' @param x a \code{meteRelat} object
+#' @param th.col line color of theoretical prediction 
+#' @param add.legend logical; add a legend
+#' @param ... arguments to be passed to \code{plot}
+# @keywords manip
+#' @export
+#' 
+#' @examples
+#' esf1 <- meteESF(spp=arth$spp,
+#'                abund=arth$count,
+#'                power=arth$mass^(.75),
+#'                minE=min(arth$mass^(.75)))
+#' ipd1 <- ipd(esf1)
+#' plot(ipd1)
+#' plot(ipd1, ptype='rad')
+#' 
+# @return list
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+#' @seealso meteSAR
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+
+plot.meteRelat <- function(x, add.legend=TRUE, th.col='red', ...) {
     plot(x$obs, ...)
-    lines(x$pred, col='red')
+    lines(x$pred, col=th.col)
     
-    if(legend) legend('topleft', c('METE prediction', 'Data'), col=c('red', 'black'), 
-                      pch=c(NA, 1), lty=c(1, NA))
+    if(add.legend) legend('topleft', c('METE prediction', 'Data'), col=c(th.col, 'black'), 
+                          pch=c(NA, 1), lty=c(1, NA))
 }
