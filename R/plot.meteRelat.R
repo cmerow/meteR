@@ -17,13 +17,9 @@
 #' @export
 #' 
 #' @examples
-#' esf1 <- meteESF(spp=arth$spp,
-#'                abund=arth$count,
-#'                power=arth$mass^(.75),
-#'                minE=min(arth$mass^(.75)))
-#' ipd1 <- ipd(esf1)
-#' plot(ipd1)
-#' plot(ipd1, ptype='rad')
+#' data(anbo)
+#' anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+#' anbo.sar
 #' 
 # @return list
 #'
