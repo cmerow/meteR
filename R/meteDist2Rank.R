@@ -4,19 +4,23 @@
 #' @description \code{meteESF} calculate the rank distribution of a meteDist object 
 #'
 #' @details
-#' Used, e.g., in \code{plot.meteDist}
+#' Extracts the predicted rank distribution from a \code{meteDist} object. 
+#' This is effectively the quantile function of the distribution. Used, e.g., 
+#' in \code{plot.meteDist}
 #' 
 #' @param x \code{meteDist} object
 # @keywords 
 #' @export
 #' 
 #' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' sad1=sad.meteESF(esf1)
-#' meteDist2Rank(sad1)                
+#' data(arth)
+#' esf1 <- meteESF(spp=arth$spp,
+#'                 abund=arth$count,
+#'                 power=arth$mass^(.75),
+#'                 minE=min(arth$mass^(.75)))
+#' sad1 <- sad.meteESF(esf1)
+#' meteDist2Rank(sad1) 
+#'                
 #' @return A vector of predicted quantiles, typically used to compare against data as in \code{plot.meteDist}
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow

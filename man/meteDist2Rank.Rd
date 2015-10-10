@@ -16,14 +16,17 @@ A vector of predicted quantiles, typically used to compare against data as in \c
 \code{meteESF} calculate the rank distribution of a meteDist object
 }
 \details{
-Used, e.g., in \code{plot.meteDist}
+Extracts the predicted rank distribution from a \code{meteDist} object.
+This is effectively the quantile function of the distribution. Used, e.g.,
+in \code{plot.meteDist}
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
-sad1=sad.meteESF(esf1)
+data(arth)
+esf1 <- meteESF(spp=arth$spp,
+                abund=arth$count,
+                power=arth$mass^(.75),
+                minE=min(arth$mass^(.75)))
+sad1 <- sad.meteESF(esf1)
 meteDist2Rank(sad1)
 }
 \author{
