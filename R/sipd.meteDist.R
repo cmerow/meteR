@@ -5,43 +5,56 @@
 #' from ESF object and return object inheriting from meteDist. This distribution (\eqn{\Theta}) describes the distribution of metabolic rates across the individuals of a species with n individuls
 #'
 #' @details 
-#' \deqn{
-#'    \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
+#' If \code{n} is provided then only the theoretical prediction is returned (because 
+#' data from multiple species could map to the same n). Thus if data and prediction are
+#' desired use \code{sppID}.
+#' 
+#' 
+#' @param esf An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})
+#' @param sppID the name or index of the species of interest as listed in the \code{spp} argument passed to \code{meteESF}
+#' @param n integer. Alternatively can extract METE prediction by indicating number of individuals in the species
+#' 
+#' @return An object of class \code{meteDist}. The object contains a list with the following elements.
+#' \describe{
+#'   \item{data}{The data used to construct the prediction}
+#'   \item{d}{density funciton}
+#'   \item{p}{cumulative density function}
+#'   \item{q}{quantile funtion}
+#'   \item{r}{random number generator}
+#'   \item{La}{Vector of Lagrange multipliers}
+#'   \item{state.var}{State variables used to constrain entropy maximization}
+#'   \item{type}{Specifies the type of distribution is 'sad'}
 #' }
 #' 
-#' 
-#' @param esf an object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})
-#' @param sppID
-#' @param n integer. number of individuals in the species
-#'
 #' @rdname sipd
 #' @export
 #' 
 #' @examples
+#' data(arth)
 #' esf1 <- meteESF(spp=arth$spp,
-#'                abund=arth$count,
-#'                power=arth$mass^(.75),
-#'                minE=min(arth$mass^(.75)))
+#'                 abund=arth$count,
+#'                 power=arth$mass^(.75),
+#'                 minE=min(arth$mass^(.75)))
 #' sipd1 <- sipd(arth.esf, sppID=5)
-# @return list
+#' sipd1
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-# @seealso sad.mete, metePsi
+#' @seealso sad.meteESF, ipd.meteESF, metePsi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 # @aliases - a list of additional topic names that will be mapped to
 # this documentation when the user looks them up from the command
 # line.
-# @family - a family name. All functions that have the same family tag will be linked in the documentation.
+#' @family Theta
 
 sipd <- function(x, ...) {
 	UseMethod('sipd')
 }
 
-# @return \code{NULL}
 #' @rdname sipd
 #' @method sipd meteESF
 #' @S3method sipd meteESF
 #' 
+
 sipd.meteESF <- function(esf, sppID, n) {
     if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
     
@@ -94,33 +107,30 @@ sipd.meteESF <- function(esf, sppID, n) {
 }
 
 #================================================================
-#' @title Intra-specific metabolic rate distribution
+#' @title Equation of the PMF for the METE Intra-specific metabolic rate distribution
 #'
-#' @description Distributi􏴜on of metabolic rates over individuals within a species of abundance n0 (Theta)
- 
-# $\Theta (\epsilon | n0,S0,N0,E0) = \dfrac{R}{\phi}$#'
-# @details  
+#' @description Distributi􏴜on of metabolic rates over individuals within a species of abundance n0 
+#'
+#' @details  
+#' \deqn{
+#'    \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
+#' }
 #' 
-#' @param e 
-#' @param n
-#' @param la2 
+#' @param e Metabolic rate
+#' @param n Number of individuals in species
+#' @param la2 Lagrange multiplier \eqn{\lambda_2} as obtained from \code{meteESF}
+#' 
 #' @export
 #' 
-#' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-
-# @return list
+#' @return Vnumeric vector of length equal to lengthof \code{e}
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-# @seealso sad.mete, metePsi
+#' @seealso metePsi, ipd.meteESF
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 # @aliases - a list of additional topic names that will be mapped to
 # this documentation when the user looks them up from the command
 # line.
-# @family - a family name. All functions that have the same family tag will be linked in the documentation.
+#' @family Theta
 
 meteTheta <- function(e, n, la2) {
     la2 * n * exp(-la2 * n * (e-1))

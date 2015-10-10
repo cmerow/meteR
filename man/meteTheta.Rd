@@ -2,31 +2,37 @@
 % Please edit documentation in R/sipd.meteDist.R
 \name{meteTheta}
 \alias{meteTheta}
-\title{Intra-specific metabolic rate distribution}
+\title{Equation of the PMF for the METE Intra-specific metabolic rate distribution}
 \usage{
 meteTheta(e, n, la2)
 }
 \arguments{
-\item{e}{}
+\item{e}{Metabolic rate}
 
-\item{n}{}
+\item{n}{Number of individuals in species}
 
-\item{la2}{}
+\item{la2}{Lagrange multiplier \eqn{\lambda_2} as obtained from \code{meteESF}}
+}
+\value{
+Vnumeric vector of length equal to lengthof \code{e}
 }
 \description{
-Distributi􏴜on of metabolic rates over individuals within a species of abundance n0 (Theta)
-# $\Theta (\epsilon | n0,S0,N0,E0) = \dfrac{R}{\phi}$
+Distributi􏴜on of metabolic rates over individuals within a species of abundance n0
 }
-\examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
+\details{
+\deqn{
+   \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
+}
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
 }
 \references{
 Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+}
+\seealso{
+metePsi, ipd.meteESF
+
+Other Theta: \code{\link{sipd}}, \code{\link{sipd.meteESF}}
 }
 

@@ -10,32 +10,52 @@ sipd(x, ...)
 \method{sipd}{meteESF}(esf, sppID, n)
 }
 \arguments{
-\item{esf}{an object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
+\item{esf}{An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
 
-\item{sppID}{}
+\item{sppID}{the name or index of the species of interest as listed in the \code{spp} argument passed to \code{meteESF}}
 
-\item{n}{integer. number of individuals in the species}
+\item{n}{integer. Alternatively can extract METE prediction by indicating number of individuals in the species}
+}
+\value{
+An object of class \code{meteDist}. The object contains a list with the following elements.
+\describe{
+  \item{data}{The data used to construct the prediction}
+  \item{d}{density funciton}
+  \item{p}{cumulative density function}
+  \item{q}{quantile funtion}
+  \item{r}{random number generator}
+  \item{La}{Vector of Lagrange multipliers}
+  \item{state.var}{State variables used to constrain entropy maximization}
+  \item{type}{Specifies the type of distribution is 'sad'}
+}
 }
 \description{
 Extract species level individual power distribution
 from ESF object and return object inheriting from meteDist. This distribution (\eqn{\Theta}) describes the distribution of metabolic rates across the individuals of a species with n individuls
 }
 \details{
-\deqn{
-   \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
-}
+If \code{n} is provided then only the theoretical prediction is returned (because
+data from multiple species could map to the same n). Thus if data and prediction are
+desired use \code{sppID}.
 }
 \examples{
+data(arth)
 esf1 <- meteESF(spp=arth$spp,
-               abund=arth$count,
-               power=arth$mass^(.75),
-               minE=min(arth$mass^(.75)))
+                abund=arth$count,
+                power=arth$mass^(.75),
+                minE=min(arth$mass^(.75)))
 sipd1 <- sipd(arth.esf, sppID=5)
+sipd1
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
 }
 \references{
 Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+}
+\seealso{
+sad.meteESF, ipd.meteESF, metePsi
+
+Other Theta: \code{\link{meteTheta}}
 }
 

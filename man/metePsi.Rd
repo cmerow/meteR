@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipd.meteESF.R
 \name{metePsi}
 \alias{metePsi}
-\title{Equation of the METE power abundance distribution}
+\title{Equation of the PMF for the METE individual metabolic rate distribution}
 \usage{
 metePsi(e, la1, la2, Z, S0, N0, E0)
 }
@@ -20,7 +20,7 @@ metePsi(e, la1, la2, Z, S0, N0, E0)
 \item{E0}{Total metabolic rate}
 }
 \value{
-numeric
+numeric vector of length equal to length of \code{e}
 }
 \description{
 \code{metePsi} calculates the value of

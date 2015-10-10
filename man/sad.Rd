@@ -13,14 +13,16 @@ sad(x)
 \item{esf}{an object of class mete.}
 }
 \value{
-An object of class \code{meteDist} which inherits from objects of class \code{sad}. The object contains a list with the following elements.
+An object of class \code{meteDist}. The object contains a list with the following elements.
 \describe{
-   \item{\code{type}}{'sad'}
-   \item{\code{data}}{X}
-   \item{\code{d}}{this.eq}
-   \item{\code{p}}{FUNp}
-   \item{\code{q}}{FUNq}
-   \item{\code{r}}{FUNr}
+  \item{data}{The data used to construct the prediction}
+  \item{d}{density funciton}
+  \item{p}{cumulative density function}
+  \item{q}{quantile funtion}
+  \item{r}{random number generator}
+  \item{La}{Vector of Lagrange multipliers}
+  \item{state.var}{State variables used to constrain entropy maximization}
+  \item{type}{Specifies the type of distribution is 'sad'}
 }
 }
 \description{
@@ -31,11 +33,13 @@ predicted by METE (Phi(n))
 See Examples.
 }
 \examples{
+data(arth)
 esf1 <- meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
-sad <- sad(esf1)
+                abund=arth$count,
+                power=arth$mass^(.75),
+                minE=min(arth$mass^(.75)))
+sad1 <- sad(esf1)
+sad1
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

@@ -17,7 +17,17 @@
 #'                minE=min(arth$mass^(.75)))
 #' ipd1 <- ipd.meteESF(esf1)
 #' 
-#' @return an object of class meteDist
+#' @return An object of class \code{meteDist}. The object contains a list with the following elements.
+#' \describe{
+#'   \item{data}{The data used to construct the prediction}
+#'   \item{d}{density funciton}
+#'   \item{p}{cumulative density function}
+#'   \item{q}{quantile funtion}
+#'   \item{r}{random number generator}
+#'   \item{La}{Vector of Lagrange multipliers}
+#'   \item{state.var}{State variables used to constrain entropy maximization}
+#'   \item{type}{Specifies the type of distribution is 'sad'}
+#' }
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 #' @seealso meteDist, sad.meteESF, metePsi
@@ -77,7 +87,7 @@ ipd.meteESF <- function(esf) {
 }
 
 ##============================================================================
-#' @title Equation of the METE power abundance distribution
+#' @title Equation of the PMF for the METE individual metabolic rate distribution
 #'
 #' @description
 #' \code{metePsi} calculates the value of 
@@ -107,7 +117,7 @@ ipd.meteESF <- function(esf) {
 #'        esf1$state.var['N0'],
 #'        esf1$state.var['E0'])
 #' 
-#' @return numeric
+#' @return numeric vector of length equal to length of \code{e}
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 #  @note other junk to mention

@@ -13,7 +13,17 @@ ipd(x)
 \item{esf}{an object of class meteESF.}
 }
 \value{
-an object of class meteDist
+An object of class \code{meteDist}. The object contains a list with the following elements.
+\describe{
+  \item{data}{The data used to construct the prediction}
+  \item{d}{density funciton}
+  \item{p}{cumulative density function}
+  \item{q}{quantile funtion}
+  \item{r}{random number generator}
+  \item{La}{Vector of Lagrange multipliers}
+  \item{state.var}{State variables used to constrain entropy maximization}
+  \item{type}{Specifies the type of distribution is 'sad'}
+}
 }
 \description{
 \code{ipd.meteESF} calculates the distribution Psi(e | N0, S0, E0),
