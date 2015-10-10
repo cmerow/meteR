@@ -58,7 +58,7 @@
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
 meteESF <- function(spp, abund, power,
-                    S0=NULL, N0=NULL, E0=N0 * 1e+06,
+                    S0=NULL, N0=NULL, E0=NULL,
                     minE) {
     ## case where spp (and abund) provided
     if(!missing(spp) & !missing(abund)) {

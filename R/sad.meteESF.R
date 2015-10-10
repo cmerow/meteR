@@ -1,7 +1,3 @@
-## generic method for sad
-sad <- function(x) {
-	UseMethod('sad')
-}
 
 #' @title METE species abundance distribution
 #'
@@ -18,11 +14,11 @@ sad <- function(x) {
 #' @export
 #' 
 #' @examples
-#' esf1=meteESF(spp=arth$spp,
+#' esf1 <- meteESF(spp=arth$spp,
 #'               abund=arth$count,
 #'               power=arth$mass^(.75),
 #'               minE=min(arth$mass^(.75)))
-#' sad=sad.meteESF(esf1)
+#' sad <- sad(esf1)
 #' 
 #' @return An object of class \code{meteDist} which inherits from objects of class \code{sad}. The object contains a list with the following elements.
 #' \describe{
@@ -43,6 +39,14 @@ sad <- function(x) {
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
+sad <- function(x) {
+	UseMethod('sad')
+}
+
+#' @rdname sad
+#' @method sad meteESF
+#' @S3method sad meteESF
+#' 
 
 sad.meteESF <- function(esf) {
     x <- esf$data$n
