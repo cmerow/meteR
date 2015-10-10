@@ -7,7 +7,7 @@
 meteDist2Rank(x)
 }
 \arguments{
-\item{a}{\code{meteDist} object}
+\item{x}{\code{meteDist} object}
 }
 \value{
 A vector of predicted quantiles, typically used to compare against data as in \code{plot.meteDist}
