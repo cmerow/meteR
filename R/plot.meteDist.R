@@ -37,71 +37,71 @@
 
 plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red", 
                           lower.tail=TRUE, add.legend=TRUE, add.line=FALSE, ...) {
-    ptype <- match.arg(ptype,c("cdf", "rad"))
-    
-    plot.par <- list(...)
-    
-    if(!('ylab' %in% names(plot.par))) {
-        ylab <- ifelse(ptype=='cdf', 'Cumulative probability', '%s')
-        ylab <- sprintf(ylab, switch(x$type,
-                                     'sad' = 'Abundance',
-                                     'ipd' = 'Metabolic rate',
-                                     'sipd' = 'Metabolic rate'))
-        plot.par$ylab <- ylab
-    }
-    
-    if(!('xlab' %in% names(plot.par))) {
-        xlab <- ifelse(ptype=='cdf', '%s', 'Rank')
-        xlab <- sprintf(xlab, switch(x$type,
-                                     'sad' = 'Abundance',
-                                     'ipd' = 'Metabolic rate',
-                                     'sipd' = 'Metabolic rate'))
-        plot.par$xlab <- xlab
-    }
-    
-    if(ptype=="cdf") {
-        this.curve <- x$p
-        ## if no data, don't plot it, just plot the curve
-        if(!is.null(x$data)) {
-	    xmax <- max(x$data)
-	    X <- .ecdf(x$data, !lower.tail)
-        } else {
-	    xmax <- ifelse(is.finite(max(plot.par$xlim)), 
-	                   max(plot.par$xlim), 
-	                   x$state.var['N0']/x$state.var['S0'])
-	    X <- cbind(c(1, floor(xmax)), this.curve(c(1, floor(xmax))))
-	    plot.par$type <- 'n'
-        }
-        
-        do.call(plot, append(list(x=X),plot.par))
-
-        if(x$type %in% c("gsd", "sad")) {
-	    this.supp <- 1:xmax
-	    points(this.supp, this.curve(this.supp,lower.tail=lower.tail),
-	           type="l", col=th.col)
-        } else {
-	    curve(this.curve(x,lower.tail=lower.tail), add=TRUE, col=th.col)
-        }
+  ptype <- match.arg(ptype,c("cdf", "rad"))
+  
+  plot.par <- list(...)
+  
+  if(!('ylab' %in% names(plot.par))) {
+    ylab <- ifelse(ptype=='cdf', 'Cumulative probability', '%s')
+    ylab <- sprintf(ylab, switch(x$type,
+                                 'sad' = 'Abundance',
+                                 'ipd' = 'Metabolic rate',
+                                 'sipd' = 'Metabolic rate'))
+    plot.par$ylab <- ylab
+  }
+  
+  if(!('xlab' %in% names(plot.par))) {
+    xlab <- ifelse(ptype=='cdf', '%s', 'Rank')
+    xlab <- sprintf(xlab, switch(x$type,
+                                 'sad' = 'Abundance',
+                                 'ipd' = 'Metabolic rate',
+                                 'sipd' = 'Metabolic rate'))
+    plot.par$xlab <- xlab
+  }
+  
+  if(ptype=="cdf") {
+    this.curve <- x$p
+    ## if no data, don't plot it, just plot the curve
+    if(!is.null(x$data)) {
+      xmax <- max(x$data)
+      X <- .ecdf(x$data, !lower.tail)
     } else {
-        ## if no data, don't plot it, just plot the rank fun
-        if(is.null(x$data)) {
-	    X <- meteDist2Rank(x)
-	    plot.par$type <- 'n'
-        } else {
-	    X <- x$data
-        }
-        
-        ## if ylim not already specified make sure both data and theory fit
-        if(!('ylim' %in% names(plot.par))) {
-	    plot.par$ylim <- range(X, x$rankFun)
-        }
-        
-        ## do plotting
-        do.call(plot, append(list(x=X),plot.par))
-        points(meteDist2Rank(x), type="l", col=th.col)
+      xmax <- ifelse(is.finite(max(plot.par$xlim)), 
+                     max(plot.par$xlim), 
+                     x$state.var['N0']/x$state.var['S0'])
+      X <- cbind(c(1, floor(xmax)), this.curve(c(1, floor(xmax))))
+      plot.par$type <- 'n'
     }
-
-    if(add.legend) legend('right', legend=c('data', 'METE'), col=c('black', 'red'),
-                          lty=c(NA, 1), pch=c(21, NA), bty='n') 
+    
+    do.call(plot, append(list(x=X),plot.par))
+    
+    if(x$type %in% c("gsd", "sad")) {
+      this.supp <- 1:xmax
+      points(this.supp, this.curve(this.supp,lower.tail=lower.tail),
+             type="l", col=th.col)
+    } else {
+      curve(this.curve(x,lower.tail=lower.tail), add=TRUE, col=th.col)
+    }
+  } else {
+    ## if no data, don't plot it, just plot the rank fun
+    if(is.null(x$data)) {
+      X <- meteDist2Rank(x)
+      plot.par$type <- 'n'
+    } else {
+      X <- x$data
+    }
+    
+    ## if ylim not already specified make sure both data and theory fit
+    if(!('ylim' %in% names(plot.par))) {
+      plot.par$ylim <- range(X, x$rankFun)
+    }
+    
+    ## do plotting
+    do.call(plot, append(list(x=X),plot.par))
+    points(meteDist2Rank(x), type="l", col=th.col)
+  }
+  
+  if(add.legend) legend('right', legend=c('data', 'METE'), col=c('black', 'red'),
+                        lty=c(NA, 1), pch=c(21, NA), bty='n') 
 }
 
