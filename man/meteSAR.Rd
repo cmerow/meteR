@@ -71,7 +71,7 @@ anbo.sar1 <- meteSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
 plot(anbo.sar1)
 
 ## using simulated x, y data
-anbo.sar2 <- meteSAR(anbo$spp, anbo$abund, x=anbo$x, y=anbo$y, row=4, col=4)
+anbo.sar2 <- meteSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$y, row=4, col=4)
 plot(anbo.sar2)
 
 ## using just state variable
