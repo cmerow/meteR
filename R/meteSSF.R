@@ -1,8 +1,7 @@
-
-#' @title metePi
+#' @title meteSSF
 #'  
-#' @description \code{metePi} calculates the ``spatial structure
-#' function'' Pi(n) (analygous to the ecosystem structure function). From 
+#' @description \code{meteSSF} calculates the ``spatial structure
+#' function'' \eqn{\Pi(n)} (analygous to the ecosystem structure function). From 
 #' the SSF the spatial abundance distribution can be calculated.
 #'
 #' @details
@@ -19,8 +18,27 @@
 #' 
 #' @examples
 #' data(anbo)
-#' ## SSF for species `crcr' in the anbo data set
-#' pi1 <- metePi(anbo$count[anbo.new$spp=='crcr'], A=1, A0=16)
+#' 
+#' ## note: abundance of each spp needs to be recorded in each cell
+#' ## even if that abundance is 0....so might need to do that in some
+#' ## data sets
+#' 
+#' samp2mat <- function(site,spp,abund) {
+#'   y <- tapply(abund, list(site, spp), sum)
+#'   y[is.na(y)] <- 0
+#'   return(y)
+#' }
+#' 
+#' anbo.mat <- samp2mat(paste(anbo[, 1], anbo[,2]), anbo$spp, anbo$count)
+#' anbo.new <- data.frame(t(sapply(strsplit(rownames(anbo.mat), ' ', fixed=TRUE), as.numeric)), 
+#'                        spp = rep(colnames(anbo.mat), each=nrow(anbo.mat)), 
+#'                        count = as.vector(anbo.mat))
+#' colnames(anbo.new)[1:2] <- colnames(anbo)[1:2]
+#' 
+#' ## anbo.new now has 0 abundance where needed
+#' 
+#' ## calculate SSF Pi
+#' pi1 <- meteSSF(anbo.new$count[anbo.new$spp=='crcr'], A=1, A0=16)
 #' pi1
 #' 
 #' @return An object of class \code{meteSSF} with elements
@@ -35,12 +53,7 @@
 #' @seealso metePi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
-
-##	function to make Pi distribution
-##	based on function for R(n,epsilon) in `makeMete'
-
-
-metePi <- function(abund, n0=sum(abund), A, A0) {
+meteSSF <- function(abund, n0=sum(abund), A, A0) {
 	# n0 <- sum(n)
 	
 	thisSSF <- .makeSSF(n0, A, A0)
@@ -52,10 +65,39 @@ metePi <- function(abund, n0=sum(abund), A, A0) {
 	return(out)
 }
 
-##	PMF for Pi
-.mete.Pi <- function(n,la,n0) {
+
+#==============================================================================
+#' @title Equation of the PMF of the METE spatial species abundance distribution
+#'
+#' @description
+#' \code{metePi} is a low level function that returns the spatial species abundance 
+#' distribution \eqn{Pi(n)} predicted by METE; vectorized in n
+#'
+#' @details
+#' See Examples
+#' 
+#' @param n A vector giving abundances of each entry
+#' @param la The spatial Lagrange multiplier returned by \code{meteSSF}
+#' @param n0 Total abundance in area A0
+#' @export
+#' 
+#' @examples
+#' metePi(0:10, 0.01, 100)
+#' 
+#' @return a numeric vector giving the probability of each entry in \code{n}
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+#' @seealso metePi
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+
+metePi <- function(n,la,n0) {
 	1/.mete.Pi.Z(la, n0) * exp(-la*n)
 }
+
+
+
+##==========================================
+## helper functions for meteSSF and metePi
 
 ##	normalization constant for Pi
 .mete.Pi.Z <- function(la,n0) {
