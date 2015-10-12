@@ -180,7 +180,7 @@
     
     if(any(!eq52)) {
       pi0[!eq52] <- sapply(n0[!eq52], function(n) {
-        .mete.Pi(0, metePi(0, n0=n, A, A0)$La, n0=n)
+        metePi(0, metePi(0, n0=n, A, A0)$La, n0=n)
       })
     }
   }
@@ -206,7 +206,7 @@
     
     if(any(!eq52)) {
       pin0[!eq52] <- sapply(n0[!eq52], function(n) {
-        .mete.Pi(n, metePi(n, n0=n, A, A0)$La, n0=n)
+        metePi(n, metePi(n, n0=n, A, A0)$La, n0=n)
       })
     }
   }

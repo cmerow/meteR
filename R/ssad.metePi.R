@@ -52,7 +52,7 @@ ssad.metePi <- function(ssf) {
 	}
 	
 	this.eq <- function(n, log=FALSE) {
-		out <- .mete.Pi(n, ssf$La, ssf$state.var['n0'])
+		out <- metePi(n, ssf$La, ssf$state.var['n0'])
 		if(log) out <- log(out)
 		
 		return(out)
