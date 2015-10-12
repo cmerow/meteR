@@ -122,34 +122,55 @@ meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
 
 
 #================================================================
-#' @title Empirical SAR
+#' @title Empirical SAR or EAR
 #'
-# @description
+#' @description computes observed SAR or EAR from raw data
 #'
-# @details
+#' @details Currently only doublings of area are supported. There are 
+#' several options for specifying areas. Either \code{row} and \code{col} or 
+#' \code{x} and \code{y} must be provided for each data entry (i.e. the 
+#' length of \code{row} and \code{col} or \code{x} and \code{y} must equal
+#' the length of \code{spp} and \code{abund}). If \code{x} and \code{y}
+#' are provided then the landscape is gridded either by specifying 
+#' \code{Amin} (the size of the smallest grid cell) or by providing the
+#' number or desired rows and columns via the \code{row} and \code{col}
+#' arguments. If only \code{row} and \code{col} are provided these are taken
+#' to be the row and column identities of each data entry
 #' 
 #' 
-#' @param spp
-#' @param abun 
-#' @param row 
-#' @param col
-#' @param x 
-#' @param y 
-#' @param Amin
-#' @param A0
-#' @param EAR logical. TRUE computes the endemics-area relatinship
-#' @param upscale logical. Do upscaling?
+#' 
+#' @param spp vector of species identities
+#' @param abund numberic vector abundances associated with each record
+#' @param row identity of row in a gridded landscape associated with each record, or desired number of rows to divide the landcape into
+#' @param col identity of column in a gridded landscape associated with each recod, or desired number of columns to divide the landcape into
+#' @param x the x-coordinate of an individual if recorded
+#' @param y the y-coordinate of an individual if recorded
+#' @param S0 total number of species
+#' @param N0 total abundance
+#' @param Amin the smallest area, either the anchor area for upscaling or the desired area to downscale to
+#' @param A0 the largest area, either the area to upscale to or the total area from which to downscale
+#' @param upscale logical, should upscaling or downscaling be carried out
+#' @param EAR logical, should the EAR or SAR be computed
 #' 
 #' @export
 #' 
 #' @examples
-#' esf=meteESF(spp=anbo$spp,
-#'              abund=anbo$count)
-
-# @return list
+#' data(anbo)
+#' anbo.obs.sar <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
+#' plot(anbo.obs.sar)
+#' anbo.obs.ear <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16, EAR=TRUE)
+#' plot(anbo.obs.ear)
+#' 
+#' ## empirical SAR from simulated x, y data
+#' anbo$x <- runif(nrow(anbo), 0, 1) + anbo$column
+#' anbo$y <- runif(nrow(anbo), 0, 1) + anbo$row
+#' meteSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$y, row=4, col=4)
+#' 
+#' @return an object of class \code{sar} inheriting from \code{data.frame} with 
+#' columns \code{A} and \code{S} giving area and species richness, respectively
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-# @seealso sad.mete, metePsi
+#' @seealso meteESF, meteSAR, downscaleSAR, upscaleSAR
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 # @aliases - a list of additional topic names that will be mapped to
 # this documentation when the user looks them up from the command
@@ -179,7 +200,7 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
   ## loop over areas
   out <- lapply(areas, function(a) {
     nspp <- .getSppInGroups(spp, abund, row, col, .getNeighbors(a, nrow, ncol), EAR)
-    cbind(A=a*Amin, S=nspp)
+    data.frame(A=a*Amin, S=nspp)
   })
   out <- do.call(rbind, out)
   
@@ -194,28 +215,36 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
 
 
 #================================================================
-#' @title Downscale the species area relationship (SAR)
+#' @title Downscale the species area relationship (SAR) or endemics area relationship (EAR)
 #'
-# @description
+#' @description Compute METE SAR by downscaling from some larger area \code{A0} to a smaller areas.
 #'
-# @details
-#' 
+#' @details Unlike the other SAR functions, downscaling can be computed for any arbitrary scale
+#' \eqn{\leq A_0}. 
 #' 
 #' @param x an object of class meteESF
-#' @param A
-#' @param A0
-#' @param EAR logical. TRUE computes the endemics-area relatinship
+#' @param A numerical vector of areas (<= \code{A0}) for which the METE prediction is desired
+#' @param A0 total study area
+#' @param EAR logical. TRUE computes the endemics area relatinship
 #'  
 #' @export
 #' 
 #' @examples
-#' esf=meteESF(spp=anbo$spp,
-#'              abund=anbo$count)
+#' data(anbo)
+#' anbo.thr.downscale <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=17)), 16)
+#' plot(anbo.thr.downscale)
+#' 
+#' ## theoretical SARs from state variables only
+#' thr.downscale <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=0.25), 16)
+#' thr.downscaleEAR <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=0.25), 16, EAR=TRUE)
+#' plot(thr.downscale, ylim=c(0, 40), col='red')
+#' plot(thr.downscaleEAR, add=TRUE, col='blue')
 #'              
-#' @return list
+#' @return an object of class \code{sar} inheriting from \code{data.frame} with 
+#' columns \code{A} and \code{S} giving area and species richness, respectively
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-# @seealso sad.mete, metePsi
+#' @seealso meteESF, meteSAR, empiricalSAR, upscaleSAR
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 # @aliases - a list of additional topic names that will be mapped to
 # this documentation when the user looks them up from the command
@@ -248,7 +277,7 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
   nspp <- sapply(A, getspp)
   
   ## should return matrix with column for area and column for spp
-  out <- cbind(A=A, S=nspp)
+  out <- data.frame(A=A, S=nspp)
   attr(out, 'source') <- 'theoretical'
   attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')
   class(out) <- 'sar'
@@ -262,26 +291,41 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
 #================================================================
 #' @title upscale SAR
 #'
-# @description
+#' @description Based on information at an anchor scale (\code{A0}) 
+#' calcuate predicted species area relationship at larger scales
 #'
-# @details
+#' @details Currently only doublings of area are supported and only 
+#' the SAR (not EAR) is supported. Upscaling works by iteratively 
+#' solving for the constraints (\eqn{S} and \eqn{N} at larger scales)
+#' that would lead to the observed data at the anchor scale. See 
+#' references for more details on this approach.
 #' 
 #' 
 #' @param x an object of class meteESF
-#' @param A0
-#' @param Aup
-#' @param EAR logical. TRUE computes the endemics-area relatinship
+#' @param A0 the anchor scale at which community data are availible.
+#' @param Aup the larges area to which to upscale
+#' @param EAR logical. TRUE computes the endemics area relatinship; currently not supported
 #' 
 #' @export
 #' 
 #' @examples
-#' esf=meteESF(spp=anbo$spp,
-#'              abund=anbo$count)
+#' ## combine SAR for scales at which we have data with upscaled SAR
+#' data(anbo)
+#' anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+#' anbo.sar
+#' plot(anbo.sar, xlim=c(1, 2^10), ylim=c(3, 50), log='xy')
+#' 
+#' ## get upscaled SAR and add to plot
+#' anbo.esf <- meteESF(spp=anbo.new$spp, abund=anbo.new$count) # need ESF for upscaling
+#' anbo.sarUP <- upscaleSAR(anbo.esf, 16, 2^10)
+#' plot(anbo.sarUP, add=TRUE, col='blue')
+#' 
 #'              
-#' @return list
+#' @return an object of class \code{sar} inheriting from \code{data.frame} with 
+#' columns \code{A} and \code{S} giving area and species richness, respectively
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-# @seealso sad.mete, metePsi
+#' @seealso meteESF, meteSAR, empiricalSAR, downscaleSAR
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 # @aliases - a list of additional topic names that will be mapped to
 # this documentation when the user looks them up from the command
@@ -308,7 +352,7 @@ upscaleSAR <- function(x, A0, Aup, EAR=FALSE) {
   }
   
   ## should return matrix with column for area and column for spp
-  out <- cbind(A=Aups, S=S0s)
+  out <- data.frame(A=Aups, S=S0s)
   attr(out, 'source') <- 'theoretical'
   attr(out, 'type') <- ifelse(EAR, 'ear', 'sar')
   class(out) <- 'sar'

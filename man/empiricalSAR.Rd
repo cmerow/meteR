@@ -2,42 +2,73 @@
 % Please edit documentation in R/sar.R
 \name{empiricalSAR}
 \alias{empiricalSAR}
-\title{Empirical SAR}
+\title{Empirical SAR or EAR}
 \usage{
 empiricalSAR(spp, abund, row, col, x, y, Amin, A0, EAR = FALSE)
 }
 \arguments{
-\item{spp}{}
+\item{spp}{vector of species identities}
 
-\item{row}{}
+\item{abund}{numberic vector abundances associated with each record}
 
-\item{col}{}
+\item{row}{identity of row in a gridded landscape associated with each record, or desired number of rows to divide the landcape into}
 
-\item{x}{}
+\item{col}{identity of column in a gridded landscape associated with each recod, or desired number of columns to divide the landcape into}
 
-\item{y}{}
+\item{x}{the x-coordinate of an individual if recorded}
 
-\item{Amin}{}
+\item{y}{the y-coordinate of an individual if recorded}
 
-\item{A0}{}
+\item{Amin}{the smallest area, either the anchor area for upscaling or the desired area to downscale to}
 
-\item{EAR}{logical. TRUE computes the endemics-area relatinship}
+\item{A0}{the largest area, either the area to upscale to or the total area from which to downscale}
 
-\item{abun}{}
+\item{EAR}{logical, should the EAR or SAR be computed}
 
-\item{upscale}{logical. Do upscaling?}
+\item{S0}{total number of species}
+
+\item{N0}{total abundance}
+
+\item{upscale}{logical, should upscaling or downscaling be carried out}
+}
+\value{
+an object of class \code{sar} inheriting from \code{data.frame} with
+columns \code{A} and \code{S} giving area and species richness, respectively
 }
 \description{
-Empirical SAR
+computes observed SAR or EAR from raw data
+}
+\details{
+Currently only doublings of area are supported. There are
+several options for specifying areas. Either \code{row} and \code{col} or
+\code{x} and \code{y} must be provided for each data entry (i.e. the
+length of \code{row} and \code{col} or \code{x} and \code{y} must equal
+the length of \code{spp} and \code{abund}). If \code{x} and \code{y}
+are provided then the landscape is gridded either by specifying
+\code{Amin} (the size of the smallest grid cell) or by providing the
+number or desired rows and columns via the \code{row} and \code{col}
+arguments. If only \code{row} and \code{col} are provided these are taken
+to be the row and column identities of each data entry
 }
 \examples{
-esf=meteESF(spp=anbo$spp,
-             abund=anbo$count)
+data(anbo)
+anbo.obs.sar <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
+plot(anbo.obs.sar)
+anbo.obs.ear <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16, EAR=TRUE)
+plot(anbo.obs.ear)
+
+## empirical SAR from simulated x, y data
+anbo$x <- runif(nrow(anbo), 0, 1) + anbo$column
+anbo$y <- runif(nrow(anbo), 0, 1) + anbo$row
+meteSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$y, row=4, col=4)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
 }
 \references{
 Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+}
+\seealso{
+meteESF, meteSAR, downscaleSAR, upscaleSAR
 }
 

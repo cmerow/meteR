@@ -2,33 +2,48 @@
 % Please edit documentation in R/sar.R
 \name{downscaleSAR}
 \alias{downscaleSAR}
-\title{Downscale the species area relationship (SAR)}
+\title{Downscale the species area relationship (SAR) or endemics area relationship (EAR)}
 \usage{
 downscaleSAR(x, A, A0, EAR = FALSE)
 }
 \arguments{
 \item{x}{an object of class meteESF}
 
-\item{A}{}
+\item{A}{numerical vector of areas (<= \code{A0}) for which the METE prediction is desired}
 
-\item{A0}{}
+\item{A0}{total study area}
 
-\item{EAR}{logical. TRUE computes the endemics-area relatinship}
+\item{EAR}{logical. TRUE computes the endemics area relatinship}
 }
 \value{
-list
+an object of class \code{sar} inheriting from \code{data.frame} with
+columns \code{A} and \code{S} giving area and species richness, respectively
 }
 \description{
-Downscale the species area relationship (SAR)
+Compute METE SAR by downscaling from some larger area \code{A0} to a smaller areas.
+}
+\details{
+Unlike the other SAR functions, downscaling can be computed for any arbitrary scale
+\eqn{\leq A_0}.
 }
 \examples{
-esf=meteESF(spp=anbo$spp,
-             abund=anbo$count)
+data(anbo)
+anbo.thr.downscale <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=17)), 16)
+plot(anbo.thr.downscale)
+
+## theoretical SARs from state variables only
+thr.downscale <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=0.25), 16)
+thr.downscaleEAR <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=0.25), 16, EAR=TRUE)
+plot(thr.downscale, ylim=c(0, 40), col='red')
+plot(thr.downscaleEAR, add=TRUE, col='blue')
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
 }
 \references{
 Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+}
+\seealso{
+meteESF, meteSAR, empiricalSAR, upscaleSAR
 }
 

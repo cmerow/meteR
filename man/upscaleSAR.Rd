@@ -9,26 +9,46 @@ upscaleSAR(x, A0, Aup, EAR = FALSE)
 \arguments{
 \item{x}{an object of class meteESF}
 
-\item{A0}{}
+\item{A0}{the anchor scale at which community data are availible.}
 
-\item{Aup}{}
+\item{Aup}{the larges area to which to upscale}
 
-\item{EAR}{logical. TRUE computes the endemics-area relatinship}
+\item{EAR}{logical. TRUE computes the endemics area relatinship; currently not supported}
 }
 \value{
-list
+an object of class \code{sar} inheriting from \code{data.frame} with
+columns \code{A} and \code{S} giving area and species richness, respectively
 }
 \description{
-upscale SAR
+Based on information at an anchor scale (\code{A0})
+calcuate predicted species area relationship at larger scales
+}
+\details{
+Currently only doublings of area are supported and only
+the SAR (not EAR) is supported. Upscaling works by iteratively
+solving for the constraints (\eqn{S} and \eqn{N} at larger scales)
+that would lead to the observed data at the anchor scale. See
+references for more details on this approach.
 }
 \examples{
-esf=meteESF(spp=anbo$spp,
-             abund=anbo$count)
+## combine SAR for scales at which we have data with upscaled SAR
+data(anbo)
+anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+anbo.sar
+plot(anbo.sar, xlim=c(1, 2^10), ylim=c(3, 50), log='xy')
+
+## get upscaled SAR and add to plot
+anbo.esf <- meteESF(spp=anbo.new$spp, abund=anbo.new$count) # need ESF for upscaling
+anbo.sarUP <- upscaleSAR(anbo.esf, 16, 2^10)
+plot(anbo.sarUP, add=TRUE, col='blue')
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
 }
 \references{
 Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+}
+\seealso{
+meteESF, meteSAR, empiricalSAR, downscaleSAR
 }
 
