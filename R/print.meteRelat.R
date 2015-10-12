@@ -1,7 +1,7 @@
 #================================================================
-#' @title print ??
+#' @title Print summaries of \code{meteRelat} objects
 #'
-# @description
+#' @description S3 method for class \code{meteRelat}
 #'
 # @details
 #' 
@@ -10,13 +10,9 @@
 #' 
 #' @export
 #' 
-#' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-
-#' @return list
+# @examples
+#'
+#' @return x silently
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 # @seealso sad.mete, metePsi

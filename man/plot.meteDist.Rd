@@ -32,6 +32,7 @@ in \code{meteESF}) from the \code{meteDist} object. Additional plotting
 arguments can be passed to \code{...}.
 }
 \examples{
+data(arth)
 esf1 <- meteESF(spp=arth$spp,
                abund=arth$count,
                power=arth$mass^(.75),

@@ -1,12 +1,16 @@
 #' @title Compute residuals between METE predictions and date of a meteDist object
 #'
 #' @description
-#' \code{residuals.meteDist} Compute residuals between METE predictions and 
+#' \code{residuals.meteDist} computes residuals between METE predictions and 
 #' data of a meteDist object
 #'
 #' @details
 #' See Examples. Typically not called directly by the user and rather used for 
-#' calculating the mean square error with \code{mse.meteDist}.
+#' calculating the mean square error with \code{mse.meteDist}. If \code{type='rank'}
+#' returned value will be of length equal to number of observations (e.g. number of
+#' species in case of SAD) but if \code{type='cumulative'} returned value will be of
+#' length equal to number of unique ovservations (e.g. number of unique abundances in
+#' case of SAR).
 #' 
 #' @param object a \code{meteDist} object
 #' @param type 'rank' or 'cumulative'
@@ -17,14 +21,15 @@
 #' @export
 #' 
 #' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' sad1=sad.meteESF(esf1)
+#' data(arth)
+#' esf1 <- meteESF(spp=arth$spp,
+#'                 abund=arth$count,
+#'                 power=arth$mass^(.75),
+#'                 minE=min(arth$mass^(.75)))
+#' sad1 <- sad.meteESF(esf1)
 #' residuals(sad1)
 #' 
-#' @return object of class \code{logLik}
+#' @return a numeic vector giving residuals for each data point
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 #' @seealso \code{mse.meteDist}

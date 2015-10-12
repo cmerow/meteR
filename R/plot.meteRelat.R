@@ -20,7 +20,7 @@
 #' @examples
 #' data(anbo)
 #' anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
-#' anbo.sar
+#' plot(anbo.sar)
 #' 
 # @return list
 #'

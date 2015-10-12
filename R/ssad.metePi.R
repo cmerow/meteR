@@ -12,14 +12,14 @@
 #' @examples
 #' data(anbo)
 #' samp2mat <- function(site,spp,abund) {
-#' y <- tapply(abund, list(site, spp), sum)
-#' y[is.na(y)] <- 0
-#' return(y)
+#'     y <- tapply(abund, list(site, spp), sum)
+#'     y[is.na(y)] <- 0
+#'     return(y)
 #' }
 #' anbo.mat <- samp2mat(paste(anbo[, 1], anbo[,2]), anbo$spp, anbo$count)
 #' anbo.new <- data.frame(t(sapply(strsplit(rownames(anbo.mat), ' ', fixed=TRUE), as.numeric)), spp = rep(colnames(anbo.mat), each=nrow(anbo.mat)), count = as.vector(anbo.mat))
 #' colnames(anbo.new)[1:2] <- colnames(anbo)[1:2]
-#' # anbo.new now has 0 abundance where needed
+#' ## anbo.new now has 0 abundance where needed
 #' pi1 <- metePi(anbo.new$count[anbo.new$spp=='crcr'], A=1, A0=16)
 #' plot(ssad(pi1))
 

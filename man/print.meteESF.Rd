@@ -11,6 +11,9 @@
 
 \item{...}{arguments to be passed}
 }
+\value{
+\code{x} silently
+}
 \description{
 \code{print.meteESF} prints an object of class \code{meteESF}
 }
@@ -18,10 +21,11 @@
 See Examples
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
-             abund=arth$count,
-             power=arth$mass^(.75),
-             minE=min(arth$mass^(.75)))
+data(arth)
+esf1 <- meteESF(spp=arth$spp,
+                abund=arth$count,
+                power=arth$mass^(.75),
+                minE=min(arth$mass^(.75)))
 print(esf1)
 esf1 # alternatively...
 }

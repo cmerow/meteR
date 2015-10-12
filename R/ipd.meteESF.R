@@ -11,6 +11,7 @@
 #' @export
 #' 
 #' @examples
+#' data(arth)
 #' esf1 <- meteESF(spp=arth$spp,
 #'                abund=arth$count,
 #'                power=arth$mass^(.75),
@@ -65,8 +66,7 @@ ipd.meteESF <- function(esf) {
     }
 
     this.p.eq <- Vectorize(function(epsilon, lower.tail=TRUE, log.p=FALSE) {
-        out <- integrate(this.eq,lower=1,
-                         upper=epsilon)$value
+        out <- integrate(this.eq,lower=1, upper=epsilon)$value
         
         if(!lower.tail) out <- 1 - out
         
@@ -90,14 +90,13 @@ ipd.meteESF <- function(esf) {
 #' @title Equation of the PMF for the METE individual metabolic rate distribution
 #'
 #' @description
-#' \code{metePsi} calculates the value of 
-## \deqn{\Psi(\epsilon | N_{0}, S_{0}, E_{0})}{\Psi(\code{e} | N0, S0, E0)} 
-#' Psi(e | N0, S0, E0) (the distribution of metabolic rates/power across all individuals in a commmunity) at the given value of \code{e}; vectorized in \code{e}.
+#' \code{metePsi} is a low level function to calculate the value of
+#' \eqn{\Psi(e | N_0, S_0, E_0)} (the distribution of metabolic rates/power across all individuals in a commmunity) at the given value of \code{e}; vectorized in \code{e}.
 #'
 #' @details
-#' Typically only used in \code{ipd.mete} and not called by the user.
+#' Typically only used in \code{ipd.meteESF} and not called by the user.
 #' 
-#' @param e the value (metabolic rate/power) at which to calculate \deqn{\Psi}
+#' @param e the value (metabolic rate/power) at which to calculate \eqn{\Psi}
 #' @param la1,la2 Lagrange multipliers
 #' @param Z partition function
 #' @param S0 Total number of species
@@ -107,15 +106,16 @@ ipd.meteESF <- function(esf) {
 #' @export
 #' 
 #' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' metePsi(min(arth$mass^(.75)),
-#'        esf1$La[1],esf1$La[2],
-#'        esf1$Z,esf1$state.var['S0'],
-#'        esf1$state.var['N0'],
-#'        esf1$state.var['E0'])
+#' data(arth)
+#' esf1 <- meteESF(spp=arth$spp,
+#'                 abund=arth$count,
+#'                 power=arth$mass^(.75),
+#'                 minE=min(arth$mass^(.75)))
+#' metePsi(1:10,
+#'         esf1$La[1],esf1$La[2],
+#'         esf1$Z,esf1$state.var['S0'],
+#'         esf1$state.var['N0'],
+#'         esf1$state.var['E0'])
 #' 
 #' @return numeric vector of length equal to length of \code{e}
 #'

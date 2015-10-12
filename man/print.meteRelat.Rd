@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.meteRelat.R
 \name{print.meteRelat}
 \alias{print.meteRelat}
-\title{print ??}
+\title{Print summaries of \code{meteRelat} objects}
 \usage{
 \method{print}{meteRelat}(x)
 }
@@ -10,16 +10,10 @@
 \item{x}{}
 }
 \value{
-list
+x silently
 }
 \description{
-print ??
-}
-\examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
+S3 method for class \code{meteRelat}
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

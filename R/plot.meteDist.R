@@ -20,6 +20,7 @@
 #' @export
 #' 
 #' @examples
+#' data(arth)
 #' esf1 <- meteESF(spp=arth$spp,
 #'                abund=arth$count,
 #'                power=arth$mass^(.75),

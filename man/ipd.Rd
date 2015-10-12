@@ -33,6 +33,7 @@ the distribution of metabolic rates across all individuals in a commmunity
 See examples.
 }
 \examples{
+data(arth)
 esf1 <- meteESF(spp=arth$spp,
                abund=arth$count,
                power=arth$mass^(.75),

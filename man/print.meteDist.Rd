@@ -21,11 +21,12 @@ S3 method for class \code{meteDist}
 Prints state variables and lagrange multipliers
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
-ipd1=ipd.meteESF(esf1)
+data(arth)
+esf1 <- meteESF(spp=arth$spp,
+                abund=arth$count,
+                power=arth$mass^(.75),
+                minE=min(arth$mass^(.75)))
+ipd1 <- ipd.meteESF(esf1)
 ipd1
 }
 \author{

@@ -1,13 +1,11 @@
-#' @title print.meteESF
+#' @title print.sar
 #'  
-#' @description \code{print.meteESF} prints an object of class \code{meteESF}
+#' @description S3 method for class \code{sar}
 #'
 #' @details
 #' See Examples
 #' 
-#' @param x an object of class \code{meteESF}
-#' @param ... arguments to be passed
-#' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
+#' @param x an object of class \code{sar}
 #' @export
 #' 
 #' @examples

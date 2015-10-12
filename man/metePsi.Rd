@@ -7,7 +7,7 @@
 metePsi(e, la1, la2, Z, S0, N0, E0)
 }
 \arguments{
-\item{e}{the value (metabolic rate/power) at which to calculate \deqn{\Psi}}
+\item{e}{the value (metabolic rate/power) at which to calculate \eqn{\Psi}}
 
 \item{la1,la2}{Lagrange multipliers}
 
@@ -23,22 +23,23 @@ metePsi(e, la1, la2, Z, S0, N0, E0)
 numeric vector of length equal to length of \code{e}
 }
 \description{
-\code{metePsi} calculates the value of
-Psi(e | N0, S0, E0) (the distribution of metabolic rates/power across all individuals in a commmunity) at the given value of \code{e}; vectorized in \code{e}.
+\code{metePsi} is a low level function to calculate the value of
+\eqn{\Psi(e | N_0, S_0, E_0)} (the distribution of metabolic rates/power across all individuals in a commmunity) at the given value of \code{e}; vectorized in \code{e}.
 }
 \details{
-Typically only used in \code{ipd.mete} and not called by the user.
+Typically only used in \code{ipd.meteESF} and not called by the user.
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
-metePsi(min(arth$mass^(.75)),
-       esf1$La[1],esf1$La[2],
-       esf1$Z,esf1$state.var['S0'],
-       esf1$state.var['N0'],
-       esf1$state.var['E0'])
+data(arth)
+esf1 <- meteESF(spp=arth$spp,
+                abund=arth$count,
+                power=arth$mass^(.75),
+                minE=min(arth$mass^(.75)))
+metePsi(1:10,
+        esf1$La[1],esf1$La[2],
+        esf1$Z,esf1$state.var['S0'],
+        esf1$state.var['N0'],
+        esf1$state.var['E0'])
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

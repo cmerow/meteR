@@ -2,20 +2,18 @@
 % Please edit documentation in R/print.sar.R
 \name{print.sar}
 \alias{print.sar}
-\title{print.meteESF}
+\title{print.sar}
 \usage{
 \method{print}{sar}(x)
 }
 \arguments{
-\item{x}{an object of class \code{meteESF}}
-
-\item{...}{arguments to be passed}
+\item{x}{an object of class \code{sar}}
 }
 \value{
 Returns the object silently
 }
 \description{
-\code{print.meteESF} prints an object of class \code{meteESF}
+S3 method for class \code{sar}
 }
 \details{
 See Examples
@@ -29,11 +27,4 @@ anbo.sar # alternatively
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
 }
-\keyword{METE,}
-\keyword{MaxEnt,}
-\keyword{ecosystem}
-\keyword{function}
-\keyword{lagrange}
-\keyword{multiplier,}
-\keyword{structure}
 
