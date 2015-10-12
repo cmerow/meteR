@@ -8,43 +8,82 @@ meteSAR(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL, Amin, A0,
   upscale = FALSE, EAR = FALSE)
 }
 \arguments{
-\item{spp}{}
+\item{spp}{vector of species identities}
 
-\item{row}{}
+\item{abund}{numberic vector abundances associated with each record}
 
-\item{col}{}
+\item{row}{identity of row in a gridded landscape associated with each record, or desired number of rows to divide the landcape into}
 
-\item{x}{}
+\item{col}{identity of column in a gridded landscape associated with each recod, or desired number of columns to divide the landcape into}
 
-\item{y}{}
+\item{x}{the x-coordinate of an individual if recorded}
 
-\item{S0}{}
+\item{y}{the y-coordinate of an individual if recorded}
 
-\item{N0}{}
+\item{S0}{total number of species}
 
-\item{Amin}{}
+\item{N0}{total abundance}
 
-\item{A0}{}
+\item{Amin}{the smallest area, either the anchor area for upscaling or the desired area to downscale to}
 
-\item{upscale}{}
+\item{A0}{the largest area, either the area to upscale to or the total area from which to downscale}
 
-\item{EAR}{}
+\item{upscale}{logical, should upscaling or downscaling be carried out}
 
-\item{abun}{}
+\item{EAR}{logical, should the EAR or SAR be computed}
+}
+\value{
+an object of class \code{meteRelat} with elements
+\describe{
+  \item{\code{pred}}{predicted relationship; an object of class \code{sar}}
+  \item{\code{obs}}{observed relationship; an object of class\code{sar9}}
+}
 }
 \description{
-Compute METE species area relationship (SAR)
+Uses raw data or state variables to calculate METE SAR
+and EAR (endemics area relatiohsip) as well as compute the observed
+SAR or EAR from data, if provided
+}
+\details{
+Currently only doublings of area are supported. Predictions
+and comparison to data can be made via several options. If \code{spp}
+and \code{abund} are not provided then only theoretical predictions
+are returned without emperical SAR or EAR results. In this case areas
+can either be specified by providing \code{Amin} and \code{A0} from
+which a vector of doubling areas is computed, or my providing \code{row},
+\code{col} and \code{A0} in which case \code{row} and \code{col} are
+taken to be the number of desired rows and columns used to construct
+a grid across the landscape. If data are provided in the form of
+\code{spp} and \code{abund} then either \code{row} and \code{col} or
+\code{x} and \code{y} must be provided for each data entry (i.e. the
+length of \code{row} and \code{col} or \code{x} and \code{y} must equal
+the length of \code{spp} and \code{abund}). If \code{x} and \code{y}
+are provided then the landscape is gridded either by specifying
+\code{Amin} (the size of the smallest grid cell) or by providing the
+number or desired rows and columns via the \code{row} and \code{col}
+arguments.
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
+data(anbo)
+
+## using row and col from anbo dataset
+anbo.sar1 <- meteSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
+plot(anbo.sar1)
+
+## using simulated x, y data
+anbo.sar2 <- meteSAR(anbo$spp, anbo$abund, x=anbo$x, y=anbo$y, row=4, col=4)
+plot(anbo.sar2)
+
+## using just state variable
+thr.sar <- meteSAR(Amin=1, A0=16, S0=50, N0=500)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
 }
 \references{
 Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+}
+\seealso{
+sad, meteESF, metePi
 }
 

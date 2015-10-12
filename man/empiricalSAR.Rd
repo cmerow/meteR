@@ -4,8 +4,7 @@
 \alias{empiricalSAR}
 \title{Empirical SAR}
 \usage{
-empiricalSAR(spp, abund, row, col, x, y, Amin, A0, upscale = FALSE,
-  EAR = FALSE)
+empiricalSAR(spp, abund, row, col, x, y, Amin, A0, EAR = FALSE)
 }
 \arguments{
 \item{spp}{}
@@ -22,11 +21,11 @@ empiricalSAR(spp, abund, row, col, x, y, Amin, A0, upscale = FALSE,
 
 \item{A0}{}
 
-\item{upscale}{logical. Do upscaling?}
-
 \item{EAR}{logical. TRUE computes the endemics-area relatinship}
 
 \item{abun}{}
+
+\item{upscale}{logical. Do upscaling?}
 }
 \description{
 Empirical SAR
