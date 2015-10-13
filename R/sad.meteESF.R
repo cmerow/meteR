@@ -67,6 +67,7 @@ sad.meteESF <- function(esf) {
       out <- metePhi(n=n,la1=esf$La[1],la2=esf$La[2],Z=esf$Z,
                      S0=esf$state.var[1],N0=esf$state.var[2],
                      E0=ifelse(is.na(esf$state.var[3]), esf$state.var[2]*10^2, esf$state.var[3]))
+      out=out/sum(out) # to address error below:  Error in distr::DiscreteDistribution(supp = 1:esf$state.var["N0"], prob = this.eq(1:esf$state.var["N0"])) : sum of 'prob' has to be (approximately) 1
       if(log) out <- log(out)
       return(out)
     }

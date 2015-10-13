@@ -1,7 +1,7 @@
 #' @title meteSSF
 #'  
 #' @description \code{meteSSF} calculates the ``spatial structure
-#' function'' \eqn{\Pi(n)} (analygous to the ecosystem structure function). From 
+#' function'' \eqn{\Pi(n)} (analogous to the ecosystem structure function). From 
 #' the SSF the spatial abundance distribution can be calculated.
 #'
 #' @details
@@ -13,8 +13,10 @@
 #' @param n0 Total abundance in area A0
 #' @param A The area at which abundances were recorded
 #' @param A0 Total study area
+#' 
 #' @keywords lagrange multiplier, METE, MaxEnt
-#' @export
+#'
+#'  @export
 #' 
 #' @examples
 #' data(anbo)
@@ -61,7 +63,7 @@ meteSSF <- function(abund, n0=sum(abund), A, A0) {
 	
 	out <- thisSSF
 	out$data$n <- abund
-	class(out) <- c('metePi', 'meteESF')
+	class(out) <- c('meteSSF', 'meteESF')
 	return(out)
 }
 

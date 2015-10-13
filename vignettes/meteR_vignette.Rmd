@@ -29,11 +29,14 @@ knitr::opts_chunk$set(cache=TRUE)
 #Introduction
 The package meteR is designed to facilitate fitting the models for the Maximum Entropy Theory of Ecology (METE) from data. For an overview of METE, see Harte et al. (2008), Harte (2011), and Harte and Newman (2014). Note that throughout this tutorial we use the notation for quantities used by the theory from these sources without extensive explanation. `meteR` can use data input in multiple formats and predict all the fundamental distributions of the theory (see Figure 1). Our objective is to facilitate tests of METE with empirical data sets. 
 
-![fig1](/Users/ctg/Dropbox/METE/meteR/vignettes/METE_Fig.png) 
+![fig1](METE_Fig.png) 
 
 Figure 1 was taken from Harte and Newman (2014) TREE 29: 384–389.
 
 <!--========================================================================-->
+<!--========================================================================-->
+<!--========================================================================-->
+
 #Case Study 1 - Abundance and Power Distributions
 We begin illustrating the capabilities of `meteR` with data from an arthropod community (data ref; more info). This data is distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and energy. Notably, these data do not contain any spatial information so we illustrate spatial predictions with a different data set in the next section.
 
@@ -56,6 +59,9 @@ str(esf1)
 ```
 Note that we use the terms 'power' and 'metabolic rate' interchangeably. The structure of the ESF contains some useful information. In addition to returning the inputs (in analogy, e.g., to common model fitting functions such as lm()), it returns the Lagrange multipliers as well as information about the fitting procedure. Note that we specified the minimum value for the metabolic rate, but that the minimum observed value will be taken by default. <!-- explain mine? -->
 <!--ANDY: To fit the model, `meteESF` uses...explain the algorithm briefly and when it should or shouldn't work -->
+
+<!--========================================================================-->
+<!--========================================================================-->
 
 ## Species Abundance Distribution (SAD)
 From the ESF, we can predict macroecological patterns. We begin with the species abundance distribution (SAD).
@@ -117,6 +123,9 @@ mseZ.meteDist(sad1, nrep=100,return.sim=TRUE)
 
 <!--ANDY: I think we need to summarize what the reader should take away from these multiple approaches to assessing fit. When would you use each? These are the kind of fundamentals that i've never learned, so this is all you....-->
 
+<!--========================================================================-->
+<!--========================================================================-->
+
 ## Individual Power Distribution (IPD)
 
 Similarly to the analyses illustrated above for the SAD, one can examine the individual power distribution (IPD; the distribution of metabolic rates over individauls in the community). We illustrate with an abbreviated version of the analyses above. First, fit and plot the IPD.
@@ -166,35 +175,114 @@ We can also obtain the distribution of metabolic rates of individuals in a speci
 plot(sipd1,xlab='metabolic rate')
 ```
 
-<!--ANDY: we still get the plot error, even though it plots. also, what's the x axis? those aren't the right units for mass or energy... -->
+<!--ANDY: what's the x axis? those aren't the right units for mass or energy... -->
+
 <!--========================================================================-->
+<!--========================================================================-->
+<!--========================================================================-->
+
 #Case Study 2 - Spatial distributions
 Next, we illustrate with data from a desert grassland community known as anza 
-borrego (ANDY: data ref). This data is distributed as part of meteR. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions. 
-```{r}
-data(anbo)
-head(anbo)
-```
-As shown in case study 1 above, we can build the ESF and investigate the SAD.
-```{r}
-data(anbo)
-head(anbo)
+borrego (ANDY: data ref). This data is distributed as part of meteR. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions related to abundance and spatial distribtion. As shown in case study 1 above, we can build the ESF and investigate the SAD.
 
+```{r}
+data(anbo)
+head(anbo)
 esf2=meteESF(spp=anbo$spp,
              abund=anbo$count)
 str(esf2)
-#sad2=sad(esf2)
-#sad2
 ```
-Note that when metabolic rate data are absent, `meteR` assumes a very large value for the state variable E0, such that terms involiving E0 can be safely ignored in distriutions and relationships involving abundance.
+
+Note that when metabolic rate data are absent, `meteR` assumes a very large value for the state variable E0, such that terms involiving E0 can be safely ignored in distributions and relationships involving abundance.
+
+```{r,fig.width=7,fig.cap="Different ways of plotting the SAD for the anbo data."}
+(sad2=sad(esf2))
+par(mfrow=c(1,2))
+plot(sad1, ptype='rad')
+plot(sad1, ptype='cdf')
+```
+
+To predict spatial distributions, the data need to be formatted such that the abundance of each is recorded in each cell even if that abundance is 0. The following will automatically fill in the necessary zeros if your data set is not already formatted in this way:
 
 ```{r,fig.width=7}
-#sad=sad(esf1)
-#par(mfrow=c(1,2))
+samp2mat <- function(site,spp,abund) {
+    y <- tapply(abund, list(site, spp), sum)
+    y[is.na(y)] <- 0
+    return(y)
+}
 
+anbo.mat <- samp2mat(paste(anbo[, 1], anbo[,2]), anbo$spp, anbo$count)
+anbo.new <- data.frame(t(sapply(strsplit(rownames(anbo.mat), ' ', fixed=TRUE), as.numeric)), 
+                       spp = rep(colnames(anbo.mat), each=nrow(anbo.mat)), 
+                       count = as.vector(anbo.mat))
+colnames(anbo.new)[1:2] <- colnames(anbo)[1:2] ## anbo.new now has 0 abundance where needed
 ```
 
+Analogous to the construction of the ESF above, we construct the Spatial Structure Function (SSF) (often denoted $\Pi (n)$ in the literature). Again, in analogy to how the SAD is constructed from the ESF, we can obtain the Species Spatial Abundance Distribution (SSAD) from the SSF.
+
+```{r,fig.width=7,fig.cap="SSAD for the anbo data."}
+pi1 <- meteSSF(anbo.new$count[anbo.new$spp=='crcr'], A=1, A0=16)
+pi1
+plot(ssad(pi1))
+```
+
+Next we predict the Species Area Relationship (SAR and EAR). We begin by predicting the number of species at scales smaller than the total plot size. For this we need to combine the ESF and the SSF. Note the the EAR is obtained with `downscaleSAR` with the option `EAR=T`. ANDY - Add explanation of the reason for upscaling and downscaling and the challenges.
+
+```{r,fig.width=7,fig.cap="The SAR (black) and EAR (blue) for the anbo data. In this example, there are 24 species distributed across 16 quadrats, hence the SAR and EAR converge at 24 species at an area of 16. "}
+anbo.esf <- meteESF(spp=anbo.new$spp, abund=anbo.new$count) 
+anbo.thr.downscale <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=17)), 16)
+anbo.thr.downscale
+anbo.thr.downscaleEAR <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=17)), 16, EAR=TRUE)
+plot(anbo.thr.downscale, ylim=c(0, max(anbo.thr.downscale[['S']])))
+plot(anbo.thr.downscaleEAR, col='blue', add=TRUE)
+```
+In this example, there are 24 species distributed across 16 quadrats, hence the SAR and EAR converge at 24 species at an area of 16. 
+
+<!-- ANDY: is there an easy way to get confidence intervales on these predictions? would you have to bootstrap the data or is there a more elegant option? More generally, can you think of a generic way to get intervals on any of the predictions or meter? Mabye theres a slick way to usea bootstrapping package and just run each of our functions in jsut a few lines?-->
+
+
+<!-- ANDY: Can you add text/edit the relevant parts for this next chunk? I was sure what the objective was... The last plot doesn't work, so it was commented out.
+```{r,fig.width=7}
+## empirical SAR and EAR
+anbo.obs.sar <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
+plot(anbo.obs.sar)
+
+anbo.obs.ear <- empiricalSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16, EAR=TRUE)
+plot(anbo.obs.ear)
+
+## the meteRelat object combining theoretical and observed SAR
+
+## combine SAR for scales at which we have data with upscaled SAR
+anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+anbo.sar
+#plot(anbo.sar, xlim=c(1, 2^10), ylim=c(3, 50), log='xy')
+```
+-->
+
+We can also use the SAR to predict the number of species at areas larger than those observed in the study (i.e. upscaling). Upscaling proceeds by sequentially doubling the area and predicting species richness (ANDY- I recall there were a few options - what did you choose and why?). To infer richness at areas intermediate between those on the doubling scale, one can simply interpolate.
+```{r,fig.width=7, fig.cap= 'Species-Area data (circles) and the upscaled prediction from the SAR (blue line).'}
+anbo.sarUP <- upscaleSAR(anbo.esf, 16, 2^10)
+anbo.obs.sar <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
+plot(anbo.obs.sar,xlim=c(1, 2^10), ylim=c(3, 50), log='xy') # plot the data
+plot(anbo.sarUP, add=TRUE, col='blue') # add upscaled prediction
+```
+
+<!-- ANDY: Seems like the following doens't need to be in the vignette. reason to keep? 
+```{r,fig.width=7,fig.cap='Species-Area data (circles) and the upscaled prediction from the SAR (blue line).'}
+# ## empirical SAR and EAR from simulated x, y data
+# anbo$x <- runif(nrow(anbo), 0, 1) + anbo$column
+# anbo$y <- runif(nrow(anbo), 0, 1) + anbo$row
+# meteSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$y, row=4, col=4)
+# 
+# plot(empiricalSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$y, row=4, col=4))
+# plot(empiricalSAR(anbo$spp, anbo$count, row=anbo$row, col=anbo$column, Amin=1, A0=16), col='red', add=TRUE)
+```
+-->
+
 <!--========================================================================-->
+<!--========================================================================-->
+<!--========================================================================-->
+
 # Case Study 3 - Specifying the state variables
 `meteR` allows the user to manually specify the state variables, which can be useful to buld models from data structures not accomodated by `meteR` or to explore how METE predictions vary as a function of state variables. 
 
@@ -207,6 +295,22 @@ par(mfrow=c(1,2))
 plot(sad3)
 plot(ipd3)
 ```
+
+Similarly, one can predict spatial distributions from the state variables. First, we downscale the species area relationsip.
+
+```{r,fig.width=7}
+## theoretical SARs from state variables only
+thr.downscale <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=0.25), 16)
+thr.downscaleEAR <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=0.25), 16, EAR=TRUE)
+plot(thr.downscale, ylim=c(0, 40), col='red')
+plot(thr.downscaleEAR, add=TRUE, col='blue')
+```
+
+We can also upscale the SAR. 
+```{r,fig.width=7}
+thr.upscale <- upscaleSAR(meteESF(S0=40, N0=400), 2^(-1:4), 16)
+```
+
 <!--
 For example, we could explore how the SAD and IPD vary as a function of N0.
 ```{r,fig.width=7}

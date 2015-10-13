@@ -23,10 +23,10 @@ print.sar <- function(x) {
 	            ifelse(attr(x, 'type')=='sar', 'species', 'endemics')))
 	
 	cat(sprintf('A: [%s, %s] \nS: [%s, %s] \n', 
-	            min(x[, 'A'], na.rm=TRUE), 
-	            max(x[, 'A'], na.rm=TRUE), 
-	            min(x[, 'S'], na.rm=TRUE), 
-	            max(x[, 'S'], na.rm=TRUE)))
+	            min(x[['A']], na.rm=TRUE), 
+	            max(x[['A']], na.rm=TRUE), 
+	            min(x[['S']], na.rm=TRUE), 
+	            max(x[['S']], na.rm=TRUE)))
 	
 	invisible(x)	
 }

@@ -20,7 +20,7 @@
 #' anbo.new <- data.frame(t(sapply(strsplit(rownames(anbo.mat), ' ', fixed=TRUE), as.numeric)), spp = rep(colnames(anbo.mat), each=nrow(anbo.mat)), count = as.vector(anbo.mat))
 #' colnames(anbo.new)[1:2] <- colnames(anbo)[1:2]
 #' ## anbo.new now has 0 abundance where needed
-#' pi1 <- metePi(anbo.new$count[anbo.new$spp=='crcr'], A=1, A0=16)
+#' pi1 <- meteSSF(anbo.new$count[anbo.new$spp=='crcr'], A=1, A0=16)
 #' plot(ssad(pi1))
 
 # @return list
@@ -34,15 +34,15 @@
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 ssad <- function(x) {
-  UseMethod('sad')
+  UseMethod('ssad')
 }
 
 #' @rdname ssad
-#' @method ssad metePi
-#' @S3method ssad metePi
+#' @method ssad meteSSF
+#' @S3method ssad meteSSF
 #' 
 
-ssad.metePi <- function(ssf) {
+ssad.meteSSF <- function(ssf) {
 	x <- ssf$data$n
 	
 	if(is.null(x)) {
