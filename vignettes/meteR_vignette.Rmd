@@ -38,7 +38,7 @@ Figure 1 was taken from Harte and Newman (2014) TREE 29: 384–389.
 <!--========================================================================-->
 
 #Case Study 1 - Abundance and Power Distributions
-We begin illustrating the capabilities of `meteR` with data from an arthropod community (data ref; more info). This data is distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and energy. Notably, these data do not contain any spatial information so we illustrate spatial predictions with a different data set in the next section.
+We begin illustrating the capabilities of `meteR` with data from an arthropod community (data ref; more info). These data are distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and energy. Notably, these data do not contain any spatial information so we illustrate spatial predictions with a different data set in the next section.
 
 ```{r}
 library(meteR)
@@ -46,9 +46,9 @@ data(arth)
 dim(arth)
 head(arth)
 ```
-This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that $metabolic_rate=mass^{3/4}$).If multiple individuals of the same size are observed, these can be specified as well (i.e., `arth$count` is something other than 1.) See the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables (N (# individuals), S (# species), E (total metabolic rate), A (total area)) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
+This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that metabolic rate $M=mass^{3/4}$). If multiple individuals of the same size are observed, these can be specified as well (i.e., `arth$count` is something other than 1.) For an example of such formatting see the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables $N_0$ (number of individuals), $S_0$ (number of species), $E_0$ (total metabolic rate), $A_0$ (total area) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
 
-Analysis begins by building the ecosystem structure function (ESF; R(n,e)). 
+Analysis begins by building the ecosystem structure function (ESF; $R(n,e)$) from which all non-spatial macroecological metrics can be derived. $R(n, e)$ describes the joint probability of observing a species with $n$ individuals and a randomly choosen member of that species having metabolic rate $e$. METE computes this distribution by maximizing information entropy relative to the constraints of $N_0/S_0$ and $E_0/S_0$ using the method of Lagrange multipliers. In `meteR` we achieve this as follows:
 ```{r}
 esf1=meteESF(spp=arth$spp,
             abund=arth$count,
@@ -57,8 +57,7 @@ esf1=meteESF(spp=arth$spp,
 esf1
 str(esf1)
 ```
-Note that we use the terms 'power' and 'metabolic rate' interchangeably. The structure of the ESF contains some useful information. In addition to returning the inputs (in analogy, e.g., to common model fitting functions such as lm()), it returns the Lagrange multipliers as well as information about the fitting procedure. Note that we specified the minimum value for the metabolic rate, but that the minimum observed value will be taken by default. <!-- explain mine? -->
-<!--ANDY: To fit the model, `meteESF` uses...explain the algorithm briefly and when it should or shouldn't work -->
+Note that we use the terms 'power' and 'metabolic rate' interchangeably. The returned object (of class `meteESF`) contains useful information. In addition to returning the inputs (in analogy, e.g., to common model fitting functions such as `lm()`), it returns the Lagrange multipliers as well as information about the fitting procedure. Note that we specified the minimum value for the metabolic rate, but that the minimum observed value will be taken by default. 
 
 <!--========================================================================-->
 <!--========================================================================-->
@@ -69,7 +68,7 @@ From the ESF, we can predict macroecological patterns. We begin with the species
 sad1=sad(esf1)
 sad1
 ```
-`sad.meteESF` fits the SAD and provides density (d), distribution function (p), quantile function (q), and random generation (r) for the distribution (see these with `str(sad1)`. This specification follows the conventions used by commonly used statistical distributions in the `stats` package (e.g. see `?rnorm`). These distributions allow us to use the model in a number of ways. You can access these functions directly as follows; e.g. randomly generating samples from the fitted distribution or determining the quantiles.
+`sad.meteESF` extracts the SAD and provides density (d), probability (p) and quantile (q) functions, as well as random number generation (r) for the distribution (see these with `str(sad1)`). This specification follows the conventions used by commonly used statistical distributions in the `stats` package (e.g. see `?rnorm`). These distributions allow us to use the model in a number of ways. You can access these functions directly as follows; e.g. randomly generating samples from the fitted distribution or determining the quantiles.
 ```{r}
 sad1$r(20)
 sad1$q(seq(0,1,length=10))
