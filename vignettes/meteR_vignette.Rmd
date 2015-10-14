@@ -93,19 +93,21 @@ llz$z
 plot(density(llz$sim),
      xlim=range(c(llz$sim,llz$obs)),
      xlab='log(likelihood)',col='red')
+#== add 95% quantile region
+abline(v=quantile(llz$sim, c(0.025, 0.975)), col='red')
+#== add observed likelihood
 abline(v=llz$obs,lty=2)
 legend('top',legend=c('data','simulated\nfrom METE'),
        col=c('black','red'), lty=c(1,1),bty='n') 
 ```
 
-Because the likelihood of the observed data fall comfortably within this distribution, we have confidence that the model provides a good fit.
-<!--ANDY: this is what we want people to take away, right? or was there something more to explain? -->
-Note that other utilities that extract liklihoods from model objects are also useful:
+Because the likelihood of the observed data falls within the 95\% quantile region of the simulated likelihoods, we have confidence that the model provides a good fit.
 
+Note that other utilities that extract liklihoods from model objects are also useful, including AIC thus opening up all model comparison capabilities in `R` and its contributed pacakges:
 ```{r}
 AIC(sad1)
 ```
-<!--ANDY: Any other such functions? -->
+
 Next, we illustrate methods relying on residuals to assess model fit.
 
 ```{r}
