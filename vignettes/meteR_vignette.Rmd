@@ -108,7 +108,7 @@ Note that other utilities that extract liklihoods from model objects are also us
 AIC(sad1)
 ```
 
-Next, we illustrate methods relying on residuals to assess model fit.
+Next, we illustrate methods relying on residuals to assess model fit. Residuals can be calculated either on the rank abundance (`type='rank'`) or cummulative (`type='cummulative'`) distribution and can be calculated as relative residuals ($(x_i - \hat{x})/\hat{x}$) or absolute ($x_i - \hat{x}$) by setting argument `relative` to `TRUE` or `FALSE` respectively. Relative residuals can be thought of as the proportional difference between observed and expected abundance or probability. From this mean squared error can be calculated and used to evaluate model fit. Although both rank abundance and cummulative density options are availible, we recommend only using rank abundance as cumulative density is constrained at upper and lower bounds and so its residuals will not be as reliable.
 
 ```{r}
 #== calculate the residuals from the fitted distribution
@@ -118,11 +118,21 @@ head(residuals(sad1, type='cumulative', relative=FALSE))
 mse.meteDist(sad1, type='rank', relative=FALSE)
 #== randomly generate 100 data sets from the fitted distribution and calculate
 #== the z-score of the data w.r.t. these simulations
-mseZ.meteDist(sad1, nrep=100,return.sim=TRUE)
-
+msez.rank=mseZ.meteDist(sad1, nrep=100, return.sim=TRUE, type='rank')
+msez.rank$z
+#== plot the distributions
+plot(density(msez$sim),
+     xlim=range(c(msez$sim,msez$obs)),
+     xlab='Mean squared error',col='red')
+#== add 95% quantile region
+abline(v=quantile(msez$sim, c(0.025, 0.975)), col='red')
+#== add observed likelihood
+abline(v=msez$obs,lty=2)
+legend('top',legend=c('data','simulated\nfrom METE'),
+       col=c('black','red'), lty=c(1,1),bty='n') 
 ```
 
-<!--ANDY: I think we need to summarize what the reader should take away from these multiple approaches to assessing fit. When would you use each? These are the kind of fundamentals that i've never learned, so this is all you....-->
+Here again we fail to reject METE as the model that generated the observed data (the obserbed MSE is below the 95\% quantile region). We can also see that the distribution of errors is not as Gaussian shaped as the distribution of likelihoods. Thus although residuals can be useful (specificlaly we can see whether, e.g., common species are more or less common than predicted by METE) we recomend using likelihood for evaluating model fit.
 
 <!--========================================================================-->
 <!--========================================================================-->
