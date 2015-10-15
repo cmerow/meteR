@@ -139,7 +139,7 @@ Here again we fail to reject METE as the model that generated the observed data 
 
 ## Individual Power Distribution (IPD)
 
-Similarly to the analyses illustrated above for the SAD, one can examine the individual power distribution (IPD; the distribution of metabolic rates over individauls in the community). We illustrate with an abbreviated version of the analyses above. First, fit and plot the IPD.
+Similarly to the analyses illustrated above for the SAD, one can examine the individual power distribution (IPD; the distribution of metabolic rates, or power, over individauls in the community). We illustrate with an abbreviated version of the analyses above. First, fit and plot the IPD.
 
 ```{r fig.width=7, fig.cap="Different ways of plotting the IPD"}
 ipd1=ipd(esf1)
@@ -158,7 +158,7 @@ Next, assess the fit of the IPD.
 head(residuals(ipd1))
 logLik(ipd1)
 logLikZ.meteDist(ipd1, nrep=100)
-(llz=logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE))
+llz=logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
 plot(density(llz$sim),xlim=range(c(llz$sim,llz$obs)),xlab='log(likelihood)',col='red')
 abline(v=llz$obs,lty=2)
 legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
