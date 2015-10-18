@@ -97,7 +97,7 @@ meteSSF <- function(spp, sppID, abund, row, col, x, y, n0=sum(abund), A, A0) {
 .getAbundInGroups <- function(abund, row, col, groups) {
   cellID <- paste(row, col, sep=',')
   cellGroup <- as.factor(groups$group[match(cellID, groups$cells)])
-  levels(cellGroup) <- unique(groups)
+  levels(cellGroup) <- unique(groups$group)
   out <- tapply(abund, cellGroup, sum)
   out[is.na(out)] <- 0
   
