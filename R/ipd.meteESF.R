@@ -39,9 +39,9 @@ ipd <- function(x) {
 }
 
 #' @rdname ipd
-#' @method ipd meteESF
-#' @S3method ipd meteESF
-#' 
+# @method ipd meteESF
+# @S3method ipd meteESF
+#' @export 
 
 ipd.meteESF <- function(esf) {
     if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')

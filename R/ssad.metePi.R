@@ -38,9 +38,9 @@ ssad <- function(x) {
 }
 
 #' @rdname ssad
-#' @method ssad meteSSF
-#' @S3method ssad meteSSF
-#' 
+# @method ssad meteSSF
+# @S3method ssad meteSSF
+#' @export 
 
 ssad.meteSSF <- function(ssf) {
 	x <- ssf$data$n

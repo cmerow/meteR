@@ -27,7 +27,7 @@ An object of class \code{meteDist}. The object contains a list with the followin
 }
 \description{
 \code{sad.mete} returns the species abundance distribution
-predicted by METE (Phi(n))
+predicted by METE (\eqn{\Phi(n)})
 }
 \details{
 See Examples.

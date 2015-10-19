@@ -51,9 +51,9 @@ sipd <- function(x, ...) {
 }
 
 #' @rdname sipd
-#' @method sipd meteESF
-#' @S3method sipd meteESF
-#' 
+# @method sipd meteESF
+# @S3method sipd meteESF
+#' @export 
 
 sipd.meteESF <- function(esf, sppID, n) {
     if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')

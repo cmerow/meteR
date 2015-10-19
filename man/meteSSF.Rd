@@ -4,7 +4,7 @@
 \alias{meteSSF}
 \title{meteSSF}
 \usage{
-meteSSF(abund, n0 = sum(abund), A, A0)
+meteSSF(spp, sppID, abund, row, col, x, y, n0 = sum(abund), A, A0)
 }
 \arguments{
 \item{abund}{A vector giving abundances of each entry}

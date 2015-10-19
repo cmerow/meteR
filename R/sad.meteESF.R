@@ -48,9 +48,9 @@ sad <- function(x) {
 }
 
 #' @rdname sad
-#' @method sad meteESF
-#' @S3method sad meteESF
-#' 
+# @method sad meteESF
+# @S3method sad meteESF
+#' @export 
 
 sad.meteESF <- function(esf) {
     x <- esf$data$n
