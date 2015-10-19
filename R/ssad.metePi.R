@@ -5,7 +5,7 @@
 # @details
 #' 
 #' 
-#' @param ssf 
+#' @param ssf An objects of class meteSSF; i.e. the spatial structure function \eqn{\Pi(n)}
 #' 
 #' @export
 #' 

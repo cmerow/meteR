@@ -1,7 +1,7 @@
 #' @title meteESF
 #'  
 #' @description \code{meteESF} Calculates the ``ecosystem structure
-#' function'' $R(n, epsilon)$ which forms the core of the Maximum Entropy Theory of
+#' function'' \eqn{R(n,\epsilon)} which forms the core of the Maximum Entropy Theory of
 #' Ecology
 #'
 #' @details
@@ -12,9 +12,9 @@
 #' confirm this assumption. Examples show different ways of combining data and state
 #' variables to specify constraints
 #' 
-#' @param spp A vector of species names for each entry
-#' @param abund A vector giving abundances of each entry
-#' @param power A vector giving metabolic rates for each entry
+#' @param spp A vector of species names 
+#' @param abund A vector of abundances 
+#' @param power A vector of metabolic rates 
 #' @param S0 Total number of species
 #' @param N0 Total number of individuals
 #' @param E0 Total metabolic rate; defaults to N0*1e6 if not specified or 

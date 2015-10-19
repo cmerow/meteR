@@ -3,7 +3,7 @@
 #'
 #' @description
 #' \code{sad.mete} returns the species abundance distribution
-#' predicted by METE (Phi(n))
+#' predicted by METE (\eqn{\Phi(n)})
 #'
 #' @details
 #' See Examples.

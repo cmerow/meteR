@@ -7,11 +7,11 @@
 meteESF(spp, abund, power, S0 = NULL, N0 = NULL, E0 = NULL, minE)
 }
 \arguments{
-\item{spp}{A vector of species names for each entry}
+\item{spp}{A vector of species names}
 
-\item{abund}{A vector giving abundances of each entry}
+\item{abund}{A vector giving abundances}
 
-\item{power}{A vector giving metabolic rates for each entry}
+\item{power}{A vector giving metabolic rates}
 
 \item{S0}{Total number of species}
 
@@ -36,7 +36,7 @@ An object of class \code{meteESF} with elements
 }
 \description{
 \code{meteESF} Calculates the ``ecosystem structure
-function'' $R(n, epsilon)$ which forms the core of the Maximum Entropy Theory of
+function'' R(n, $\epsilon$) which forms the core of the Maximum Entropy Theory of
 Ecology
 }
 \details{

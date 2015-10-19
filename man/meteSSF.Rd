@@ -26,7 +26,7 @@ An object of class \code{meteSSF} with elements
 }
 \description{
 \code{meteSSF} calculates the ``spatial structure
-function'' \eqn{\Pi(n)} (analygous to the ecosystem structure function). From
+function'' \eqn{\Pi(n)} (analogous to the ecosystem structure function). From
 the SSF the spatial abundance distribution can be calculated.
 }
 \details{
