@@ -55,18 +55,54 @@
 #' @seealso metePi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
-meteSSF <- function(abund, n0=sum(abund), A, A0) {
-	# n0 <- sum(n)
+meteSSF <- function(spp, sppID, abund, row, col, x, y, n0=sum(abund), A, A0) {
+  ## get grid regardless of starting input but only if spp and abund are given
+  if(!missing(spp) & !missing(abund)) {
+    areaInfo <- .findAreas(
+      spp=if(missing(abund)) NULL else spp,
+      abund=if(missing(abund)) NULL else abund, 
+      row=if(missing(row)) NULL else row, 
+      col=if(missing(col)) NULL else col, 
+      x=if(missing(x)) NULL else x, 
+      y=if(missing(y)) NULL else y, 
+      Amin=if(missing(A)) NULL else A, 
+      A0=if(missing(A0)) NULL else A0)
+    areas <- areaInfo$areas
+    row <- areaInfo$row
+    col <- areaInfo$col
+    nrow <- areaInfo$nrow
+    ncol <- areaInfo$ncol
+    Amin <- areaInfo$Amin
+    A0 <- areaInfo$A0
+    
+    ## focal area might have changed slightly
+    A <- areas[which.min(abs(A - areas))]
+    
+    ## get abundance in grid
+    abund[spp != sppID] <- 0
+    abund <- .getAbundInGroups(abund, row, col, .getNeighbors(A, nrow, ncol))
+  } else {
+    abund <- NULL
+  }
+  
+  ## make SSF for state variables
+	out <- .makeSSF(n0, A, A0)
 	
-	thisSSF <- .makeSSF(n0, A, A0)
-	# SSAD <- makeSSAD(n, thisSSF)
-	
-	out <- thisSSF
 	out$data$n <- abund
 	class(out) <- c('meteSSF', 'meteESF')
 	return(out)
 }
 
+## helper function to get abundances in all cells
+.getAbundInGroups <- function(abund, row, col, groups) {
+  cellID <- paste(row, col, sep=',')
+  cellGroup <- as.factor(groups$group[match(cellID, groups$cells)])
+  levels(cellGroup) <- unique(groups$group)
+  out <- tapply(abund, cellGroup, sum)
+  out[is.na(out)] <- 0
+  
+  return(out)
+}
 
 #==============================================================================
 #' @title Equation of the PMF of the METE spatial species abundance distribution
