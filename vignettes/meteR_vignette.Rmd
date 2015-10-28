@@ -121,13 +121,13 @@ mse.meteDist(sad1, type='rank', relative=FALSE)
 msez.rank=mseZ.meteDist(sad1, nrep=100, return.sim=TRUE, type='rank')
 msez.rank$z
 #== plot the distributions
-plot(density(msez$sim),
-     xlim=range(c(msez$sim,msez$obs)),
+plot(density(msez.rank$sim),
+     xlim=range(c(msez.rank$sim,msez.rank$obs)),
      xlab='Mean squared error',col='red')
 #== add 95% quantile region
-abline(v=quantile(msez$sim, c(0.025, 0.975)), col='red')
+abline(v=quantile(msez.rank$sim, c(0.025, 0.975)), col='red')
 #== add observed likelihood
-abline(v=msez$obs,lty=2)
+abline(v=msez.rank$obs,lty=2)
 legend('top',legend=c('data','simulated\nfrom METE'),
        col=c('black','red'), lty=c(1,1),bty='n') 
 ```
@@ -238,6 +238,8 @@ plot(ssad(pi1))
 ```
 
 Next we predict the Species Area Relationship (SAR and EAR). We begin by predicting the number of species at scales smaller than the total plot size. For this we need to combine the ESF and the SSF. Note the the EAR is obtained with `downscaleSAR` with the option `EAR=T`. ANDY - Add explanation of the reason for upscaling and downscaling and the challenges.
+
+<!-- note that we don't actually have meteSAR in here. should we? -->?
 
 ```{r,fig.width=7,fig.cap="The SAR (black) and EAR (blue) for the anbo data. In this example, there are 24 species distributed across 16 quadrats, hence the SAR and EAR converge at 24 species at an area of 16. "}
 anbo.esf <- meteESF(spp=anbo.new$spp, abund=anbo.new$count) 
