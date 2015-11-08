@@ -55,7 +55,7 @@
 #' @return an object of class \code{meteRelat} with elements
 #' \describe{
 #'   \item{\code{pred}}{predicted relationship; an object of class \code{sar}}
-#'   \item{\code{obs}}{observed relationship; an object of class\code{sar9}}
+#'   \item{\code{obs}}{observed relationship; an object of class\code{sar}}
 #' }
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow

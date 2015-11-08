@@ -36,7 +36,7 @@ meteSAR(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL, Amin, A0,
 an object of class \code{meteRelat} with elements
 \describe{
   \item{\code{pred}}{predicted relationship; an object of class \code{sar}}
-  \item{\code{obs}}{observed relationship; an object of class\code{sar9}}
+  \item{\code{obs}}{observed relationship; an object of class\code{sar}}
 }
 }
 \description{
