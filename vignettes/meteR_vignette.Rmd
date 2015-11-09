@@ -151,8 +151,8 @@ str(ipd1) # analogous structure to sad1 above
 ipd1$r(8) # random number generation from fitted distribution
 
 par(mfrow=c(1,2))
-plot(ipd1, ptype='cdf')
-plot(ipd1, ptype='rad')
+plot(ipd1, ptype='cdf', log='x')
+plot(ipd1, ptype='rad', log='y')
 ```
 
 Next, assess the fit of the IPD.
@@ -164,6 +164,7 @@ logLikZ.meteDist(ipd1, nrep=100)
 llz=logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
 plot(density(llz$sim),xlim=range(c(llz$sim,llz$obs)),xlab='log(likelihood)',col='red')
 abline(v=llz$obs,lty=2)
+llz$z
 legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
        lty=c(1,1),bty='n') 
 
@@ -176,20 +177,30 @@ mse.meteDist(ipd1, type='rank', relative=FALSE)
 mseZ=mseZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
 mseZ$z
 plot(density(mseZ$sim),xlim=range(c(mseZ$sim,mseZ$obs)),xlab='mse',col='red')
-abline(v=llz$obs,lty=2)
+abline(v=mseZ$obs,lty=2)
 legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
        lty=c(1,1),bty='n') 
 ```
-<!--ANDY: What should the reader take away from this? discuss residuals vs. likelihoods. arth ipd is supported by residauls z but not liklihood. -->
 
-We can also obtain the distribution of metabolic rates of individuals in a species with $n$ individuals ($\Theta$):
-<!-- add if we figure out how to put equns in: (\eqn{\Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}) with `sipd` with (for species 5) -->
+<!-- yeah i'm worried about this, especially cause the plots look like theory fits really well. will need to look into it more -->
+
+METE predicts two other distributions relating to metabolic rates: the distribution of metabolic rates across individuals within a species with $n$ total individuals (the `sipd`, $\Theta(e | n)$ in the notation of Harte 2011) and the species level distribution of average metabolic rates (the `spd`, $\nu(e)$ in the notation of Harte 2011). 
+
+We can obtain the SIPD with `S3` method `sipd` which requires either a species ID be specified or the total abundance of a hypothetical species:
 ```{r fig.width=5, fig.cap="Distribution of metabolic rates of individuals in a species with $n$ individuals"}
-(sipd1 <- sipd(esf1, sppID=5))
-plot(sipd1,xlab='metabolic rate')
+sipd1 <- sipd(esf1, sppID=5)
+plot(sipd1, log='x')
+
+## sipd based on total abundance of a hypothetical species
+sipd2 <- sipd(esf1, n=25)
 ```
 
-<!--ANDY: what's the x axis? those aren't the right units for mass or energy... -->
+We can obtain the SPD with `S3` method `spd`:
+```{r fig.width=5, fig.cap="Distribution of metabolic rates of individuals in a species with $n$ individuals"}
+spd1 <- spd(esf1)
+plot(spd1, log='x')
+```
+
 
 <!--========================================================================-->
 <!--========================================================================-->
