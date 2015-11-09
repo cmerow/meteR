@@ -208,7 +208,7 @@ plot(spd1, log='x')
 
 #Case Study 2 - Spatial distributions
 Next, we illustrate spatial analyses with data from a survey of a desert annual grassland community at the Anza 
-Borrego Preserve (Harte and Harte, unpub. data). The survey recorded every herbacious plant within a 16x16m plot gridded to ever square meter.  Thus spatial data take the form of the row and column identity where each plant was recorded. This dataset is distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions related to abundance and spatial distribtion. As shown in case study 1 above, we can build the ESF and investigate the SAD.
+Borrego Preserve (Harte and Harte, unpub. data). The survey recorded every herbacious plant within a 4x4m plot gridded to ever square meter (resulting in 16 total cells).  Thus spatial data take the form of the row and column identity where each plant was recorded. This dataset is distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions related to abundance and spatial distribtion. As shown in case study 1 above, we can build the ESF and investigate the SAD.
 
 ```{r}
 data(anbo)
@@ -256,24 +256,39 @@ pi3 <- meteSSF(anbo$spp, 'crcr', anbo$count, x=anbo$x, y=anbo$y, A=1, A0=16)
 plot(ssad(pi3)) # the plot has naturally changed slightly due to the jittering
 ```
 
-Next we predict the Species Area Relationship and Endemics Area Relationship (SAR and EAR). We begin by predicting the number of species at scales smaller than the total plot size. For this we need to combine the ESF and the SSF. Note the the EAR is obtained with `downscaleSAR` with the option `EAR=T`. ANDY - Add explanation of the reason for upscaling and downscaling and the challenges.
+Next we predict the Species Area Relationship and Endemics Area Relationship (SAR and EAR). We begin by predicting the number of species at scales smaller than the total plot size. For this we need to combine the ESF and the SSF. Note the the EAR is obtained in all functions by specifying argument `EAR=TRUE`. Downscaling assumes that METE holds at the largest spatial scale and smaller scales are spatially nested subsamples of this larger scale.  As such this approach makes intuitive sense for small-scale plot data.  Conversely upscaling allows one to use plot-level data to predict species richness at scales much larger than the suveyed plot.  This is achived by iteratively solving for the larger spatial scale that would yield the observed smaller scale under nested subsampling.  This iterative process can be carried out to indefinite scales.
 
-<!-- note that we don't actually have meteSAR in here. should we? -->?
+The METE-predicted SAR can be obtained in two ways, one directly and one recalling the `meteDist` objects explored earlier.
 
-```{r,fig.width=7,fig.cap="The SAR (black) and EAR (blue) for the anbo data. In this example, there are 24 species distributed across 16 quadrats, hence the SAR and EAR converge at 24 species at an area of 16. "}
-anbo.esf <- meteESF(spp=anbo.new$spp, abund=anbo.new$count) 
+```{r,fig.width=7,fig.cap="The SAR (black) and EAR (blue) for the anbo data."}
+## first the direct method
+anbo.esf <- meteESF(spp=anbo$spp, abund=anbo$count)
 anbo.thr.downscale <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=17)), 16)
 anbo.thr.downscale
 anbo.thr.downscaleEAR <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=17)), 16, EAR=TRUE)
-plot(anbo.thr.downscale, ylim=c(0, max(anbo.thr.downscale[['S']])))
+
+## upscaling
+anbo.thr.upscale <- upscaleSAR(anbo.esf, 16, 2^6)
+
+## plotting
+plot(anbo.thr.downscale, xlim=c(1, 2^6), ylim=c(0, 35))
 plot(anbo.thr.downscaleEAR, col='blue', add=TRUE)
+plot(anbo.thr.upscale, col='red', add=TRUE)
 ```
-In this example, there are 24 species distributed across 16 quadrats, hence the SAR and EAR converge at 24 species at an area of 16. 
+In this example, there are 24 species distributed across 16 quadrats, hence the downscaled SAR (black) and EAR (blue) converge at 24 species at an area of 16. Endemics here must be interpreted as local endemics, thus all 24 species are ``endemic'' to the 16m$^2$ plot.  Upscale species richness is shown in red.  Note that for mathematical convenience (discussed in Harte 2011) we only consider doublings of area when computing upscaled species richness.  For intermediate areas one can simply iterpolate.
+
+To compare the mete prediction with data we use `meteSAR` to obtain a `meteRelat` object that stores both observed data and theoretical predictions:
+```{r,fig.width=7,fig.cap="Comparing SAR with data."}
+anbo.sar <- meteSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
+anbo.sar
+plot(anbo.sar, log='xy')
+```
 
 <!-- ANDY: is there an easy way to get confidence intervales on these predictions? would you have to bootstrap the data or is there a more elegant option? More generally, can you think of a generic way to get intervals on any of the predictions or meter? Mabye theres a slick way to usea bootstrapping package and just run each of our functions in jsut a few lines?-->
 
+<!-- the z-score simulation stuff can give confidence intervals, but for the relationships there's no straightforward way to do it.  we'd have to make probabilistic relationships, which is do-able, but best saved for later.  Justin Kitzes actually has a paper about probabilistic SAR that we can base our later attempts on-->
 
-<!-- ANDY: Can you add text/edit the relevant parts for this next chunk? I was sure what the objective was... The last plot doesn't work, so it was commented out.
+The emirical SAR (or EAR) can also be directly obtained from the data without jointly calculating the theoretical predictions:
 ```{r,fig.width=7}
 ## empirical SAR and EAR
 anbo.obs.sar <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
@@ -281,15 +296,8 @@ plot(anbo.obs.sar)
 
 anbo.obs.ear <- empiricalSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16, EAR=TRUE)
 plot(anbo.obs.ear)
-
-## the meteRelat object combining theoretical and observed SAR
-
-## combine SAR for scales at which we have data with upscaled SAR
-anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
-anbo.sar
-#plot(anbo.sar, xlim=c(1, 2^10), ylim=c(3, 50), log='xy')
 ```
--->
+
 
 We can also use the SAR to predict the number of species at areas larger than those observed in the study (i.e. upscaling). Upscaling proceeds by sequentially doubling the area and predicting species richness (ANDY- I recall there were a few options - what did you choose and why?). To infer richness at areas intermediate between those on the doubling scale, one can simply interpolate.
 ```{r,fig.width=7, fig.cap= 'Species-Area data (circles) and the upscaled prediction from the SAR (blue line).'}
