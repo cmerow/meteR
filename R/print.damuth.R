@@ -1,18 +1,18 @@
-#' @title print.sar
+#' @title print.damuth
 #'  
-#' @description S3 method for class \code{sar}
+#' @description S3 method for class \code{damuth}
 #'
 #' @details
 #' See Examples
 #' 
-#' @param x an object of class \code{sar}
+#' @param x an object of class \code{damuth}
 #' @export
 #' 
 #' @examples
-#' data(anbo)
-#' anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
-#' print(anbo.sar)
-#' anbo.sar # alternatively
+#' data(arth)
+#' esf1 <- meteESF(arth$spp, arth$count, arth$mass^0.75)
+#' ebar1 <- ebar(esf1)
+#' print(ebar1)
 #' 
 #' @return Returns the object silently
 #'
