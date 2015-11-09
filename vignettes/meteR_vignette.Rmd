@@ -38,7 +38,7 @@ Figure 1 was taken from Harte and Newman (2014) TREE 29: 384–389 and illustrat
 <!--========================================================================-->
 
 #Case Study 1 - Abundance and Power Distributions
-We begin illustrating the capabilities of `meteR` with data from an arthropod community (data ref; more info). These data are distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and energy. Notably, these data do not contain any spatial information so we illustrate spatial predictions with a different data set in the next section.
+We begin illustrating the capabilities of `meteR` with data from an arthropod community (Gruner 2007) collected via conopy fogging in Hawaii and including individal body mass measurements for each arthropd specimen collected. These data are distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and metabolic rate. Notably, these data do not contain any spatial information so we illustrate spatial predictions with a different data set in the next section.
 
 ```{r}
 library(meteR)
@@ -46,7 +46,7 @@ data(arth)
 dim(arth)
 head(arth)
 ```
-This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that metabolic rate $M=mass^{3/4}$). If multiple individuals of the same size are observed, these can be specified as well (i.e., `arth$count` is something other than 1.) For an example of such formatting see the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables $N_0$ (number of individuals), $S_0$ (number of species), $E_0$ (total metabolic rate), $A_0$ (total area) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
+This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that metabolic rate $M \propto mass^{3/4}$). If multiple individuals of the same size from the same species are observed (and lumped into one record), these can be specified as well, i.e., by letting `arth$count` be something other than 1. For an example of such formatting see the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables $N_0$ (number of individuals), $S_0$ (number of species), $E_0$ (total metabolic rate) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
 
 Analysis begins by building the ecosystem structure function (ESF; $R(n,e)$) from which all non-spatial macroecological metrics can be derived. $R(n, e)$ describes the joint probability of observing a species with $n$ individuals and a randomly choosen member of that species having metabolic rate $e$. METE computes this distribution by maximizing information entropy relative to the constraints of $N_0/S_0$ and $E_0/S_0$ using the method of Lagrange multipliers. In `meteR` we achieve this as follows:
 ```{r}
@@ -57,7 +57,9 @@ esf1=meteESF(spp=arth$spp,
 esf1
 str(esf1)
 ```
-Note that we use the terms 'power' and 'metabolic rate' interchangeably. The returned object (of class `meteESF`) contains useful information. In addition to returning the inputs (in analogy, e.g., to common model fitting functions such as `lm()`), it returns the Lagrange multipliers as well as information about the fitting procedure. Note that we specified the minimum value for the metabolic rate, but that the minimum observed value will be taken by default. 
+Note that we use the terms 'power' and 'metabolic rate' interchangeably (after all units of power are energy per time and thus an energetic rate). Further note that we specified the minimum value for the metabolic rate, but that the minimum observed value will be taken by default. Without loss of generality, metabolic rates are re-scaled by this minimum such that the minimum possible observable metabolic rate is 1. This is neccesary for the underlying mathematics as discussed in Harte (2011). 
+
+The returned object (of class `meteESF`) contains useful information. In addition to returning the inputs (in analogy, e.g., to common model fitting functions such as `lm`), it returns the Lagrange multipliers from entropy maximization as well as information about the fitting procedure.
 
 <!--========================================================================-->
 <!--========================================================================-->
@@ -68,16 +70,17 @@ From the ESF, we can predict macroecological patterns. We begin with the species
 sad1=sad(esf1)
 sad1
 ```
-`sad.meteESF` extracts the SAD and provides density (d), probability (p) and quantile (q) functions, as well as random number generation (r) for the distribution (see these with `str(sad1)`). This specification follows the conventions used by commonly used statistical distributions in the `stats` package (e.g. see `?rnorm`). These distributions allow us to use the model in a number of ways. You can access these functions directly as follows; e.g. randomly generating samples from the fitted distribution or determining the quantiles.
+The `S3` method `sad` for class `meteESF` extracts the SAD and provides density (d), probability (p) and quantile (q) functions, as well as random number generation (r) for the distribution (see these with `str(sad1)`). This specification follows the conventions used by statistical distributions in the `stats` package (e.g. see `?rnorm`). These distributions allow us to use the model in a number of ways. You can access these functions directly as follows; e.g. randomly generating samples from the fitted distribution or determining the quantiles.
 ```{r}
 sad1$r(20)
 sad1$q(seq(0,1,length=10))
 ```
+
 `meteR` readily plots the SAD as either a rank-abundance distribution (`ptype=rad`) or a cumulative distribution (`ptype=cdf`) (and other predicted distributions):
 ```{r fig.width=7, fig.cap="Different ways of plotting the SAD"}
 par(mfrow=c(1,2))
-plot(sad1, ptype='rad')
-plot(sad1, ptype='cdf')
+plot(sad1, ptype='rad', log='y')
+plot(sad1, ptype='cdf', log='x')
 ```
 
 `meter` provides functions to assess model fit based on likelihood and residuals. First, we illustrate likelihood methods:
@@ -103,12 +106,12 @@ legend('top',legend=c('data','simulated\nfrom METE'),
 
 Because the likelihood of the observed data falls within the 95\% quantile region of the simulated likelihoods, we have confidence that the model provides a good fit.
 
-Note that other utilities that extract liklihoods from model objects are also useful, including AIC thus opening up all model comparison capabilities in `R` and its contributed pacakges:
+Note that other utilities that extract liklihoods from model objects are also useful, including AIC, thus opening up all model comparison capabilities in `R` and its contributed pacakges:
 ```{r}
 AIC(sad1)
 ```
 
-Next, we illustrate methods relying on residuals to assess model fit. Residuals can be calculated either on the rank abundance (`type='rank'`) or cummulative (`type='cummulative'`) distribution and can be calculated as relative residuals ($(x_i - \hat{x})/\hat{x}$) or absolute ($x_i - \hat{x}$) by setting argument `relative` to `TRUE` or `FALSE` respectively. Relative residuals can be thought of as the proportional difference between observed and expected abundance or probability. From this mean squared error can be calculated and used to evaluate model fit. Although both rank abundance and cummulative density options are availible, we recommend only using rank abundance as cumulative density is constrained at upper and lower bounds and so its residuals will not be as reliable.
+Next, we illustrate methods relying on residuals to assess model fit. Residuals can be calculated either on the rank abundance (`type='rank'`) or cummulative (`type='cummulative'`) distribution and can be calculated as relative residuals ($(x_i - \hat{x})/\hat{x}$) or absolute ($x_i - \hat{x}$) by setting argument `relative` to `TRUE` or `FALSE`, respectively. Relative residuals can be thought of as the proportional difference between observed and expected abundance or probability. From the residuals, mean squared error can be calculated and used to evaluate model fit. Although both rank abundance and cummulative density options are availible, we recommend only using rank abundance as cumulative density is constrained at upper and lower bounds and so its residuals will not be as reliable.
 
 ```{r}
 #== calculate the residuals from the fitted distribution
