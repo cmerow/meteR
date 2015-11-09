@@ -28,7 +28,8 @@
 print.meteRelat <- function(x) {
     cat(switch(attr(x$pred, 'type'), 
                'sar' = 'Species area relationship',
-               'ear' = 'Endemcis area relationship'),
+               'ear' = 'Endemcis area relationship',
+               'damuth' = 'Abundance metabolic rate relationship'),
         sprintf('predicted using %s', ifelse(is.null(x$obs),
                                              'state variables only',
                                              'raw data')),
