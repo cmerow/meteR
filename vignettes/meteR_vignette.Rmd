@@ -201,7 +201,11 @@ spd1 <- spd(esf1)
 plot(spd1, log='x')
 ```
 
-
+Because the distribution of within species metabolic rates depends on the total abundance of that species, it makes sense that there should be a relationship between the mean metabolic rate and the abundance of a species. This relationship has been widely studied (Damuth; White) and if mean metabolic rate is independent of $n$ this is known as energy equivilance. To explore this relationship we introduce a new `S3` class `meteRelat` which acts like `meteDist` to house both observed and theoretical predictions, this time not of a probabilistic distribution but of a deterministic relationship.  To obtain the relationship between abundance and mean metabolic rate we use the `ebar` function:
+```{r fig.width=5, fig.cap="Relationship between abundance and mean metabolic rate"}
+ebar1 <- ebar(esf1)
+plot(ebar1)
+```
 <!--========================================================================-->
 <!--========================================================================-->
 <!--========================================================================-->
