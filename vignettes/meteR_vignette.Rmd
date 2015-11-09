@@ -227,22 +227,6 @@ plot(sad1, ptype='rad')
 plot(sad1, ptype='cdf')
 ```
 
-To predict spatial distributions, the data need to be formatted such that the abundance of each is recorded in each cell even if that abundance is 0. The following will automatically fill in the necessary zeros if your data set is not already formatted in this way:
-
-```{r,fig.width=7}
-samp2mat <- function(site,spp,abund) {
-    y <- tapply(abund, list(site, spp), sum)
-    y[is.na(y)] <- 0
-    return(y)
-}
-
-anbo.mat <- samp2mat(paste(anbo[, 1], anbo[,2]), anbo$spp, anbo$count)
-anbo.new <- data.frame(t(sapply(strsplit(rownames(anbo.mat), ' ', fixed=TRUE), as.numeric)), 
-                       spp = rep(colnames(anbo.mat), each=nrow(anbo.mat)), 
-                       count = as.vector(anbo.mat))
-colnames(anbo.new)[1:2] <- colnames(anbo)[1:2] ## anbo.new now has 0 abundance where needed
-```
-
 Analogous to the construction of the ESF above, we construct the Spatial Structure Function (SSF) (often denoted $\Pi (n)$ in the literature). Again, in analogy to how the SAD is constructed from the ESF, we can obtain the Species Spatial Abundance Distribution (SSAD) from the SSF.
 
 ```{r,fig.width=7,fig.cap="SSAD for the anbo data."}
