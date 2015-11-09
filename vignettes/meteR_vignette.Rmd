@@ -207,8 +207,8 @@ plot(spd1, log='x')
 <!--========================================================================-->
 
 #Case Study 2 - Spatial distributions
-Next, we illustrate with data from a desert grassland community known as anza 
-borrego (ANDY: data ref). This data is distributed as part of meteR. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions related to abundance and spatial distribtion. As shown in case study 1 above, we can build the ESF and investigate the SAD.
+Next, we illustrate spatial analyses with data from a survey of a desert annual grassland community at the Anza 
+Borrego Preserve (Harte and Harte, unpub. data). The survey recorded every herbacious plant within a 16x16m plot gridded to ever square meter.  Thus spatial data take the form of the row and column identity where each plant was recorded. This dataset is distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions related to abundance and spatial distribtion. As shown in case study 1 above, we can build the ESF and investigate the SAD.
 
 ```{r}
 data(anbo)
@@ -218,7 +218,7 @@ esf2=meteESF(spp=anbo$spp,
 str(esf2)
 ```
 
-Note that when metabolic rate data are absent, `meteR` assumes a very large value for the state variable E0, such that terms involiving E0 can be safely ignored in distributions and relationships involving abundance.
+Note that when metabolic rate data are absent, `meteR` assumes a very large value for the state variable E0, such that terms involiving E0 can be safely ignored in distributions and relationships involving abundance following Harte (2011).
 
 ```{r,fig.width=7,fig.cap="Different ways of plotting the SAD for the anbo data."}
 (sad2=sad(esf2))
