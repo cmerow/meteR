@@ -299,26 +299,6 @@ plot(anbo.obs.ear)
 ```
 
 
-We can also use the SAR to predict the number of species at areas larger than those observed in the study (i.e. upscaling). Upscaling proceeds by sequentially doubling the area and predicting species richness (ANDY- I recall there were a few options - what did you choose and why?). To infer richness at areas intermediate between those on the doubling scale, one can simply interpolate.
-```{r,fig.width=7, fig.cap= 'Species-Area data (circles) and the upscaled prediction from the SAR (blue line).'}
-anbo.sarUP <- upscaleSAR(anbo.esf, 16, 2^10)
-anbo.obs.sar <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
-plot(anbo.obs.sar,xlim=c(1, 2^10), ylim=c(3, 50), log='xy') # plot the data
-plot(anbo.sarUP, add=TRUE, col='blue') # add upscaled prediction
-```
-
-<!-- ANDY: Seems like the following doens't need to be in the vignette. reason to keep? 
-```{r,fig.width=7,fig.cap='Species-Area data (circles) and the upscaled prediction from the SAR (blue line).'}
-# ## empirical SAR and EAR from simulated x, y data
-# anbo$x <- runif(nrow(anbo), 0, 1) + anbo$column
-# anbo$y <- runif(nrow(anbo), 0, 1) + anbo$row
-# meteSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$y, row=4, col=4)
-# 
-# plot(empiricalSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$y, row=4, col=4))
-# plot(empiricalSAR(anbo$spp, anbo$count, row=anbo$row, col=anbo$column, Amin=1, A0=16), col='red', add=TRUE)
-```
--->
-
 <!--========================================================================-->
 <!--========================================================================-->
 <!--========================================================================-->
