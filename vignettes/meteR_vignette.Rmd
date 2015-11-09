@@ -227,15 +227,36 @@ plot(sad1, ptype='rad')
 plot(sad1, ptype='cdf')
 ```
 
-Analogous to the construction of the ESF above, we construct the Spatial Structure Function (SSF) (often denoted $\Pi (n)$ in the literature). Again, in analogy to how the SAD is constructed from the ESF, we can obtain the Species Spatial Abundance Distribution (SSAD) from the SSF.
+Analogous to the construction of the ESF above, we construct the Spatial Structure Function (SSF) (denoted $\Pi(n | n_0, A, A_0)$ in Harte 2011). $\Pi$ depends on the total abundance $n_0$ of the species of interest as well as the the total area of the study system $A_0$ and the scale for which the SSF is to be calculated ($A$). Again, in analogy to how the SAD is constructed from the ESF, we can obtain the Species Spatial Abundance Distribution (SSAD) from the SSF, but here must specify the species for which the SSF and SSAD are to be constructed as well as the spatial state variables (both the area of interest `A` and the total area `A0`).
 
 ```{r,fig.width=7,fig.cap="SSAD for the anbo data."}
-pi1 <- meteSSF(anbo.new$count[anbo.new$spp=='crcr'], A=1, A0=16)
+## note we are calculating SSF for the species crcr
+pi1 <- meteSSF(anbo$spp, 'crcr', anbo$count, row=anbo$row, col=anbo$column, A=1, A0=16)
 pi1
 plot(ssad(pi1))
 ```
 
-Next we predict the Species Area Relationship (SAR and EAR). We begin by predicting the number of species at scales smaller than the total plot size. For this we need to combine the ESF and the SSF. Note the the EAR is obtained with `downscaleSAR` with the option `EAR=T`. ANDY - Add explanation of the reason for upscaling and downscaling and the challenges.
+Areas greater than the minimum can also be explored:
+```{r,fig.width=7,fig.cap="SSAD for A=2."}
+pi2 <- meteSSF(anbo$spp, 'crcr', anbo$count, row=anbo$row, col=anbo$column, A=2, A0=16)
+pi2
+plot(ssad(pi2)) # theory is not looking too good for this case
+```
+
+This is done by aggregating cells internally in `meteSSF`.
+
+We will examine the case where spatial data are given in the form of `x` and `y` coordinates for each abundance measure by simulating such data.
+
+```{r,fig.width=7,fig.cap="SSAD for simulated x,y anbo data."}
+## jitter abundance records within each cell
+anbo$x <- runif(nrow(anbo), 0, 1) + anbo$column
+anbo$y <- runif(nrow(anbo), 0, 1) + anbo$row
+
+pi3 <- meteSSF(anbo$spp, 'crcr', anbo$count, x=anbo$x, y=anbo$y, A=1, A0=16)
+plot(ssad(pi3)) # the plot has naturally changed slightly due to the jittering
+```
+
+Next we predict the Species Area Relationship and Endemics Area Relationship (SAR and EAR). We begin by predicting the number of species at scales smaller than the total plot size. For this we need to combine the ESF and the SSF. Note the the EAR is obtained with `downscaleSAR` with the option `EAR=T`. ANDY - Add explanation of the reason for upscaling and downscaling and the challenges.
 
 <!-- note that we don't actually have meteSAR in here. should we? -->?
 
