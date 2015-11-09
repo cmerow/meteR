@@ -2,6 +2,7 @@
 
 S3method(ipd,meteESF)
 S3method(logLik,meteDist)
+S3method(plot,damuth)
 S3method(plot,meteDist)
 S3method(plot,meteRelat)
 S3method(plot,sar)
