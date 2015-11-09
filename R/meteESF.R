@@ -73,7 +73,7 @@ meteESF <- function(spp, abund, power,
         
         ## if power missing, set large for numeric approx
         if(missing(power)) {
-            power <- rep(1000, length(spp))
+            power <- rep(10, length(spp))
             power[1] <- 1 # do this so re-scaling by min still allows E0 big
             e.given <- FALSE # to determine if power should be returned as data
         } else {
@@ -102,7 +102,7 @@ meteESF <- function(spp, abund, power,
         E0 <- sum(power*abund)
         
     } else if(is.null(E0)) {
-        E0 <- N0*10^2 # make very large so it has no effect
+        E0 <- N0*10^3 # make very large so it has no effect
         e.given <- FALSE
         dats <- NULL
     } else {
