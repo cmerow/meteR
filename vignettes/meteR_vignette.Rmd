@@ -304,11 +304,10 @@ plot(anbo.obs.ear)
 <!--========================================================================-->
 
 # Case Study 3 - Specifying the state variables
-`meteR` allows the user to manually specify the state variables, which can be useful to buld models from data structures not accomodated by `meteR` or to explore how METE predictions vary as a function of state variables. 
+`meteR` allows the user to manually specify the state variables, which can be useful to explore how METE predictions vary as a function of state variables without regard to specific datasets. 
 
 ```{r,fig.width=7}
-
-esf3=meteESF(N0=4000,S0=50,E0=1e5,minE=1)
+esf3=meteESF(N0=4000, S0=50, E0=1e5, minE=1)
 sad3=sad(esf3)
 ipd3=ipd(esf3)
 par(mfrow=c(1,2))
