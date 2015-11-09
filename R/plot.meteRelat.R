@@ -30,7 +30,7 @@
 
 plot.meteRelat <- function(x, add.legend=TRUE, th.col='red', ...) {
     plot(x$obs, ...)
-    lines(x$pred, col=th.col)
+    plot(x$pred, col=th.col, add=TRUE)
     
     if(add.legend) legend('topleft', c('METE prediction', 'Data'), col=c(th.col, 'black'), 
                           pch=c(NA, 1), lty=c(1, NA))
