@@ -284,6 +284,12 @@ anbo.sar
 plot(anbo.sar, log='xy')
 ```
 
+Note that we can also calculate the SAR or EAR using `x`, `y` data instead of rows and columns similarely to how we did this with the SSF:
+```{r}
+anbo.sar.sim <- meteSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$x, Amin=1, A0=16)
+anbo.sar.sim
+```
+
 <!-- ANDY: is there an easy way to get confidence intervales on these predictions? would you have to bootstrap the data or is there a more elegant option? More generally, can you think of a generic way to get intervals on any of the predictions or meter? Mabye theres a slick way to usea bootstrapping package and just run each of our functions in jsut a few lines?-->
 
 <!-- the z-score simulation stuff can give confidence intervals, but for the relationships there's no straightforward way to do it.  we'd have to make probabilistic relationships, which is do-able, but best saved for later.  Justin Kitzes actually has a paper about probabilistic SAR that we can base our later attempts on-->
@@ -357,10 +363,3 @@ For example, we could explore how the SAD and IPD vary as a function of N0.
 * Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. - Oxford University Press.
 * Harte, J. et al. 2008. Maximum entropy and the state-variable approach to macroecology. - Ecology 89: 2700–2711.
 * Harte, J. and Newman, E. A. 2014. Maximum information entropy: a foundation for ecological theory. - Trends in Ecology and Evolution 29: 384–389.
-
-
-
-
-
-
-
