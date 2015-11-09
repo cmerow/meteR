@@ -36,11 +36,19 @@ ebar <- function(esf) {
   if(is.null(x)) {
     X <- NULL
   } else {
-    X <- aggregate(list(n=esf$data$n, e=esf$data$e), esf$data$s, sum)
+    X <- aggregate(list(n=esf$data$n, e=esf$data$e), list(s=esf$data$s), sum)
     X$e <- X$e/X$n
   }
   
-  thr <- data.frame(n=1:min(esf$state.var['N0'], X$n), e=1 + 1/(1:min(esf$state.var['N0'], X$n) * la2))
+  thr <- data.frame(n=1:min(esf$state.var['N0'], max(X$n)), e=1 + 1/(1:min(esf$state.var['N0'], max(X$n)) * esf$La[2]))
+  
+  attr(X, 'source') <- 'empirical'
+  attr(X, 'type') <- 'damuth'
+  class(X) <- 'damuth'
+  
+  attr(thr, 'source') <- 'theoretical'
+  attr(thr, 'type') <- 'damuth'
+  class(thr) <- 'damuth'
   
   out <- list(obs=X, pred=thr)
   class(out) <- 'meteRelat'
