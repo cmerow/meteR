@@ -18,7 +18,7 @@ vignette: >
 ADD TOC
 FIX latex
 -ADD data refs
--how to handle plotting when just the state varaibles are specified? - make it so you can add this to the the plot via just a line?
+-how to handle plotting when just the state variables are specified? - make it so you can add this to the the plot via just a line?
 -->
 
 ```{r setup, include=FALSE}
@@ -31,14 +31,14 @@ The package `meteR` is designed to facilitate fitting the models for the Maximum
 
 ![fig1](METE_Fig.png) 
 
-Figure 1 was taken from Harte and Newman (2014) TREE 29: 384–389 and illustrates the dirivation of and connection between different METE distributions and relationships.
+Figure 1 was taken from Harte and Newman (2014) TREE 29: 384–389 and illustrates the derivation of and connection between different METE distributions and relationships.
 
 <!--========================================================================-->
 <!--========================================================================-->
 <!--========================================================================-->
 
 #Case Study 1 - Abundance and Power Distributions
-We begin illustrating the capabilities of `meteR` with data from an arthropod community (Gruner 2007) collected via conopy fogging in Hawaii and including individal body mass measurements for each arthropd specimen collected. These data are distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and metabolic rate. Notably, these data do not contain any spatial information so we illustrate spatial predictions with a different data set in the next section.
+We begin illustrating the capabilities of `meteR` with data from an arthropod community (Gruner 2007) collected via canopy fogging in Hawaii and including individual body mass measurements for each arthropod specimen collected. These data are distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and metabolic rate. Notably, these data do not contain any spatial information so we illustrate spatial predictions with a different data set in the next section.
 
 ```{r}
 library(meteR)
@@ -48,7 +48,7 @@ head(arth)
 ```
 This data set illustrates one data format used by `meteR`; each row represents an individual, with an observation of its metabolic rate (note that we convert mass to metabolic rate using the usual relationship of Metabolic Scaling Theory such that metabolic rate $M \propto mass^{3/4}$). If multiple individuals of the same size from the same species are observed (and lumped into one record), these can be specified as well, i.e., by letting `arth$count` be something other than 1. For an example of such formatting see the data set `anbo`, included with  `meteR`, discussed in the next section. There are two main reasons to provide data to `meteR`: (1) `meteR` will calculate the state variables $N_0$ (number of individuals), $S_0$ (number of species), $E_0$ (total metabolic rate) and relevant summary statistics for you; (2) these data are used by `meter` to compare against predictions. If data are not provided, the values for the state variables can be directly specified by the user (see Case Study 3).
 
-Analysis begins by building the ecosystem structure function (ESF; $R(n,e)$) from which all non-spatial macroecological metrics can be derived. $R(n, e)$ describes the joint probability of observing a species with $n$ individuals and a randomly choosen member of that species having metabolic rate $e$. METE computes this distribution by maximizing information entropy relative to the constraints of $N_0/S_0$ and $E_0/S_0$ using the method of Lagrange multipliers. In `meteR` we achieve this as follows:
+Analysis begins by building the ecosystem structure function (ESF; $R(n,e)$) from which all non-spatial macroecological metrics can be derived. $R(n, e)$ describes the joint probability of observing a species with $n$ individuals and a randomly chosen member of that species having metabolic rate $e$. METE computes this distribution by maximizing information entropy relative to the constraints of $N_0/S_0$ and $E_0/S_0$ using the method of Lagrange multipliers. In `meteR` we achieve this as follows:
 ```{r}
 esf1=meteESF(spp=arth$spp,
             abund=arth$count,
@@ -57,7 +57,7 @@ esf1=meteESF(spp=arth$spp,
 esf1
 str(esf1)
 ```
-Note that we use the terms 'power' and 'metabolic rate' interchangeably (after all units of power are energy per time and thus an energetic rate). Further note that we specified the minimum value for the metabolic rate, but that the minimum observed value will be taken by default. Without loss of generality, metabolic rates are re-scaled by this minimum such that the minimum possible observable metabolic rate is 1. This is neccesary for the underlying mathematics as discussed in Harte (2011). 
+Note that we use the terms 'power' and 'metabolic rate' interchangeably (after all units of power are energy per time and thus an energetic rate). Further note that we specified the minimum value for the metabolic rate, but that the minimum observed value will be taken by default. Without loss of generality, metabolic rates are re-scaled by this minimum such that the minimum possible observable metabolic rate is 1. This is necessary for the underlying mathematics as discussed in Harte (2011). 
 
 The returned object (of class `meteESF`) contains useful information. In addition to returning the inputs (in analogy, e.g., to common model fitting functions such as `lm`), it returns the Lagrange multipliers from entropy maximization as well as information about the fitting procedure.
 
@@ -106,12 +106,12 @@ legend('top',legend=c('data','simulated\nfrom METE'),
 
 Because the likelihood of the observed data falls within the 95\% quantile region of the simulated likelihoods, we have confidence that the model provides a good fit.
 
-Note that other utilities that extract liklihoods from model objects are also useful, including AIC, thus opening up all model comparison capabilities in `R` and its contributed pacakges:
+Note that other utilities that extract liklihoods from model objects are also useful, including AIC, thus opening up all model comparison capabilities in `R` and its contributed packages:
 ```{r}
 AIC(sad1)
 ```
 
-Next, we illustrate methods relying on residuals to assess model fit. Residuals can be calculated either on the rank abundance (`type='rank'`) or cummulative (`type='cummulative'`) distribution and can be calculated as relative residuals ($(x_i - \hat{x})/\hat{x}$) or absolute ($x_i - \hat{x}$) by setting argument `relative` to `TRUE` or `FALSE`, respectively. Relative residuals can be thought of as the proportional difference between observed and expected abundance or probability. From the residuals, mean squared error can be calculated and used to evaluate model fit. Although both rank abundance and cummulative density options are availible, we recommend only using rank abundance as cumulative density is constrained at upper and lower bounds and so its residuals will not be as reliable.
+Next, we illustrate methods relying on residuals to assess model fit. Residuals can be calculated either on the rank abundance (`type='rank'`) or cumulative (`type='cumulative'`) distribution and can be calculated as relative residuals ($(x_i - \hat{x})/\hat{x}$) or absolute ($x_i - \hat{x}$) by setting argument `relative` to `TRUE` or `FALSE`, respectively. Relative residuals can be thought of as the proportional difference between observed and expected abundance or probability. From the residuals, mean squared error can be calculated and used to evaluate model fit. Although both rank abundance and cumulative density options are available, we recommend only using rank abundance as cumulative density is constrained at upper and lower bounds and so its residuals will not be as reliable.
 
 ```{r}
 #== calculate the residuals from the fitted distribution
@@ -135,14 +135,14 @@ legend('top',legend=c('data','simulated\nfrom METE'),
        col=c('black','red'), lty=c(1,1),bty='n') 
 ```
 
-Here again we fail to reject METE as the model that generated the observed data (the obserbed MSE is below the 95\% quantile region). We can also see that the distribution of errors is not as Gaussian shaped as the distribution of likelihoods. Thus although residuals can be useful (specificlaly we can see whether, e.g., common species are more or less common than predicted by METE) we recomend using likelihood for evaluating model fit.
+Here again we fail to reject METE as the model that generated the observed data (the observed MSE is below the 95\% quantile region). We can also see that the distribution of errors is not as Gaussian shaped as the distribution of likelihoods. Thus although residuals can be useful (specifically we can see whether, e.g., common species are more or less common than predicted by METE) we recommend using likelihood for evaluating model fit.
 
 <!--========================================================================-->
 <!--========================================================================-->
 
 ## Individual Power Distribution (IPD)
 
-Similarly to the analyses illustrated above for the SAD, one can examine the individual power distribution (IPD; the distribution of metabolic rates, or power, over individauls in the community). We illustrate with an abbreviated version of the analyses above. First, fit and plot the IPD.
+Similarly to the analyses illustrated above for the SAD, one can examine the individual power distribution (IPD; the distribution of metabolic rates, or power, over individuals in the community). We illustrate with an abbreviated version of the analyses above. First, fit and plot the IPD.
 
 ```{r fig.width=7, fig.cap="Different ways of plotting the IPD"}
 ipd1=ipd(esf1)
@@ -201,7 +201,7 @@ spd1 <- spd(esf1)
 plot(spd1, log='x')
 ```
 
-Because the distribution of within species metabolic rates depends on the total abundance of that species, it makes sense that there should be a relationship between the mean metabolic rate and the abundance of a species. This relationship has been widely studied (Damuth; White) and if mean metabolic rate is independent of $n$ this is known as energy equivilance. To explore this relationship we introduce a new `S3` class `meteRelat` which acts like `meteDist` to house both observed and theoretical predictions, this time not of a probabilistic distribution but of a deterministic relationship.  To obtain the relationship between abundance and mean metabolic rate we use the `ebar` function:
+Because the distribution of within species metabolic rates depends on the total abundance of that species, it makes sense that there should be a relationship between the mean metabolic rate and the abundance of a species. This relationship has been widely studied (Damuth; White) and if mean metabolic rate is independent of $n$ this is known as energy equivalence. To explore this relationship we introduce a new `S3` class `meteRelat` which acts like `meteDist` to house both observed and theoretical predictions, this time not of a probabilistic distribution but of a deterministic relationship.  To obtain the relationship between abundance and mean metabolic rate we use the `ebar` function:
 ```{r fig.width=5, fig.cap="Relationship between abundance and mean metabolic rate"}
 ebar1 <- ebar(esf1)
 plot(ebar1)
@@ -212,7 +212,7 @@ plot(ebar1)
 
 #Case Study 2 - Spatial distributions
 Next, we illustrate spatial analyses with data from a survey of a desert annual grassland community at the Anza 
-Borrego Preserve (Harte and Harte, unpub. data). The survey recorded every herbacious plant within a 4x4m plot gridded to ever square meter (resulting in 16 total cells).  Thus spatial data take the form of the row and column identity where each plant was recorded. This dataset is distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions related to abundance and spatial distribtion. As shown in case study 1 above, we can build the ESF and investigate the SAD.
+Borrego Preserve (Harte and Harte, unpub. data). The survey recorded every herbaceous plant within a 4x4m plot gridded to ever square meter (resulting in 16 total cells).  Thus spatial data take the form of the row and column identity where each plant was recorded. This dataset is distributed as part of `meteR`. We will use it to illustrate the construction of distributions related to abundance and area. Note that metabolic rate/body mass information are not available, but that we can still analyze many of METE's predictions related to abundance and spatial distribution. As shown in case study 1 above, we can build the ESF and investigate the SAD.
 
 ```{r}
 data(anbo)
@@ -222,7 +222,7 @@ esf2=meteESF(spp=anbo$spp,
 str(esf2)
 ```
 
-Note that when metabolic rate data are absent, `meteR` assumes a very large value for the state variable E0, such that terms involiving E0 can be safely ignored in distributions and relationships involving abundance following Harte (2011).
+Note that when metabolic rate data are absent, `meteR` assumes a very large value for the state variable E0, such that terms involving E0 can be safely ignored in distributions and relationships involving abundance following Harte (2011).
 
 ```{r,fig.width=7,fig.cap="Different ways of plotting the SAD for the anbo data."}
 (sad2=sad(esf2))
@@ -260,7 +260,7 @@ pi3 <- meteSSF(anbo$spp, 'crcr', anbo$count, x=anbo$x, y=anbo$y, A=1, A0=16)
 plot(ssad(pi3)) # the plot has naturally changed slightly due to the jittering
 ```
 
-Next we predict the Species Area Relationship and Endemics Area Relationship (SAR and EAR). We begin by predicting the number of species at scales smaller than the total plot size. For this we need to combine the ESF and the SSF. Note the the EAR is obtained in all functions by specifying argument `EAR=TRUE`. Downscaling assumes that METE holds at the largest spatial scale and smaller scales are spatially nested subsamples of this larger scale.  As such this approach makes intuitive sense for small-scale plot data.  Conversely upscaling allows one to use plot-level data to predict species richness at scales much larger than the suveyed plot.  This is achived by iteratively solving for the larger spatial scale that would yield the observed smaller scale under nested subsampling.  This iterative process can be carried out to indefinite scales.
+Next we predict the Species Area Relationship and Endemics Area Relationship (SAR and EAR). We begin by predicting the number of species at scales smaller than the total plot size. For this we need to combine the ESF and the SSF. Note the the EAR is obtained in all functions by specifying argument `EAR=TRUE`. Downscaling assumes that METE holds at the largest spatial scale and smaller scales are spatially nested subsamples of this larger scale.  As such this approach makes intuitive sense for small-scale plot data.  Conversely upscaling allows one to use plot-level data to predict species richness at scales much larger than the surveyed plot.  This is achieved by iteratively solving for the larger spatial scale that would yield the observed smaller scale under nested subsampling.  This iterative process can be carried out to indefinite scales.
 
 The METE-predicted SAR can be obtained in two ways, one directly and one recalling the `meteDist` objects explored earlier.
 
@@ -279,7 +279,7 @@ plot(anbo.thr.downscale, xlim=c(1, 2^6), ylim=c(0, 35))
 plot(anbo.thr.downscaleEAR, col='blue', add=TRUE)
 plot(anbo.thr.upscale, col='red', add=TRUE)
 ```
-In this example, there are 24 species distributed across 16 quadrats, hence the downscaled SAR (black) and EAR (blue) converge at 24 species at an area of 16. Endemics here must be interpreted as local endemics, thus all 24 species are ``endemic'' to the 16m$^2$ plot.  Upscale species richness is shown in red.  Note that for mathematical convenience (discussed in Harte 2011) we only consider doublings of area when computing upscaled species richness.  For intermediate areas one can simply iterpolate.
+In this example, there are 24 species distributed across 16 quadrats, hence the downscaled SAR (black) and EAR (blue) converge at 24 species at an area of 16. Endemics here must be interpreted as local endemics, thus all 24 species are ``endemic'' to the 16m$^2$ plot.  Upscale species richness is shown in red.  Note that for mathematical convenience (discussed in Harte 2011) we only consider doublings of area when computing upscaled species richness.  For intermediate areas one can simply interpolate.
 
 To compare the mete prediction with data we use `meteSAR` to obtain a `meteRelat` object that stores both observed data and theoretical predictions:
 ```{r,fig.width=7,fig.cap="Comparing SAR with data."}
@@ -288,17 +288,17 @@ anbo.sar
 plot(anbo.sar, log='xy')
 ```
 
-Note that we can also calculate the SAR or EAR using `x`, `y` data instead of rows and columns similarely to how we did this with the SSF:
+Note that we can also calculate the SAR or EAR using `x`, `y` data instead of rows and columns similarly to how we did this with the SSF:
 ```{r}
 anbo.sar.sim <- meteSAR(anbo$spp, anbo$count, x=anbo$x, y=anbo$x, Amin=1, A0=16)
 anbo.sar.sim
 ```
 
-<!-- ANDY: is there an easy way to get confidence intervales on these predictions? would you have to bootstrap the data or is there a more elegant option? More generally, can you think of a generic way to get intervals on any of the predictions or meter? Mabye theres a slick way to usea bootstrapping package and just run each of our functions in jsut a few lines?-->
+<!-- ANDY: is there an easy way to get confidence intervals on these predictions? would you have to bootstrap the data or is there a more elegant option? More generally, can you think of a generic way to get intervals on any of the predictions or meter? Maybe theres a slick way to use bootstrapping package and just run each of our functions in just a few lines?-->
 
 <!-- the z-score simulation stuff can give confidence intervals, but for the relationships there's no straightforward way to do it.  we'd have to make probabilistic relationships, which is do-able, but best saved for later.  Justin Kitzes actually has a paper about probabilistic SAR that we can base our later attempts on-->
 
-The emirical SAR (or EAR) can also be directly obtained from the data without jointly calculating the theoretical predictions:
+The empirical SAR (or EAR) can also be directly obtained from the data without jointly calculating the theoretical predictions:
 ```{r,fig.width=7}
 ## empirical SAR and EAR
 anbo.obs.sar <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
@@ -325,7 +325,7 @@ plot(sad3)
 plot(ipd3)
 ```
 
-Similarly, one can predict spatial distributions from the state variables. First, we downscale the species area relationsip.
+Similarly, one can predict spatial distributions from the state variables. First, we downscale the species area relationship.
 
 ```{r,fig.width=7}
 ## theoretical SARs from state variables only
