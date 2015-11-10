@@ -50,10 +50,10 @@ This data set illustrates one data format used by `meteR`; each row represents a
 
 Analysis begins by building the ecosystem structure function (ESF; $R(n,e)$) from which all non-spatial macroecological metrics can be derived. $R(n, e)$ describes the joint probability of observing a species with $n$ individuals and a randomly chosen member of that species having metabolic rate $e$. METE computes this distribution by maximizing information entropy relative to the constraints of $N_0/S_0$ and $E_0/S_0$ using the method of Lagrange multipliers. In `meteR` we achieve this as follows:
 ```{r}
-esf1=meteESF(spp=arth$spp,
-            abund=arth$count,
-            power=arth$mass^(3/4),
-            minE=min(arth$mass^(3/4)))
+esf1 <- meteESF(spp=arth$spp,
+                abund=arth$count,
+                power=arth$mass^(3/4),
+                minE=min(arth$mass^(3/4)))
 esf1
 str(esf1)
 ```
@@ -67,7 +67,7 @@ The returned object (of class `meteESF`) contains useful information. In additio
 ## Species Abundance Distribution (SAD)
 From the ESF, we can predict macroecological patterns. We begin with the species abundance distribution (SAD).
 ```{r}
-sad1=sad(esf1)
+sad1 <- sad(esf1)
 sad1
 ```
 The `S3` method `sad` for class `meteESF` extracts the SAD and provides density (d), probability (p) and quantile (q) functions, as well as random number generation (r) for the distribution (see these with `str(sad1)`). This specification follows the conventions used by statistical distributions in the `stats` package (e.g. see `?rnorm`). These distributions allow us to use the model in a number of ways. You can access these functions directly as follows; e.g. randomly generating samples from the fitted distribution or determining the quantiles.
@@ -90,7 +90,7 @@ plot(sad1, ptype='cdf', log='x')
 logLik(sad1)
 #== randomly generate 100 data sets from the fitted distribution and calculate
 #== the z-score of the data w.r.t. these simulations
-llz=logLikZ.meteDist(sad1, nrep=100, return.sim=TRUE)
+llz <- logLikZ.meteDist(sad1, nrep=100, return.sim=TRUE)
 llz$z
 #== plot the distributions
 plot(density(llz$sim),
@@ -145,7 +145,7 @@ Here again we fail to reject METE as the model that generated the observed data 
 Similarly to the analyses illustrated above for the SAD, one can examine the individual power distribution (IPD; the distribution of metabolic rates, or power, over individuals in the community). We illustrate with an abbreviated version of the analyses above. First, fit and plot the IPD.
 
 ```{r fig.width=7, fig.cap="Different ways of plotting the IPD"}
-ipd1=ipd(esf1)
+ipd1 <- ipd(esf1)
 ipd1
 str(ipd1) # analogous structure to sad1 above
 ipd1$r(8) # random number generation from fitted distribution
@@ -161,7 +161,7 @@ Next, assess the fit of the IPD.
 head(residuals(ipd1))
 logLik(ipd1)
 logLikZ.meteDist(ipd1, nrep=100)
-llz=logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
+llz <- logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
 plot(density(llz$sim),xlim=range(c(llz$sim,llz$obs)),xlab='log(likelihood)',col='red')
 abline(v=llz$obs,lty=2)
 llz$z
@@ -174,7 +174,7 @@ Interestingly, although it appears that the data are unlikely to have been drawn
 
 ```{r fig.width=5, fig.cap="Mean squared error-based z-score."}
 mse.meteDist(ipd1, type='rank', relative=FALSE)
-mseZ=mseZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
+mseZ <- mseZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
 mseZ$z
 plot(density(mseZ$sim),xlim=range(c(mseZ$sim,mseZ$obs)),xlab='mse',col='red')
 abline(v=mseZ$obs,lty=2)
@@ -217,7 +217,7 @@ Borrego Preserve (Harte and Harte, unpub. data). The survey recorded every herba
 ```{r}
 data(anbo)
 head(anbo)
-esf2=meteESF(spp=anbo$spp,
+esf2 <- meteESF(spp=anbo$spp,
              abund=anbo$count)
 str(esf2)
 ```
@@ -317,9 +317,9 @@ plot(anbo.obs.ear)
 `meteR` allows the user to manually specify the state variables, which can be useful to explore how METE predictions vary as a function of state variables without regard to specific datasets. 
 
 ```{r,fig.width=7}
-esf3=meteESF(N0=4000, S0=50, E0=1e5, minE=1)
-sad3=sad(esf3)
-ipd3=ipd(esf3)
+esf3 <- meteESF(N0=4000, S0=50, E0=1e5, minE=1)
+sad3 <- sad(esf3)
+ipd3 <- ipd(esf3)
 par(mfrow=c(1,2))
 plot(sad3)
 plot(ipd3)
