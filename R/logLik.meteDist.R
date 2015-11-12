@@ -84,6 +84,13 @@ logLik.meteDist <- function(object,...) {
 #' @seealso mseZ.meteDist
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
+logLikZ <- function(x, ...) {
+  UseMethod('logLikZ', ...)
+}
+
+#' @rdname logLikZ
+#' @export 
+
 logLikZ.meteDist <- function(x, nrep, return.sim=FALSE) {
   lik.obs <- logLik(x)
   lik.sim <- replicate(nrep, {
