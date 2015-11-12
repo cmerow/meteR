@@ -91,6 +91,15 @@ residuals.meteDist <- function(object, type=c("rank","cumulative"),
 # this documentation when the user looks them up from the command
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
+mse <- function(x, ...) {
+  UseMethod('mse', ...)
+}
+
+#' @rdname mse
+#' @export 
+
+
 mse.meteDist <- function(x, type=c("rank","cumulative"),
                          relative=TRUE, log=FALSE) {
   type <- match.arg(type, choices=c("rank","cumulative"))
@@ -137,6 +146,14 @@ mse.meteDist <- function(x, type=c("rank","cumulative"),
 # this documentation when the user looks them up from the command
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
+
+mseZ <- function(x, ...) {
+  UseMethod('mseZ', ...)
+}
+
+#' @rdname mseZ
+#' @export 
+
 mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
                           type=c("rank","cumulative")) {
   #seems like this should default to relative resid, since that's what is produced by residuals() for the data. need to add an arg for relative=TRUE?s
