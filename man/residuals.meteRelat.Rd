@@ -29,7 +29,7 @@ esf1 <- meteESF(spp=arth$spp,
                 power=arth$mass^(.75),
                 minE=min(arth$mass^(.75)))
 ebar1 <- ebar(esf1)
-residuals(ebar)
+residuals(ebar1)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

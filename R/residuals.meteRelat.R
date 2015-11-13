@@ -19,7 +19,7 @@
 #'                 power=arth$mass^(.75),
 #'                 minE=min(arth$mass^(.75)))
 #' ebar1 <- ebar(esf1)
-#' residuals(ebar)
+#' residuals(ebar1)
 #' 
 #' @return a numeic vector giving residuals for each data point
 #'
@@ -42,37 +42,39 @@ residuals.meteRelat <- function(object) {
 } 
 
 #==========================================================================
-#' @title Computes mean squared error for meteRelat
-#'
-#' @description
-#' \code{mse.meteRelat} computes mean squared error for rank or cdf between METE prediction and data
-#'
-#' @details
-#' See Examples.
-#' 
-#' @param x a \code{meteRelat} object
-#' @export
-#' 
-#' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' sad1=sad.meteESF(esf1)
-#' mse.meteDist(sad1, type='rank', relative=FALSE)
-#' @return numeric; the value of the mean squared error.
-#'
-#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-#' @seealso mseZ.meteDist
-#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
-# @aliases - a list of additional topic names that will be mapped to
-# this documentation when the user looks them up from the command
-# line.
-# @family - a family name. All functions that have the same family tag will be linked in the documentation.
-
-
-mse.meteRelat <- function(x) {
-  resid <- residuals(x)
-  
-  return(mean(resid^2))
-}
+# #' @title Computes mean squared error for meteRelat
+# #'
+# #' @description
+# #' \code{mse.meteRelat} computes mean squared error for rank or cdf between METE prediction and data
+# #'
+# #' @details
+# #' See Examples.
+# #' 
+# #' @param x a \code{meteRelat} object
+# #' @export
+# #' 
+# #' @examples
+# #' data(arth)
+# #' esf1 <- meteESF(spp=arth$spp,
+# #'                 abund=arth$count,
+# #'                 power=arth$mass^(.75),
+# #'                 minE=min(arth$mass^(.75)))
+# #' ebar1 <- ebar(esf1)
+# #' mse(ebar1)
+# #' 
+# #' @return numeric; the value of the mean squared error.
+# #'
+# #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+# #' @seealso mseZ.meteDist
+# #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+# # @aliases - a list of additional topic names that will be mapped to
+# # this documentation when the user looks them up from the command
+# # line.
+# # @family - a family name. All functions that have the same family tag will be linked in the documentation.
+# 
+# 
+# mse.meteRelat <- function(x) {
+#   resid <- residuals(x)
+#   
+#   return(mean(resid^2))
+# }
