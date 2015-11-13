@@ -34,7 +34,7 @@
 #' @seealso meteDist, sad.meteESF, metePsi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
-spd <- function(x) {
+spd <- function(esf) {
   UseMethod('ipd')
 }
 
