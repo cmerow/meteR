@@ -7,7 +7,19 @@
 meteSSF(spp, sppID, abund, row, col, x, y, n0 = sum(abund), A, A0)
 }
 \arguments{
+\item{spp}{}
+
+\item{sppID}{}
+
 \item{abund}{A vector giving abundances of each entry}
+
+\item{row}{}
+
+\item{col}{}
+
+\item{x}{}
+
+\item{y}{}
 
 \item{n0}{Total abundance in area A0}
 

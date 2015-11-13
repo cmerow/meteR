@@ -53,6 +53,7 @@ logLik.meteDist <- function(object,...) {
 #' @param x a \code{meteDist} object
 #' @param nrep number of simulations from the fitted METE distribution 
 #' @param return.sim logical; return the simulated liklihood values
+#' @param ... arguments to be passed to methods
 #' @export
 #' 
 #' @examples
@@ -85,7 +86,7 @@ logLik.meteDist <- function(object,...) {
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
 logLikZ <- function(x, ...) {
-  UseMethod('logLikZ', ...)
+  UseMethod('logLikZ')
 }
 
 #' @rdname logLikZ

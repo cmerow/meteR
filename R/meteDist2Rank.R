@@ -18,7 +18,7 @@
 #'                 abund=arth$count,
 #'                 power=arth$mass^(.75),
 #'                 minE=min(arth$mass^(.75)))
-#' sad1 <- sad.meteESF(esf1)
+#' sad1 <- sad(esf1)
 #' meteDist2Rank(sad1) 
 #'                
 #' @return A vector of predicted quantiles, typically used to compare against data as in \code{plot.meteDist}

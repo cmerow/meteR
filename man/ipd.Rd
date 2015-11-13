@@ -11,6 +11,8 @@ ipd(esf, ...)
 }
 \arguments{
 \item{esf}{an object of class meteESF.}
+
+\item{...}{additiona arguments to be passed to methods}
 }
 \value{
 An object of class \code{meteDist}. The object contains a list with the following elements.
