@@ -92,7 +92,7 @@ logLikZ <- function(x, ...) {
 #' @rdname logLikZ
 #' @export 
 
-logLikZ.meteDist <- function(x, nrep, return.sim=FALSE) {
+logLikZ.meteDist <- function(x, nrep, return.sim=FALSE,...) {
   lik.obs <- logLik(x)
   lik.sim <- replicate(nrep, {
     new.dat <- x$r(length(x$data))

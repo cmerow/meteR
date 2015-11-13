@@ -17,11 +17,7 @@ meteTheta(e, n, la2)
 numeric vector of length equal to lengthof \code{e}
 }
 \description{
-Distributi􏴜on of metabolic rates over individuals within a species of abundance n0
-}
-\details{
-\deqn{
-}
+Distribution of metabolic rates over individuals within a species of abundance n0
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

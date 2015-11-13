@@ -4,7 +4,7 @@
 \alias{residuals.meteRelat}
 \title{Compute residuals between METE predictions and date of a meteRelat object}
 \usage{
-\method{residuals}{meteRelat}(object)
+\method{residuals}{meteRelat}(object, ...)
 }
 \arguments{
 \item{object}{a \code{meteRelat} object}

@@ -31,7 +31,7 @@
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
-residuals.meteRelat <- function(object) {
+residuals.meteRelat <- function(object, ...) {
   xy <- object$pred
   names(xy) <- c('x', 'y')
   fun <- approxfun(xy)

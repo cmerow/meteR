@@ -6,6 +6,7 @@
 #' See Examples
 #' 
 #' @param x an object of class \code{damuth}
+#' @param ... arguments to be passed to methods
 #' @export
 #' 
 #' @examples
@@ -18,7 +19,7 @@
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 
-print.damuth <- function(x) {
+print.damuth <- function(x,...) {
   cat('Abundance metabolic rate relationship ranging from \n')
   
   cat(sprintf('n: [%s, %s] \ne: [%s, %s] \n', 

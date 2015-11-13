@@ -110,12 +110,12 @@ sipd.meteESF <- function(esf, sppID, n) {
 #================================================================
 #' @title Equation of the PMF for the METE Intra-specific metabolic rate distribution
 #'
-#' @description Distributi􏴜on of metabolic rates over individuals within a species of abundance n0 
+#' @description Distribution of metabolic rates over individuals within a species of abundance n0 
 #'
-#' @details  
-#' \deqn{
-#   \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
-#'}
+# @details  
+# \deqn{
+#    \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
+# }
 #' 
 #' @param e Metabolic rate
 #' @param n Number of individuals in species
