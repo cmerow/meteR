@@ -4,7 +4,7 @@
 \alias{print.sar}
 \title{print.sar}
 \usage{
-\method{print}{sar}(x)
+\method{print}{sar}(x, ...)
 }
 \arguments{
 \item{x}{an object of class \code{sar}}

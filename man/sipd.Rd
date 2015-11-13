@@ -7,7 +7,7 @@
 \usage{
 sipd(esf, ...)
 
-\method{sipd}{meteESF}(esf, sppID, n)
+\method{sipd}{meteESF}(esf, sppID, n, ...)
 }
 \arguments{
 \item{esf}{An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}

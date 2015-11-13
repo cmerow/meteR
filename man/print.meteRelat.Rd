@@ -4,7 +4,7 @@
 \alias{print.meteRelat}
 \title{Print summaries of \code{meteRelat} objects}
 \usage{
-\method{print}{meteRelat}(x)
+\method{print}{meteRelat}(x, ...)
 }
 \arguments{
 \item{x}{an object of class meteRelat}

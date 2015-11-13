@@ -105,7 +105,7 @@ mse <- function(x, ...) {
 #' @export 
 
 mse.meteDist <- function(x, type=c("rank","cumulative"),
-                         relative=TRUE, log=FALSE) {
+                         relative=TRUE, log=FALSE,...) {
   type <- match.arg(type, choices=c("rank","cumulative"))
   
   resid <- residuals(x, type, relative, log)
@@ -167,7 +167,7 @@ mseZ <- function(x, ...) {
 #' @export 
 
 mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
-                          type=c("rank","cumulative")) {
+                          type=c("rank","cumulative"),...) {
   #seems like this should default to relative resid, since that's what is produced by residuals() for the data. need to add an arg for relative=TRUE?s
   if(type=='rank') {
     thr <- function(dat) {

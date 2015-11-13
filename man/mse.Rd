@@ -8,7 +8,7 @@
 mse(x, ...)
 
 \method{mse}{meteDist}(x, type = c("rank", "cumulative"), relative = TRUE,
-  log = FALSE)
+  log = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{meteDist} object}

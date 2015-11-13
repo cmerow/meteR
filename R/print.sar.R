@@ -18,7 +18,7 @@
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 
-print.sar <- function(x) {
+print.sar <- function(x,...) {
 	cat(sprintf('%s %s area relationship ranging from \n', attr(x, 'source'), 
 	            ifelse(attr(x, 'type')=='sar', 'species', 'endemics')))
 	
