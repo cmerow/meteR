@@ -19,4 +19,3 @@ Imports:
     nleqslv,
     distr
 Suggests:
-    testthat
