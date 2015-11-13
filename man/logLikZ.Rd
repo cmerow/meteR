@@ -7,7 +7,7 @@
 \usage{
 logLikZ(x, ...)
 
-\method{logLikZ}{meteDist}(x, nrep, return.sim = FALSE)
+\method{logLikZ}{meteDist}(x, nrep, return.sim = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{meteDist} object}

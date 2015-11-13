@@ -114,7 +114,7 @@ mse.meteDist <- function(x, type=c("rank","cumulative"),
 }
 
 
-mse.meteRelat <- function(x) {
+mse.meteRelat <- function(x,...) {
   resid <- residuals(x)
   
   return(mean(resid^2))

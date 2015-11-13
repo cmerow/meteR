@@ -4,10 +4,12 @@
 \alias{print.damuth}
 \title{print.damuth}
 \usage{
-\method{print}{damuth}(x)
+\method{print}{damuth}(x, ...)
 }
 \arguments{
 \item{x}{an object of class \code{damuth}}
+
+\item{...}{arguments to be passed to methods}
 }
 \value{
 Returns the object silently
