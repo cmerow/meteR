@@ -46,7 +46,7 @@
 # line.
 #' @family Theta
 
-sipd <- function(x, ...) {
+sipd <- function(esf, ...) {
 	UseMethod('sipd')
 }
 

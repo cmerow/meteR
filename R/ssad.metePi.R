@@ -24,7 +24,7 @@
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
-ssad <- function(x) {
+ssad <- function(ssf) {
   UseMethod('ssad')
 }
 

@@ -12,6 +12,8 @@ logLikZ(x, ...)
 \arguments{
 \item{x}{a \code{meteDist} object}
 
+\item{...}{arguments to be passed to methods}
+
 \item{nrep}{number of simulations from the fitted METE distribution}
 
 \item{return.sim}{logical; return the simulated liklihood values}

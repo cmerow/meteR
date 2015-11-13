@@ -7,6 +7,13 @@
 meteSSF(spp, sppID, abund, row, col, x, y, n0 = sum(abund), A, A0)
 }
 \arguments{
+<<<<<<< HEAD
+\item{spp}{}
+
+\item{sppID}{}
+
+\item{abund}{A vector giving abundances of each entry}
+=======
 \item{spp}{A vector of species names}
 
 \item{sppID}{A character giving the name of the desired species (as it appears in `spp')}
@@ -20,6 +27,15 @@ meteSSF(spp, sppID, abund, row, col, x, y, n0 = sum(abund), A, A0)
 \item{x}{A vector of x coordinates for each observation}
 
 \item{y}{A vector of y coordinates for each observation}
+>>>>>>> b6a5b222e75fa75c7a3d606b990504f144f916a0
+
+\item{row}{}
+
+\item{col}{}
+
+\item{x}{}
+
+\item{y}{}
 
 \item{n0}{Total abundance in area A0}
 
