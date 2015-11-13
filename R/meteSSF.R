@@ -9,14 +9,13 @@
 #' Function (SSF). Uses internal code to determine when computation-saving approximations 
 #' can be safely made
 #' 
-#' 
-#' @param spp 
-#' @param sppID 
-#' @param abund A vector giving abundances of each entry
-#' @param row
-#' @param col
-#' @param x
-#' @param y
+#' @param spp A vector of species names
+#' @param sppID  A character giving the name of the desired species (as it appears in `spp') 
+#' @param abund A vector of abundances 
+#' @param row A vector of row IDs for each observation
+#' @param col A vector of column IDs for each observation
+#' @param x A vector of x coordinates for each observation
+#' @param y A vector of y coordinates for each observation
 #' @param n0 Total abundance in area A0
 #' @param A The area at which abundances were recorded
 #' @param A0 Total study area
