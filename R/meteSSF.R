@@ -9,10 +9,18 @@
 #' Function (SSF). Uses internal code to determine when computation-saving approximations 
 #' can be safely made
 #' 
+#' 
+#' @param spp 
+#' @param sppID 
 #' @param abund A vector giving abundances of each entry
+#' @param row
+#' @param col
+#' @param x
+#' @param y
 #' @param n0 Total abundance in area A0
 #' @param A The area at which abundances were recorded
 #' @param A0 Total study area
+#' 
 #' 
 #' @keywords lagrange multiplier, METE, MaxEnt
 #'

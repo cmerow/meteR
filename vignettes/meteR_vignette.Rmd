@@ -10,6 +10,7 @@ vignette: >
   \VignetteIndexEntry{An Overview of meteR: testing the Maximum Entropy Theory of Ecology}
   \VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc} 
 ---
 <!--  rmarkdown::html_vignette % this doesn't seem to allow TOC-->
 

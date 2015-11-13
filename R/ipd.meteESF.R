@@ -7,6 +7,8 @@
 #' See examples.
 #' 
 #' @param esf an object of class meteESF. 
+#' @param ... additiona arguments to be passed to methods
+#' 
 #' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
 #' @export
 #' 
