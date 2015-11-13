@@ -7,7 +7,7 @@
 \method{print}{meteRelat}(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{an object of class meteRelat}
 }
 \value{
 x silently

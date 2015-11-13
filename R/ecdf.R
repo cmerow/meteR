@@ -1,4 +1,4 @@
-#' @export
+# @export
 .ecdf <- function(x,complement=FALSE) {
   if(is.table(x)) {
     tabz <- x

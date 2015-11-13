@@ -5,12 +5,12 @@
 \alias{ipd.meteESF}
 \title{Individual Power Distribution}
 \usage{
-ipd(x)
+ipd(...)
 
 \method{ipd}{meteESF}(esf)
 }
 \arguments{
-\item{esf}{an object of class meteESF.}
+\item{x}{an object of class meteESF.}
 }
 \value{
 An object of class \code{meteDist}. The object contains a list with the following elements.

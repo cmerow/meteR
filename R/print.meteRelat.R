@@ -6,7 +6,7 @@
 # @details
 #' 
 #' 
-#' @param x
+#' @param x an object of class meteRelat
 #' 
 #' @export
 #' 

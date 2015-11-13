@@ -51,7 +51,6 @@
 #' 
 #' ## using just state variable
 #' thr.sar <- meteSAR(Amin=1, A0=16, S0=50, N0=500) 
-#'
 #' @return an object of class \code{meteRelat} with elements
 #' \describe{
 #'   \item{\code{pred}}{predicted relationship; an object of class \code{sar}}
@@ -145,11 +144,8 @@ meteSAR <- function(spp, abund, row, col, x, y, S0 = NULL, N0 = NULL,
 #' @param col identity of column in a gridded landscape associated with each recod, or desired number of columns to divide the landcape into
 #' @param x the x-coordinate of an individual if recorded
 #' @param y the y-coordinate of an individual if recorded
-#' @param S0 total number of species
-#' @param N0 total abundance
 #' @param Amin the smallest area, either the anchor area for upscaling or the desired area to downscale to
 #' @param A0 the largest area, either the area to upscale to or the total area from which to downscale
-#' @param upscale logical, should upscaling or downscaling be carried out
 #' @param EAR logical, should the EAR or SAR be computed
 #' 
 #' @export
@@ -231,6 +227,7 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
 #' 
 #' @examples
 #' data(anbo)
+#' anbo.esf <- meteESF(spp=anbo$spp, abund=anbo$count)
 #' anbo.thr.downscale <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=7)), 16)
 #' plot(anbo.thr.downscale)
 #' 
@@ -310,15 +307,15 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
 #' 
 #' @examples
 ## combine SAR for scales at which we have data with upscaled SAR
-data(anbo)
-anbo.sar <- meteSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
-anbo.sar
-plot(anbo.sar, xlim=c(1, 2^10), ylim=c(3, 50), log='xy')
-
-## get upscaled SAR and add to plot
-anbo.esf <- meteESF(spp=anbo$spp, abund=anbo$count) # need ESF for upscaling
-anbo.sarUP <- upscaleSAR(anbo.esf, 16, 2^10)
-plot(anbo.sarUP, add=TRUE, col='blue')
+#' data(anbo)
+#' anbo.sar <- meteSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
+#' anbo.sar
+#' plot(anbo.sar, xlim=c(1, 2^10), ylim=c(3, 50), log='xy')
+#' 
+#' ## get upscaled SAR and add to plot
+#' anbo.esf <- meteESF(spp=anbo$spp, abund=anbo$count) # need ESF for upscaling
+#' anbo.sarUP <- upscaleSAR(anbo.esf, 16, 2^10)
+#' plot(anbo.sarUP, add=TRUE, col='blue')
 #' 
 #'              
 #' @return an object of class \code{sar} inheriting from \code{data.frame} with 

@@ -24,12 +24,6 @@ empiricalSAR(spp, abund, row, col, x, y, Amin, A0, EAR = FALSE)
 \item{A0}{the largest area, either the area to upscale to or the total area from which to downscale}
 
 \item{EAR}{logical, should the EAR or SAR be computed}
-
-\item{S0}{total number of species}
-
-\item{N0}{total abundance}
-
-\item{upscale}{logical, should upscaling or downscaling be carried out}
 }
 \value{
 an object of class \code{sar} inheriting from \code{data.frame} with

@@ -6,7 +6,7 @@
 #' @details
 #' See examples.
 #' 
-#' @param esf an object of class meteESF. 
+#' @param x an object of class meteESF. 
 #' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
 #' @export
 #' 
