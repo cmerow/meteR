@@ -11,7 +11,7 @@
 #' 
 #' @examples
 #' data(anbo)
-#' pi1 <- meteSSF(anbo.new$count[anbo.new$spp=='crcr'], A=1, A0=16)
+#' pi1 <- meteSSF(anbo$spp, 'crcr', anbo$count, row=anbo$row, col=anbo$col, A=1, A0=16)
 #' plot(ssad(pi1))
 
 # @return list
