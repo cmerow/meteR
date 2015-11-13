@@ -76,12 +76,16 @@ residuals.meteDist <- function(object, type=c("rank","cumulative"),
 #' @export
 #' 
 #' @examples
-#' esf1=meteESF(spp=arth$spp,
-#'               abund=arth$count,
-#'               power=arth$mass^(.75),
-#'               minE=min(arth$mass^(.75)))
-#' sad1=sad.meteESF(esf1)
-#' mse.meteDist(sad1, type='rank', relative=FALSE)
+#' data(arth)
+#' esf1 <- meteESF(spp=arth$spp,
+#'                 abund=arth$count,
+#'                 power=arth$mass^(.75),
+#'                 minE=min(arth$mass^(.75)))
+#' sad1 <- sad(esf1)
+#' mse(sad1, type='rank', relative=FALSE)
+#' ebar1 <- ebar(esf1)
+#' mse(ebar1)
+#' 
 #' @return numeric; the value of the mean squared error.
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
@@ -93,18 +97,24 @@ residuals.meteDist <- function(object, type=c("rank","cumulative"),
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 mse <- function(x, ...) {
-  UseMethod('mse', ...)
+  UseMethod('mse')
 }
 
 #' @rdname mse
 #' @export 
-
 
 mse.meteDist <- function(x, type=c("rank","cumulative"),
                          relative=TRUE, log=FALSE) {
   type <- match.arg(type, choices=c("rank","cumulative"))
   
   resid <- residuals(x, type, relative, log)
+  
+  return(mean(resid^2))
+}
+
+
+mse.meteRelat <- function(x) {
+  resid <- residuals(x)
   
   return(mean(resid^2))
 }

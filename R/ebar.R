@@ -38,6 +38,7 @@ ebar <- function(esf) {
   } else {
     X <- aggregate(list(n=esf$data$n, e=esf$data$e), list(s=esf$data$s), sum)
     X$e <- X$e/X$n
+    X <- X[, c('n', 'e')]
   }
   
   thr <- data.frame(n=1:min(esf$state.var['N0'], max(X$n)), e=1 + 1/(1:min(esf$state.var['N0'], max(X$n)) * esf$La[2]))

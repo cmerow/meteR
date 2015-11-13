@@ -29,12 +29,15 @@ numeric; the value of the mean squared error.
 See Examples.
 }
 \examples{
-esf1=meteESF(spp=arth$spp,
-              abund=arth$count,
-              power=arth$mass^(.75),
-              minE=min(arth$mass^(.75)))
-sad1=sad.meteESF(esf1)
-mse.meteDist(sad1, type='rank', relative=FALSE)
+data(arth)
+esf1 <- meteESF(spp=arth$spp,
+                abund=arth$count,
+                power=arth$mass^(.75),
+                minE=min(arth$mass^(.75)))
+sad1 <- sad(esf1)
+mse(sad1, type='rank', relative=FALSE)
+ebar1 <- ebar(esf1)
+mse(ebar1)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
