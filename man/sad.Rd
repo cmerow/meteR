@@ -5,7 +5,7 @@
 \alias{sad.meteESF}
 \title{METE species abundance distribution}
 \usage{
-sad(x)
+sad(esf)
 
 \method{sad}{meteESF}(esf)
 }

@@ -13,6 +13,8 @@ mse(x, ...)
 \arguments{
 \item{x}{a \code{meteDist} object}
 
+\item{...}{arguments to be passed to methods}
+
 \item{type}{'rank' or 'cumulative'}
 
 \item{relative}{logical; if true use relative MSE}

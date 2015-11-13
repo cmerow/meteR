@@ -5,12 +5,14 @@
 \alias{sipd.meteESF}
 \title{Generic method to obtain the species-level individual power distribution (SIPD)}
 \usage{
-sipd(x, ...)
+sipd(esf, ...)
 
 \method{sipd}{meteESF}(esf, sppID, n)
 }
 \arguments{
 \item{esf}{An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
+
+\item{...}{arguments to be passed to methods}
 
 \item{sppID}{the name or index of the species of interest as listed in the \code{spp} argument passed to \code{meteESF}}
 
@@ -31,7 +33,7 @@ An object of class \code{meteDist}. The object contains a list with the followin
 }
 \description{
 Extract species level individual power distribution
-from ESF object and return object inheriting from meteDist. This distribution (\eqn{\Theta}) describes the distribution of metabolic rates across the individuals of a species with n individuls
+from ESF object and return object inheriting from meteDist. This distribution (Theta) describes the distribution of metabolic rates across the individuals of a species with n individuls
 }
 \details{
 If \code{n} is provided then only the theoretical prediction is returned (because

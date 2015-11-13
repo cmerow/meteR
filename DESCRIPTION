@@ -3,7 +3,7 @@ Type: Package
 Title: Fitting and Plotting Tools for the Maximum Entropy
     Theory of Ecology (METE)
 Version: 1.0
-Date: 2015-09-08
+Date: 2015-11-13
 Author: Andy Rominger, Cory Merow, John Harte
 Maintainer: Cory Merow <cory.merow@gmail.com>
 Description: Fit and plot macroecological patterns predicted by the Maximum

@@ -5,7 +5,7 @@
 \alias{spd.meteESF}
 \title{Species Power Distribution}
 \usage{
-spd(x)
+spd(esf)
 
 \method{spd}{meteESF}(esf)
 }

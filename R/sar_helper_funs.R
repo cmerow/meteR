@@ -1,5 +1,5 @@
 ## figure out areas
-# @export
+#' @export
 .findAreas <- function(spp, abund, row, col, x, y, Amin, A0) {
     if(is.null(spp) | is.null(abund)) { # no data
         if(missing(Amin)) { # use row and col as nrow and ncol

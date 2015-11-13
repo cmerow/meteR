@@ -64,6 +64,7 @@ number or desired rows and columns via the \code{row} and \code{col}
 arguments.
 }
 \examples{
+\dontrun{
 data(anbo)
 
 ## using row and col from anbo dataset
@@ -76,6 +77,7 @@ plot(anbo.sar2)
 
 ## using just state variable
 thr.sar <- meteSAR(Amin=1, A0=16, S0=50, N0=500)
+}
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
