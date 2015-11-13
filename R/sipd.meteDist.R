@@ -2,7 +2,7 @@
 #' @title Generic method to obtain the species-level individual power distribution (SIPD)
 #'
 #' @description Extract species level individual power distribution 
-#' from ESF object and return object inheriting from meteDist. This distribution (\eqn{\Theta}) describes the distribution of metabolic rates across the individuals of a species with n individuls
+#' from ESF object and return object inheriting from meteDist. This distribution (Theta) describes the distribution of metabolic rates across the individuals of a species with n individuls
 #'
 #' @details 
 #' If \code{n} is provided then only the theoretical prediction is returned (because 
@@ -13,6 +13,7 @@
 #' @param esf An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})
 #' @param sppID the name or index of the species of interest as listed in the \code{spp} argument passed to \code{meteESF}
 #' @param n integer. Alternatively can extract METE prediction by indicating number of individuals in the species
+#' @param ... arguments to be passed to methods
 #' 
 #' @return An object of class \code{meteDist}. The object contains a list with the following elements.
 #' \describe{
@@ -113,19 +114,19 @@ sipd.meteESF <- function(esf, sppID, n) {
 #'
 #' @details  
 #' \deqn{
-#'    \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
-#' }
+#   \Theta( \epsilon \mid n, S_{0}, N_{0}, E_{0} ) \approx \lambda_{2} n e^{- \lambda_[2] n (\epsilon -1)}
+#'}
 #' 
 #' @param e Metabolic rate
 #' @param n Number of individuals in species
-#' @param la2 Lagrange multiplier \eqn{\lambda_2} as obtained from \code{meteESF}
+#' @param la2 Lagrange multiplier (lambda_2) as obtained from \code{meteESF}
 #' 
 #' @export
 #' 
-#' @return Vnumeric vector of length equal to lengthof \code{e}
+#' @return numeric vector of length equal to lengthof \code{e}
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-#' @seealso metePsi, ipd.meteESF
+#' @seealso metePsi, ipd
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 # @aliases - a list of additional topic names that will be mapped to
 # this documentation when the user looks them up from the command

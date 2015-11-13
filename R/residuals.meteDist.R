@@ -72,7 +72,7 @@ residuals.meteDist <- function(object, type=c("rank","cumulative"),
 #' @param type 'rank' or 'cumulative'
 #' @param relative logical; if true use relative MSE
 #' @param log logical; if TRUE calculate MSE on logged distirbution. If FALSE use arithmetic scale.
-#' @Param ... arguments to be passed to methods
+#' @param ... arguments to be passed to methods
 # @keywords manip
 #' @export
 #' 
@@ -133,7 +133,7 @@ mse.meteRelat <- function(x) {
 #' @param nrep number of simulations from the fitted METE distribution 
 #' @param return.sim logical; return the simulated liklihood values
 #' @param type either "rank" or "cumulative"
-#' @param arguments to be passed to methods
+#' @param ... arguments to be passed to methods
 # @keywords manip
 #' @export
 #' 

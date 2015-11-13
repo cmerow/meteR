@@ -26,7 +26,7 @@ esf1 <- meteESF(spp=arth$spp,
                 abund=arth$count,
                 power=arth$mass^(.75),
                 minE=min(arth$mass^(.75)))
-sad1 <- sad.meteESF(esf1)
+sad1 <- sad(esf1)
 meteDist2Rank(sad1)
 }
 \author{

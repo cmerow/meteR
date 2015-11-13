@@ -39,6 +39,7 @@
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' data(anbo)
 #' 
 #' ## using row and col from anbo dataset
@@ -51,6 +52,7 @@
 #' 
 #' ## using just state variable
 #' thr.sar <- meteSAR(Amin=1, A0=16, S0=50, N0=500) 
+#' }
 #' @return an object of class \code{meteRelat} with elements
 #' \describe{
 #'   \item{\code{pred}}{predicted relationship; an object of class \code{sar}}

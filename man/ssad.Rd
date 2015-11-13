@@ -5,7 +5,7 @@
 \alias{ssad.meteSSF}
 \title{Species Spatial Abundance Distribution}
 \usage{
-ssad(x)
+ssad(ssf)
 
 \method{ssad}{meteSSF}(ssf)
 }
