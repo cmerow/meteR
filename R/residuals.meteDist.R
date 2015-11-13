@@ -16,7 +16,7 @@
 #' @param type 'rank' or 'cumulative'
 #' @param relative logical; if true use relative MSE
 #' @param log logical; if TRUE calculate MSE on logged distirbution. If FALSE use arithmetic scale.
-#' @param ... arguments to be passed
+#' @param ... arguments to be passed to methods
 # @keywords manip
 #' @export
 #' 
@@ -26,7 +26,7 @@
 #'                 abund=arth$count,
 #'                 power=arth$mass^(.75),
 #'                 minE=min(arth$mass^(.75)))
-#' sad1 <- sad.meteESF(esf1)
+#' sad1 <- sad(esf1)
 #' residuals(sad1)
 #' 
 #' @return a numeic vector giving residuals for each data point
@@ -105,7 +105,7 @@ mse <- function(x, ...) {
 #' @export 
 
 mse.meteDist <- function(x, type=c("rank","cumulative"),
-                         relative=TRUE, log=FALSE,...) {
+                         relative=TRUE, log=FALSE, ...) {
   type <- match.arg(type, choices=c("rank","cumulative"))
   
   resid <- residuals(x, type, relative, log)
@@ -160,14 +160,14 @@ mse.meteRelat <- function(x,...) {
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
 mseZ <- function(x, ...) {
-  UseMethod('mseZ', ...)
+  UseMethod('mseZ')
 }
 
 #' @rdname mseZ
 #' @export 
 
 mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
-                          type=c("rank","cumulative"),...) {
+                          type=c("rank","cumulative"), ...) {
   #seems like this should default to relative resid, since that's what is produced by residuals() for the data. need to add an arg for relative=TRUE?s
   if(type=='rank') {
     thr <- function(dat) {

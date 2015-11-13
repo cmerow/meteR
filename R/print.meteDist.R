@@ -17,7 +17,7 @@
 #'                 abund=arth$count,
 #'                 power=arth$mass^(.75),
 #'                 minE=min(arth$mass^(.75)))
-#' ipd1 <- ipd.meteESF(esf1)
+#' ipd1 <- ipd(esf1)
 #' ipd1
 #' @return The \code{meteDist} object is returned invisibly
 #'

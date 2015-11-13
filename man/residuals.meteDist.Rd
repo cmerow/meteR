@@ -16,7 +16,7 @@
 
 \item{log}{logical; if TRUE calculate MSE on logged distirbution. If FALSE use arithmetic scale.}
 
-\item{...}{arguments to be passed}
+\item{...}{arguments to be passed to methods}
 }
 \value{
 a numeic vector giving residuals for each data point
@@ -39,7 +39,7 @@ esf1 <- meteESF(spp=arth$spp,
                 abund=arth$count,
                 power=arth$mass^(.75),
                 minE=min(arth$mass^(.75)))
-sad1 <- sad.meteESF(esf1)
+sad1 <- sad(esf1)
 residuals(sad1)
 }
 \author{

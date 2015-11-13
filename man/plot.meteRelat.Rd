@@ -26,7 +26,7 @@ arguments can be passed to \code{...}.
 }
 \examples{
 data(anbo)
-anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
+anbo.sar <- meteSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
 plot(anbo.sar)
 }
 \author{

@@ -16,7 +16,7 @@
 #'                abund=arth$count,
 #'                power=arth$mass^(.75),
 #'                minE=min(arth$mass^(.75)))
-#' spd1 <- spd.meteESF(esf1)
+#' spd1 <- spd(esf1)
 #' 
 #' @return An object of class \code{meteDist}. The object contains a list with the following elements.
 #' \describe{

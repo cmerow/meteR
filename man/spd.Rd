@@ -38,7 +38,7 @@ esf1 <- meteESF(spp=arth$spp,
                abund=arth$count,
                power=arth$mass^(.75),
                minE=min(arth$mass^(.75)))
-spd1 <- spd.meteESF(esf1)
+spd1 <- spd(esf1)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
