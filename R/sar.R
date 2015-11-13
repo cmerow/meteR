@@ -231,12 +231,12 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
 #' 
 #' @examples
 #' data(anbo)
-#' anbo.thr.downscale <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=17)), 16)
+#' anbo.thr.downscale <- downscaleSAR(anbo.esf, 2^(seq(-3, 4, length=7)), 16)
 #' plot(anbo.thr.downscale)
 #' 
 #' ## theoretical SARs from state variables only
-#' thr.downscale <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=0.25), 16)
-#' thr.downscaleEAR <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=0.25), 16, EAR=TRUE)
+#' thr.downscale <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1,4,by=1), 16)
+#' thr.downscaleEAR <- downscaleSAR(meteESF(S0=40, N0=400), 2^seq(-1, 4, by=1), 16, EAR=TRUE)
 #' plot(thr.downscale, ylim=c(0, 40), col='red')
 #' plot(thr.downscaleEAR, add=TRUE, col='blue')
 #'              
@@ -309,16 +309,16 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
 #' @export
 #' 
 #' @examples
-#' ## combine SAR for scales at which we have data with upscaled SAR
-#' data(anbo)
-#' anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
-#' anbo.sar
-#' plot(anbo.sar, xlim=c(1, 2^10), ylim=c(3, 50), log='xy')
-#' 
-#' ## get upscaled SAR and add to plot
-#' anbo.esf <- meteESF(spp=anbo.new$spp, abund=anbo.new$count) # need ESF for upscaling
-#' anbo.sarUP <- upscaleSAR(anbo.esf, 16, 2^10)
-#' plot(anbo.sarUP, add=TRUE, col='blue')
+## combine SAR for scales at which we have data with upscaled SAR
+data(anbo)
+anbo.sar <- meteSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)
+anbo.sar
+plot(anbo.sar, xlim=c(1, 2^10), ylim=c(3, 50), log='xy')
+
+## get upscaled SAR and add to plot
+anbo.esf <- meteESF(spp=anbo$spp, abund=anbo$count) # need ESF for upscaling
+anbo.sarUP <- upscaleSAR(anbo.esf, 16, 2^10)
+plot(anbo.sarUP, add=TRUE, col='blue')
 #' 
 #'              
 #' @return an object of class \code{sar} inheriting from \code{data.frame} with 
