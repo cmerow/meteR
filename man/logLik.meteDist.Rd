@@ -29,7 +29,7 @@ esf1 <- meteESF(spp=arth$spp,
                 power=arth$mass^(.75),
                 minE=min(arth$mass^(.75)))
 ## calculate individual power distribution and its likelihood
-ipd1 <- ipd.meteESF(esf1)
+ipd1 <- ipd(esf1)
 logLik(ipd1)
 }
 \author{

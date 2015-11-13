@@ -42,9 +42,9 @@ esf1 <- meteESF(spp=arth$spp,
                 power=arth$mass^(.75),
                 minE=min(arth$mass^(.75)))
 ## calculate individual power distribution
-ipd1 <- ipd.meteESF(esf1)
+ipd1 <- ipd(esf1)
 ## calculate z-score, keeping all simulated log likelihoods for plotting
-llz <- logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
+llz <- logLikZ(ipd1, nrep=100, return.sim=TRUE)
 
 plot(density(llz$sim),xlim=range(c(llz$sim,llz$obs)),
      xlab='log(likelihood)',col='red')
