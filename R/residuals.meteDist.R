@@ -113,7 +113,7 @@ mse.meteDist <- function(x, type=c("rank","cumulative"),
   return(mean(resid^2))
 }
 
-
+#' @export 
 mse.meteRelat <- function(x,...) {
   resid <- residuals(x)
   
@@ -142,8 +142,8 @@ mse.meteRelat <- function(x,...) {
 #'               abund=arth$count,
 #'               power=arth$mass^(4/3),
 #'               minE=min(arth$mass^(4/3)))
-#' sad1=sad.meteESF(esf1)
-#' mseZ.meteDist(sad1, nrep=100)
+#' sad1=sad(esf1)
+#' mseZ(sad1, nrep=100)
 #' @return list with elements
 #' \describe{
 #'    \item{z}{The z-score}

@@ -5,14 +5,16 @@
 \alias{sipd.meteESF}
 \title{Generic method to obtain the species-level individual power distribution (SIPD)}
 \usage{
-sipd(esf, ...)
+sipd(x, ...)
 
 \method{sipd}{meteESF}(esf, sppID, n, ...)
 }
 \arguments{
-\item{esf}{An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
+\item{x}{An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
 
 \item{...}{arguments to be passed to methods}
+
+\item{esf}{An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
 
 \item{sppID}{the name or index of the species of interest as listed in the \code{spp} argument passed to \code{meteESF}}
 

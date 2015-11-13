@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{an object of class \code{sar}}
+
+\item{...}{arguments to be passed to methods}
 }
 \value{
 Returns the object silently

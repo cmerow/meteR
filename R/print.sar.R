@@ -6,6 +6,7 @@
 #' See Examples
 #' 
 #' @param x an object of class \code{sar}
+#' @param ... arguments to be passed to methods
 #' @export
 #' 
 #' @examples

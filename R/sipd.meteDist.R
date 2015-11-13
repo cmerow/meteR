@@ -10,6 +10,7 @@
 #' desired use \code{sppID}.
 #' 
 #' 
+#' @param x An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})
 #' @param esf An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})
 #' @param sppID the name or index of the species of interest as listed in the \code{spp} argument passed to \code{meteESF}
 #' @param n integer. Alternatively can extract METE prediction by indicating number of individuals in the species
@@ -47,7 +48,7 @@
 # line.
 #' @family Theta
 
-sipd <- function(esf, ...) {
+sipd <- function(x, ...) {
 	UseMethod('sipd')
 }
 

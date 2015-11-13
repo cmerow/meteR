@@ -40,8 +40,8 @@ esf1=meteESF(spp=arth$spp,
               abund=arth$count,
               power=arth$mass^(4/3),
               minE=min(arth$mass^(4/3)))
-sad1=sad.meteESF(esf1)
-mseZ.meteDist(sad1, nrep=100)
+sad1=sad(esf1)
+mseZ(sad1, nrep=100)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

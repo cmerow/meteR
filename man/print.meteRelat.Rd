@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{an object of class meteRelat}
+
+\item{...}{arguments to be passed to methods}
 }
 \value{
 x silently

@@ -5,8 +5,8 @@
 #'
 # @details
 #' 
-#' 
 #' @param x an object of class meteRelat
+#' @param ... arguments to be passed to methods
 #' 
 #' @export
 #' 
