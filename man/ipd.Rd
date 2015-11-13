@@ -5,12 +5,12 @@
 \alias{ipd.meteESF}
 \title{Individual Power Distribution}
 \usage{
-ipd(...)
+ipd(esf, ...)
 
-\method{ipd}{meteESF}(esf)
+\method{ipd}{meteESF}(esf, ...)
 }
 \arguments{
-\item{x}{an object of class meteESF.}
+\item{esf}{an object of class meteESF.}
 }
 \value{
 An object of class \code{meteDist}. The object contains a list with the following elements.
@@ -38,7 +38,7 @@ esf1 <- meteESF(spp=arth$spp,
                abund=arth$count,
                power=arth$mass^(.75),
                minE=min(arth$mass^(.75)))
-ipd1 <- ipd.meteESF(esf1)
+ipd1 <- ipd(esf1)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

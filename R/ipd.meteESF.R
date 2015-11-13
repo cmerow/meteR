@@ -6,7 +6,7 @@
 #' @details
 #' See examples.
 #' 
-#' @param x an object of class meteESF. 
+#' @param esf an object of class meteESF. 
 #' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
 #' @export
 #' 
@@ -16,7 +16,7 @@
 #'                abund=arth$count,
 #'                power=arth$mass^(.75),
 #'                minE=min(arth$mass^(.75)))
-#' ipd1 <- ipd.meteESF(esf1)
+#' ipd1 <- ipd(esf1)
 #' 
 #' @return An object of class \code{meteDist}. The object contains a list with the following elements.
 #' \describe{
@@ -34,16 +34,16 @@
 #' @seealso meteDist, sad.meteESF, metePsi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
-ipd <- function(x) {
+ipd <- function(esf,...) {
 	UseMethod('ipd')
 }
 
 #' @rdname ipd
 # @method ipd meteESF
 # @S3method ipd meteESF
-#' @export 
 
-ipd.meteESF <- function(esf) {
+#' @export
+ipd.meteESF <- function(esf,...) {
     if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
     
     x <- esf$data$e
