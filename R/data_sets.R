@@ -34,7 +34,7 @@
 #' A dataset containing the community abundace data for plant species, as well 
 #' as the locations of plots with respect to one another
 #'
-#' @format A data frame with 1929 rows and 4 variables:
+#' @format A data frame with 1928 rows and 4 variables:
 #' \describe{
 #'   \item{row}{plot coordinate}
 #'   \item{column}{plot coordinate}
