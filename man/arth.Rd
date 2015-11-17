@@ -10,6 +10,9 @@
   \item{count}{number of individuals}
   \item{mass}{biomass}
 }}
+\source{
+Gruner, D. S. 2007. Geological age, ecosystem development, and local resource constraints on arthropod community structure in the Hawaiian Islands. Biological Journal of the Linnean Society, 90: 551--570.
+}
 \usage{
 arth
 }
