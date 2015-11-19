@@ -27,19 +27,3 @@
 #' }
 #' @source Gruner, D. S. 2007. Geological age, ecosystem development, and local resource constraints on arthropod community structure in the Hawaiian Islands. Biological Journal of the Linnean Society, 90: 551--570.
 "arth"
-
-#==========================================================================
-#' Community abundance data for a serpentine grassland
-#'
-#' A dataset containing the community abundace data for plant species, as well 
-#' as the locations of plots with respect to one another
-#'
-#' @format A data frame with 1928 rows and 4 variables:
-#' \describe{
-#'   \item{row}{plot coordinate}
-#'   \item{column}{plot coordinate}
-#'   \item{spp}{species ID}
-#'   \item{count}{number of individuals}
-#' }
-#' @source Green J., J. Harte, and A. Ostling, 2003. Species richness, endemism, and abundance patterns: tests of two fractal models in a serpentine grassland. Ecology Letters 6: 919--928.
-"serp"
