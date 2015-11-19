@@ -7,14 +7,12 @@
 \usage{
 sipd(x, ...)
 
-\method{sipd}{meteESF}(esf, sppID, n, ...)
+\method{sipd}{meteESF}(x, sppID, n, ...)
 }
 \arguments{
 \item{x}{An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
 
 \item{...}{arguments to be passed to methods}
-
-\item{esf}{An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})}
 
 \item{sppID}{the name or index of the species of interest as listed in the \code{spp} argument passed to \code{meteESF}}
 

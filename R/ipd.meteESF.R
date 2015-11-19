@@ -6,7 +6,7 @@
 #' @details
 #' See examples.
 #' 
-#' @param esf an object of class meteESF. 
+#' @param x an object of class meteESF. 
 #' @param ... additiona arguments to be passed to methods
 #' 
 #' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
@@ -36,7 +36,7 @@
 #' @seealso meteDist, sad.meteESF, metePsi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
-ipd <- function(esf,...) {
+ipd <- function(x, ...) {
 	UseMethod('ipd')
 }
 
@@ -45,22 +45,22 @@ ipd <- function(esf,...) {
 # @S3method ipd meteESF
 
 #' @export
-ipd.meteESF <- function(esf,...) {
-    if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
+ipd.meteESF <- function(x,...) {
+    if(is.na(x$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
     
-    x <- esf$data$e
-    if(is.null(x)) {
+    dat <- x$data$e
+    if(is.null(dat)) {
         X <- NULL
     } else {
-        X <- sort(esf$data$e, decreasing=TRUE)
+        X <- sort(dat, decreasing=TRUE)
     }
     
     this.eq <- function(epsilon, log=FALSE) {
-        out <- metePsi(epsilon, la1=esf$La[1], 
-                       la2=esf$La[2], Z=esf$Z,
-                       S0=esf$state.var[1], 
-                       N0=esf$state.var[2], 
-                       E0=esf$state.var[3])
+        out <- metePsi(epsilon, la1=x$La[1], 
+                       la2=x$La[2], Z=x$Z,
+                       S0=x$state.var[1], 
+                       N0=x$state.var[2], 
+                       E0=x$state.var[3])
         
         if(log) out <- log(out)
         
@@ -78,11 +78,11 @@ ipd.meteESF <- function(esf,...) {
     }, vectorize.args="epsilon")
     
     FUN <- distr::AbscontDistribution(d=this.eq, p=this.p.eq,
-                                      low1=1, low=1, up=esf$state.var[3], up1=esf$state.var[3])
+                                      low1=1, low=1, up=x$state.var[3], up1=x$state.var[3])
     
     out <- list(type='ipd', data=X, 
                 d=this.eq, p=FUN@p, q=FUN@q, r=FUN@r,
-                state.var=esf$state.var, La=esf$La)
+                state.var=x$state.var, La=x$La)
     class(out) <- c('ipd', 'meteDist')
     
     return(out)

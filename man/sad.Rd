@@ -5,12 +5,12 @@
 \alias{sad.meteESF}
 \title{METE species abundance distribution}
 \usage{
-sad(esf)
+sad(x)
 
-\method{sad}{meteESF}(esf)
+\method{sad}{meteESF}(x)
 }
 \arguments{
-\item{esf}{an object of class mete.}
+\item{x}{an object of class mete.}
 }
 \value{
 An object of class \code{meteDist}. The object contains a list with the following elements.

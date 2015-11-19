@@ -5,12 +5,12 @@
 \alias{ssad.meteSSF}
 \title{Species Spatial Abundance Distribution}
 \usage{
-ssad(ssf)
+ssad(x)
 
-\method{ssad}{meteSSF}(ssf)
+\method{ssad}{meteSSF}(x)
 }
 \arguments{
-\item{ssf}{An objects of class meteSSF; i.e. the spatial structure function \eqn{\Pi(n)}}
+\item{x}{An objects of class meteSSF; i.e. the spatial structure function \eqn{\Pi(n)}}
 }
 \description{
 Species Spatial Abundance Distribution

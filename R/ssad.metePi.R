@@ -5,7 +5,7 @@
 # @details
 #' 
 #' 
-#' @param ssf An objects of class meteSSF; i.e. the spatial structure function \eqn{\Pi(n)}
+#' @param x An objects of class meteSSF; i.e. the spatial structure function \eqn{\Pi(n)}
 #' 
 #' @export
 #' 
@@ -24,7 +24,7 @@
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
-ssad <- function(ssf) {
+ssad <- function(x) {
   UseMethod('ssad')
 }
 
@@ -33,28 +33,28 @@ ssad <- function(ssf) {
 # @S3method ssad meteSSF
 #' @export 
 
-ssad.meteSSF <- function(ssf) {
-	x <- ssf$data$n
+ssad.meteSSF <- function(x) {
+	dat <- x$data$n
 	
-	if(is.null(x)) {
+	if(is.null(dat)) {
 		X <- NULL
 	} else {
-		X <- sort(x, decreasing=TRUE)
+		X <- sort(dat, decreasing=TRUE)
 	}
 	
 	this.eq <- function(n, log=FALSE) {
-		out <- metePi(n, ssf$La, ssf$state.var['n0'])
+		out <- metePi(n, x$La, x$state.var['n0'])
 		if(log) out <- log(out)
 		
 		return(out)
 	}
 	
-	FUN <- distr::DiscreteDistribution(supp=0:ssf$state.var['n0'],
-	                                   prob=this.eq(0:ssf$state.var['n0']))
+	FUN <- distr::DiscreteDistribution(supp=0:x$state.var['n0'],
+	                                   prob=this.eq(0:x$state.var['n0']))
 	
 	out <- list(type='ssad', data=X,
 	            d=this.eq, p=FUN@p, q=FUN@q, r=FUN@r,
-	            state.var=ssf$state.var, La=ssf$La)
+	            state.var=x$state.var, La=x$La)
 	
 	class(out) <- c('ssad', 'meteDist')
 	

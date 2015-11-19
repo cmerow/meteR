@@ -4,10 +4,10 @@
 \alias{ebar}
 \title{Relationship between mean metabolic rate (\eqn{\bar{\epsilon}}) and abundance}
 \usage{
-ebar(esf)
+ebar(x)
 }
 \arguments{
-\item{esf}{an object of class meteESF.}
+\item{x}{an object of class meteESF.}
 }
 \value{
 An object of class \code{meteRelaT}. The object contains a list with the following elements.

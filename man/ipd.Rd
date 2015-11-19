@@ -5,12 +5,12 @@
 \alias{ipd.meteESF}
 \title{Individual Power Distribution}
 \usage{
-ipd(esf, ...)
+ipd(x, ...)
 
-\method{ipd}{meteESF}(esf, ...)
+\method{ipd}{meteESF}(x, ...)
 }
 \arguments{
-\item{esf}{an object of class meteESF.}
+\item{x}{an object of class meteESF.}
 
 \item{...}{additiona arguments to be passed to methods}
 }

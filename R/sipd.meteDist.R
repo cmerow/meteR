@@ -11,7 +11,6 @@
 #' 
 #' 
 #' @param x An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})
-#' @param esf An object of class meteESF (i.e. the fitted distribution \eqn{R(n,e)})
 #' @param sppID the name or index of the species of interest as listed in the \code{spp} argument passed to \code{meteESF}
 #' @param n integer. Alternatively can extract METE prediction by indicating number of individuals in the species
 #' @param ... arguments to be passed to methods
@@ -57,23 +56,23 @@ sipd <- function(x, ...) {
 # @S3method sipd meteESF
 #' @export 
 
-sipd.meteESF <- function(esf, sppID, n,...) {
-    if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
+sipd.meteESF <- function(x, sppID, n,...) {
+    if(is.na(x$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
     
     if(!missing(n)) { # n provided, only return theoretical (cause how deal with multiple spp with same n?)
         if(!missing(sppID)) warning('`sppID` ignored if `n` provided; to explore individual species use `sppID` instead')
         X <- NULL # data null if n provided
-    } else if(!is.null(esf$data)) { # data provided
+    } else if(!is.null(x$data)) { # data provided
         if(!missing(sppID)) {
-            spp <- as.factor(esf$data$s)
+            spp <- as.factor(x$data$s)
             if(is.numeric(sppID)) sppID <- levels(spp)[sppID]
             
-            n <- sum(esf$data$n[esf$data$s == sppID])
-            x <- esf$data$e
-            if(is.null(x)) { # no energy data
+            n <- sum(x$data$n[x$data$s == sppID])
+            dat <- x$data$e
+            if(is.null(dat)) { # no energy data
                 X <- NULL
             } else {
-                X <- sort(x, decreasing=TRUE)
+                X <- sort(dat, decreasing=TRUE)
             }
         } else {
             
@@ -84,24 +83,24 @@ sipd.meteESF <- function(esf, sppID, n,...) {
     }
     
     this.eq <- function(epsilon, log=FALSE) {
-        out <- meteTheta(epsilon, n=n, la2=esf$La[2])
+        out <- meteTheta(epsilon, n=n, la2=x$La[2])
         if(log) out <- log(out)
         return(out)
     }
     
     this.p.eq <- function(epsilon, log=FALSE, lower.tail=TRUE) {
-        out <- .meteThetaCum(epsilon, n, esf$La[2], log)
+        out <- .meteThetaCum(epsilon, n, x$La[2], log)
         if(!lower.tail) out <- 1 - out
         
         return(out)
     }
     
     FUN <- distr::AbscontDistribution(d=this.eq, p=this.p.eq,
-                                      low1=1, low=1, up=esf$state.var[3], up1=esf$state.var[3])
+                                      low1=1, low=1, up=x$state.var[3], up1=x$state.var[3])
     
     out <- list(type='sipd', data=X,
                 d=this.eq, p=this.p.eq, q=FUN@q, r=FUN@r,
-                state.var=esf$state.var, La=esf$La)
+                state.var=x$state.var, La=x$La)
     out$state.var['n'] <- n
     class(out) <- c('ipd', 'meteDist')
     

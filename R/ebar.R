@@ -5,7 +5,7 @@
 #' @details
 #' See examples.
 #' 
-#' @param esf an object of class meteESF. 
+#' @param x an object of class meteESF. 
 #' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
 #' @export
 #' 
@@ -28,20 +28,20 @@
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
 
-ebar <- function(esf) {
-  if(is.na(esf$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
+ebar <- function(x) {
+  if(is.na(x$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
   
-  x <- esf$data$e
+  dat <- x$data$e
   
-  if(is.null(x)) {
+  if(is.null(dat)) {
     X <- NULL
   } else {
-    X <- aggregate(list(n=esf$data$n, e=esf$data$e), list(s=esf$data$s), sum)
+    X <- aggregate(list(n=x$data$n, e=x$data$e), list(s=x$data$s), sum)
     X$e <- X$e/X$n
     X <- X[, c('n', 'e')]
   }
   
-  thr <- data.frame(n=1:min(esf$state.var['N0'], max(X$n)), e=1 + 1/(1:min(esf$state.var['N0'], max(X$n)) * esf$La[2]))
+  thr <- data.frame(n=1:min(x$state.var['N0'], max(X$n)), e=1 + 1/(1:min(x$state.var['N0'], max(X$n)) * x$La[2]))
   
   attr(X, 'source') <- 'empirical'
   attr(X, 'type') <- 'damuth'

@@ -8,7 +8,7 @@
 #' @details
 #' See Examples.
 #' 
-#' @param esf an object of class mete. 
+#' @param x an object of class mete. 
 #' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure 
 #' function
 #' @export
@@ -43,7 +43,7 @@
 # line.
 # @family - a family name. All functions that have the same family tag will be linked in the documentation.
 
-sad <- function(esf) {
+sad <- function(x) {
 	UseMethod('sad')
 }
 
@@ -52,34 +52,34 @@ sad <- function(esf) {
 # @S3method sad meteESF
 #' @export 
 
-sad.meteESF <- function(esf) {
-    x <- esf$data$n
-    otu <- esf$data$s
+sad.meteESF <- function(x) {
+    dat <- x$data$n
+    otu <- x$data$s
     
-    if(is.null(x)) {
+    if(is.null(dat)) {
       X <- NULL
     } else {
-      X <- sort(tapply(x,otu,sum),decreasing=TRUE)
+      X <- sort(tapply(dat,otu,sum),decreasing=TRUE)
     }
     
     
     this.eq <- function(n, log=FALSE) {
-      out <- metePhi(n=n,la1=esf$La[1],la2=esf$La[2],Z=esf$Z,
-                     S0=esf$state.var[1],N0=esf$state.var[2],
-                     E0=ifelse(is.na(esf$state.var[3]), esf$state.var[2]*10^2, esf$state.var[3]))
-#      out=out/sum(out) # to address error below:  Error in distr::DiscreteDistribution(supp = 1:esf$state.var["N0"], prob = this.eq(1:esf$state.var["N0"])) : sum of 'prob' has to be (approximately) 1
+      out <- metePhi(n=n,la1=x$La[1],la2=x$La[2],Z=x$Z,
+                     S0=x$state.var[1],N0=x$state.var[2],
+                     E0=ifelse(is.na(x$state.var[3]), x$state.var[2]*10^2, x$state.var[3]))
+#      out=out/sum(out) # to address error below:  Error in distr::DiscreteDistribution(supp = 1:x$state.var["N0"], prob = this.eq(1:x$state.var["N0"])) : sum of 'prob' has to be (approximately) 1
       if(log) out <- log(out)
       return(out)
     }
     
-    FUN <- distr::DiscreteDistribution(supp=1:esf$state.var["N0"], 
-                                prob=this.eq(1:esf$state.var["N0"]))
+    FUN <- distr::DiscreteDistribution(supp=1:x$state.var["N0"], 
+                                prob=this.eq(1:x$state.var["N0"]))
     
-    # rankFun <- qphi2rank(FUN@q,esf$state.var["S0"])
+    # rankFun <- qphi2rank(FUN@q,x$state.var["S0"])
     
     out <- list(type='sad', data=X, 
                 d=this.eq, p=FUN@p, q=FUN@q, r=FUN@r,
-                state.var=esf$state.var, La=esf$La)
+                state.var=x$state.var, La=x$La)
     class(out) <- c('sad', 'meteDist')
     
     return(out)

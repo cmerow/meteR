@@ -5,12 +5,12 @@
 \alias{spd.meteESF}
 \title{Species Power Distribution}
 \usage{
-spd(esf)
+spd(x)
 
-\method{spd}{meteESF}(esf)
+\method{spd}{meteESF}(x)
 }
 \arguments{
-\item{esf}{an object of class meteESF.}
+\item{x}{an object of class meteESF.}
 }
 \value{
 An object of class \code{meteDist}. The object contains a list with the following elements.
