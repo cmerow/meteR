@@ -99,9 +99,11 @@ logLikZ.meteDist <- function(x, nrep, return.sim=FALSE,...) {
     sum(x$d(new.dat, log=TRUE))
   })
   
+  z <- (lik.obs-mean(lik.sim))/sd(lik.sim)
+  
   if(!return.sim) lik.sim <- NULL
   
-  return(list(z=(lik.obs-mean(lik.sim))/sd(lik.sim), 
+  return(list(z=z, 
               obs=lik.obs,
               sim=lik.sim))
   
