@@ -102,7 +102,8 @@ plot.meteDist <- function(x, ptype=c("cdf","rad"), th.col="red",
     points(meteDist2Rank(x), type="l", col=th.col)
   }
   
-  if(add.legend) legend('right', legend=c('data', 'METE'), col=c('black', 'red'),
+  if(add.legend) legend(ifelse(ptype=='cdf', 'bottomright', 'topright'), 
+                        legend=c('data', 'METE'), col=c('black', 'red'),
                         lty=c(NA, 1), pch=c(21, NA), bty='n') 
 }
 
