@@ -68,7 +68,7 @@ sipd.meteESF <- function(x, sppID, n,...) {
             if(is.numeric(sppID)) sppID <- levels(spp)[sppID]
             
             n <- sum(x$data$n[x$data$s == sppID])
-            dat <- x$data$e
+            dat <- x$data$e[x$data$s == sppID]
             if(is.null(dat)) { # no energy data
                 X <- NULL
             } else {
