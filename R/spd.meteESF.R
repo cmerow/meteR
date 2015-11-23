@@ -35,7 +35,7 @@
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 
 spd <- function(x) {
-  UseMethod('ipd')
+  UseMethod('spd')
 }
 
 #' @rdname spd
@@ -122,6 +122,9 @@ meteNu <- function(e,la1,la2,Z,S0,N0,E0) {
   t2 <- exp(-beta/(la2*(e-1)))
   t3 <- e-1
   
-  return(t1 * t2 / t3)
+  out <- t1 * t2 / t3
+  out[e==1] <- .Machine$double.eps
+
+  return(out)
 }
 
