@@ -155,6 +155,7 @@ metePi <- function(n,la,n0) {
 
 
 ##	make *S*patial *S*tructure *F*unction, like the ESF slot in mete class
+#' @importFrom stats uniroot
 .makeSSF <- function(n0, A, A0, eq52=.useEq52(n0,A,A0)) {
 	if(A/A0 == 0.5) {
 		return(list(La=0, La.info='analytic solution',

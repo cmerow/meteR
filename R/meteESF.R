@@ -150,6 +150,7 @@ meteESF <- function(spp, abund, power,
 
 ##===========================================================================
 ## helper fun to calculate lagrange multipliers
+#' @importFrom stats nlm
 
 .mete.lambda <- function(S0, N0, E0) {
     ## reasonable starting values

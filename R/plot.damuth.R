@@ -10,6 +10,8 @@
 #' @param ... arguments passed to \code{plot}
 #' 
 #' @export
+#' @importFrom graphics plot points
+
 #' 
 #' @examples
 #' data(arth)

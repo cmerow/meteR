@@ -11,6 +11,7 @@
 #' 
 #' @export
 #' 
+#' @importFrom graphics plot points
 #' @examples
 #' data(anbo)
 #' anbo.obs.sar <- empiricalSAR(anbo$spp, anbo$count, anbo$row, anbo$col, Amin=1, A0=16)

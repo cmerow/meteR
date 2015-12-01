@@ -45,6 +45,8 @@ ipd <- function(x, ...) {
 # @S3method ipd meteESF
 
 #' @export
+
+#' @importFrom stats integrate
 ipd.meteESF <- function(x,...) {
     if(is.na(x$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')
     
