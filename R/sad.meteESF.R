@@ -21,6 +21,8 @@
 #'                 minE=min(arth$mass^(.75)))
 #' sad1 <- sad(esf1)
 #' sad1
+#' sad1$r(20)
+#' sad1$q(seq(0,1,length=10))
 #' 
 #' @return An object of class \code{meteDist}. The object contains a list with the following elements.
 #' \describe{

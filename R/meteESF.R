@@ -216,6 +216,7 @@ meteESF <- function(spp, abund, power,
     return(f)
 }
 
+
 ##===========================================================================
 ## function to return Z, the normalizing constant of R as well as
 ## the simplifying parameters beta and sigma
@@ -231,5 +232,47 @@ meteESF <- function(spp, abund, power,
     Z <- t1*(t2 - t3)
     
     return(Z)
+}
+
+##===========================================================================
+#' @title predictESF
+#'  
+#' @description \code{predict} predicts the probabilities for given combinations of abundance and energ from the  ``ecosystem structure
+#' function'' \eqn{R(n,\epsilon)} 
+#'
+#' @details
+#' Uses a fitted object of class \code{meteESF} and user supplied values of abundance and power to predict values of the ESF
+#' 
+#' @param esf A fitted object of class \code{meteESF}
+#' @param abund A vector of abundances 
+#' @param power A vector of metabolic rates 
+#' 
+#' @keywords lagrange multiplier, METE, MaxEnt, ecosystem structure function
+#' @export
+#' 
+#' @examples
+#' ## case where complete data availible
+#' esf1 <- meteESF(spp=arth$spp,
+#'                 abund=arth$count,
+#'                 power=arth$mass^(.75),
+#'                 minE=min(arth$mass^(.75)))
+#' predictESF(esf1,
+#'            abund=c(10,3),
+#'            power=c(.01,3))
+
+#' 
+#' @return a data.frame with abundance, power, and the predicted value of the ESF
+#'
+#' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
+#' @seealso meteESF
+#' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+
+predictESF=function(esf,abund,power){
+  p=(1/esf$Z) * 
+    exp(-1*esf$La[1]*abund) * 
+    exp(-1*esf$La[1]*power)
+  return(data.frame(abund=abund,
+                    power=power,
+                    ESF.prob=p))
 }
 
