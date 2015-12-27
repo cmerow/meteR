@@ -18,6 +18,7 @@
 #' @param add.line add the curve for a fitted model to the existing plot
 # @keywords manip
 #' @export
+#' @importFrom graphics curve legend plot points
 #' 
 #' @examples
 #' data(arth)

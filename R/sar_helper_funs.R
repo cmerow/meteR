@@ -249,6 +249,7 @@
  }
 
 ## find the root to the upscale constraint and return solution
+#' @importFrom stats uniroot
 .solveUpscale <- function(S0, N0) {
   beta <- uniroot(.eq9, .solRng(S0, N0), S0=S0, N0=N0, tol=.Machine$double.eps)$root
   Sup <- .Sup(beta, S0, N0)

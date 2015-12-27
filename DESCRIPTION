@@ -3,7 +3,7 @@ Type: Package
 Title: Fitting and Plotting Tools for the Maximum Entropy
     Theory of Ecology (METE)
 Version: 1.0
-Date: 2015-11-13
+Date: 2015-11-24
 Author: Andy Rominger, Cory Merow 
 Maintainer: Cory Merow <cory.merow@gmail.com>
 Description: Fit and plot macroecological patterns predicted by the Maximum
@@ -13,9 +13,10 @@ URL: https://github.com/cmerow/meteR
 BugReports: https://github.com/cmerow/meteR/issues
 LazyLoad: yes
 LazyData: true
-Depends:
+Depends: 
     R (>= 2.10)
-Imports:
+Imports: 
     nleqslv,
     distr
 Suggests:
+    testthat

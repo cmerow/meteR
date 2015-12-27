@@ -26,7 +26,7 @@
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 #' @seealso meteDist, sad.meteESF, metePsi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
-
+#' @importFrom stats aggregate
 
 ebar <- function(x) {
   if(is.na(x$state.var[3])) stop('must provide metabolic rate data or E0 to calculate power distributions')

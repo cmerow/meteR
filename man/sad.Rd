@@ -40,6 +40,8 @@ esf1 <- meteESF(spp=arth$spp,
                 minE=min(arth$mass^(.75)))
 sad1 <- sad(esf1)
 sad1
+sad1$r(20)
+sad1$q(seq(0,1,length=10))
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow
