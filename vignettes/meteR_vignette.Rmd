@@ -91,7 +91,7 @@ plot(sad1, ptype='cdf', log='x')
 logLik(sad1)
 #== randomly generate 100 data sets from the fitted distribution and calculate
 #== the z-score of the data w.r.t. these simulations
-llz <- logLikZ.meteDist(sad1, nrep=100, return.sim=TRUE)
+llz <- logLikZ(sad1, nrep=100, return.sim=TRUE)
 llz$z
 #== plot the distributions
 plot(density(llz$sim),
@@ -119,10 +119,10 @@ Next, we illustrate methods relying on residuals to assess model fit. Residuals 
 head(residuals(sad1))
 head(residuals(sad1, type='cumulative', relative=FALSE))
 #== calculate the mean-squared error
-mse.meteDist(sad1, type='rank', relative=FALSE)
+mse(sad1, type='rank', relative=FALSE)
 #== randomly generate 100 data sets from the fitted distribution and calculate
 #== the z-score of the data w.r.t. these simulations
-msez.rank=mseZ.meteDist(sad1, nrep=100, return.sim=TRUE, type='rank')
+msez.rank=mseZ(sad1, nrep=100, return.sim=TRUE, type='rank')
 msez.rank$z
 #== plot the distributions
 plot(density(msez.rank$sim),
@@ -161,8 +161,8 @@ Next, assess the fit of the IPD.
 ```{r fig.width=5, fig.cap="Likelihood-based z-score."}
 head(residuals(ipd1))
 logLik(ipd1)
-logLikZ.meteDist(ipd1, nrep=100)
-llz <- logLikZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
+logLikZ(ipd1, nrep=100)
+llz <- logLikZ(ipd1, nrep=100, return.sim=TRUE)
 plot(density(llz$sim),xlim=range(c(llz$sim,llz$obs)),xlab='log(likelihood)',col='red')
 abline(v=llz$obs,lty=2)
 llz$z
@@ -174,8 +174,8 @@ legend('top',legend=c('data','simulated\nfrom METE'),col=c('black','red'),
 Interestingly, although it appears that the data are unlikely to have been drawn from the METE distribution based on the z-score of the likelihood, the mean squared error suggests otherwise.
 
 ```{r fig.width=5, fig.cap="Mean squared error-based z-score."}
-mse.meteDist(ipd1, type='rank', relative=FALSE)
-mseZ <- mseZ.meteDist(ipd1, nrep=100, return.sim=TRUE)
+mse(ipd1, type='rank', relative=FALSE)
+mseZ <- mseZ(ipd1, nrep=100, return.sim=TRUE)
 mseZ$z
 plot(density(mseZ$sim),xlim=range(c(mseZ$sim,mseZ$obs)),xlab='mse',col='red')
 abline(v=mseZ$obs,lty=2)
