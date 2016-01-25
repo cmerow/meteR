@@ -6,6 +6,7 @@ d=data.frame(sp=c('a','b','c','c','d','d','d'),
              pow=c(23,9,6,9,3,2,1))
 esf1 <- meteESF(spp=d$sp, abund=d$abun, power=d$pow)
 sad1=sad(esf1)
+plot(sad1)
 #sad1$d(c(1,2,12))
 #meteDist2Rank(sad1)
 #predictESF(esf1,c(12,12,12,2,2,1,1),c(1,2,3,6,9,9,23))
@@ -27,3 +28,4 @@ test_that('IPD computed correctly',{
   
   
 })
+
