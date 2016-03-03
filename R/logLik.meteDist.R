@@ -93,12 +93,34 @@ logLikZ <- function(x, ...) {
 #' @export 
 
 #' @importFrom stats logLik sd
-logLikZ.meteDist <- function(x, nrep, return.sim=FALSE,...) {
+logLikZ.meteDist <- function(x, nrep=999, return.sim=FALSE, ...) {
   lik.obs <- logLik(x)
-  lik.sim <- replicate(nrep, {
-    new.dat <- x$r(length(x$data))
-    sum(x$d(new.dat, log=TRUE))
-  })
+  state.var <- sum(x$data)
+  
+  lik.sim <- c()
+  cat('simulating data that conform to state variables: \n')
+  for(i in 1:10) {
+    cat(sprintf('attempt %s \n', i))
+    this.sim <- replicate(100*nrep, {
+      new.dat <- x$r(length(x$data))
+      if(abs(sum(new.dat) - state.var) < 0.001*state.var) {
+        return(NA)
+      } else {
+        return(sum(x$d(new.dat, log=TRUE)))
+      }
+    })
+    
+    lik.sim <- c(lik.sim, this.sim[!is.na(this.sim)])
+    if(length(lik.sim) >= nrep) break
+  }
+  
+  if(length(lik.sim) >= nrep) {
+    lik.sim <- c(lik.sim[1:nrep], lik.obs)
+  } else {
+    warning(sprintf('%s (not %s as desired) simulated replicates found that match the state variables', 
+                    length(lik.sim), nrep))
+    lik.sim <- c(lik.sim, lik.obs)
+  }
   
   z <- (lik.obs-mean(lik.sim))/sd(lik.sim)
   
