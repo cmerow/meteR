@@ -168,16 +168,17 @@ mseZ <- function(x, ...) {
 #' @export 
 #' @importFrom stats sd
 mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
-                          type=c("rank","cumulative"), ...) {
-  #seems like this should default to relative resid, since that's what is produced by residuals() for the data. need to add an arg for relative=TRUE?s
+                          type=c("rank","cumulative"), 
+                          relative=TRUE, log=FALSE, ...) {
   if(type=='rank') {
-    thr <- function(dat) {
+    thr <- function(dat, relative=relative, log=log) {
       mean((sort(dat, TRUE) - meteDist2Rank(x))^2)
     }
   } else {
     thr <- function(dat) {
       obs <- .ecdf(dat)
-      mean((obs - x$p(obs[,1]))^2)
+      
+      mean((obs[, 2] - x$p(obs[, 1]))^2)
     }
   }
   
