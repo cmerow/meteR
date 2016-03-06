@@ -196,7 +196,8 @@ mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
 #     
 #     thr(new.dat)
 #   })
-  
+  state.var <- sum(x$data)
+
   mse.sim <- c()
   cat('simulating data that conform to state variables: \n')
   for(i in 1:10) {
