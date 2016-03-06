@@ -191,11 +191,36 @@ mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
   }
   
   mse.obs <- mse.meteDist(x, type, relative, log)
-  mse.sim <- replicate(nrep, {
-    new.dat <- x$r(length(x$data))
+#   mse.sim <- replicate(nrep, {
+#     new.dat <- x$r(length(x$data))
+#     
+#     thr(new.dat)
+#   })
+  
+  mse.sim <- c()
+  cat('simulating data that conform to state variables: \n')
+  for(i in 1:10) {
+    cat(sprintf('attempt %s \n', i))
+    this.sim <- replicate(100*nrep, {
+      new.dat <- x$r(length(x$data))
+      if(abs(sum(new.dat) - state.var) < 0.001*state.var) {
+        return(NA)
+      } else {
+        return(thr(new.dat))
+      }
+    })
     
-    thr(new.dat)
-  })
+    mse.sim <- c(mse.sim, this.sim[!is.na(this.sim)])
+    if(length(mse.sim) >= nrep) break
+  }
+  
+  if(length(mse.sim) >= nrep) {
+    mse.sim <- c(mse.sim[1:nrep], mse.obs)
+  } else {
+    warning(sprintf('%s (not %s as desired) simulated replicates found that match the state variables', 
+                    length(lik.sim), nrep))
+    lik.sim <- c(mse.sim, mse.obs)
+  }
   
   if(return.sim) {
     return(list(z=(mse.obs-mean(mse.sim))/sd(mse.sim), 
