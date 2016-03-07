@@ -170,17 +170,18 @@ mseZ <- function(x, ...) {
 mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
                           type=c("rank","cumulative"), 
                           relative=TRUE, log=FALSE, ...) {
+  
   if(type=='rank') {
-    thr <- function(dat, relative=relative, log=log) {
-      rad <- meteDist2Rank(x)
+    rad <- meteDist2Rank(x)
+    thr <- function(dat) {
       res <- sort(dat, TRUE) - rad
       if(relative) res <- res/rad
       
       return(mean(res^2))
     }
   } else {
+    obs <- .ecdf(dat)
     thr <- function(dat) {
-      obs <- .ecdf(dat)
       if(log) obs[, 2] <- log(obs[, 2])
       pred <- x$p(obs[, 1], log.p=log)
       res <- obs[, 2] - pred
@@ -191,11 +192,6 @@ mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
   }
   
   mse.obs <- mse.meteDist(x, type, relative, log)
-#   mse.sim <- replicate(nrep, {
-#     new.dat <- x$r(length(x$data))
-#     
-#     thr(new.dat)
-#   })
   state.var <- sum(x$data)
 
   mse.sim <- c()
