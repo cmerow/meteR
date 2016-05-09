@@ -7,16 +7,24 @@ output:
     toc: true
     toc_depth: 3
 vignette: >
+  %\VignetteIndexEntry{An Overview of meteR: testing the Maximum Entropy Theory of Ecology}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+
+---
+<!--  rmarkdown::html_vignette % this doesn't seem to allow TOC
+#another option for output
+output: rmarkdown::html_vignette
+
+vignette: >
   \VignetteIndexEntry{An Overview of meteR: testing the Maximum Entropy Theory of Ecology}
   \VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   \usepackage[T1]{fontenc} 
----
-<!--  rmarkdown::html_vignette % this doesn't seem to allow TOC-->
+  -->
 
 <!-- For more details on using R Markdown see <http://rmarkdown.rstudio.com>. 
 #TO DO
-ADD TOC
 FIX latex
 -ADD data refs
 -how to handle plotting when just the state variables are specified? - make it so you can add this to the the plot via just a line?
@@ -189,12 +197,13 @@ METE predicts two other distributions relating to metabolic rates: the distribut
 
 We can obtain the SIPD with `S3` method `sipd` which requires either a species ID be specified or the total abundance of a hypothetical species:
 ```{r fig.width=5, fig.cap="Distribution of metabolic rates of individuals in a species with $n$ individuals"}
-sipd1 <- sipd(esf1, sppID=5)
-plot(sipd1, log='x')
+sipd1 <- sipd(esf1, sppID=27)
+plot(sipd1, log='x',ylim=c(0,1))
 
 ## sipd based on total abundance of a hypothetical species
 sipd2 <- sipd(esf1, n=25)
 ```
+Note that this plot is not particularly informative in this case because there are only 3 unique observations of metabolic rate for this species. 
 
 We can obtain the SPD with `S3` method `spd`:
 ```{r fig.width=5, fig.cap="Distribution of metabolic rates of individuals in a species with $n$ individuals"}

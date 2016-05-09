@@ -8,7 +8,7 @@
 mseZ(x, ...)
 
 \method{mseZ}{meteDist}(x, nrep, return.sim = FALSE, type = c("rank",
-  "cumulative"), ...)
+  "cumulative"), relative = TRUE, log = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{meteDist} object}
