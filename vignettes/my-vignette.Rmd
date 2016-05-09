@@ -3,7 +3,6 @@ title: "Vignette Title"
 author: "Vignette Author"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-  fig_caption: yes
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
