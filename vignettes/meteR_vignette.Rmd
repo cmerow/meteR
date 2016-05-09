@@ -2,7 +2,11 @@
 title: "An Overview of meteR: testing the Maximum Entropy Theory of Ecology"
 author: "Andy Rominger, Cory Merow"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: yes
+    toc: true
+    toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{An Overview of meteR: testing the Maximum Entropy Theory of Ecology}
   %\VignetteEngine{knitr::rmarkdown}
