@@ -142,13 +142,6 @@ plot.sar <- function(x, ...) {#
          ylab=sprintf('Number of %s', ifelse(attr(x, 'type') == 'ear', 'endemics', 'species')), #
          type=ifelse(attr(x, 'source')=='empirical', 'p', 'l'), ...)	#
 }
-## function to plot objects of class sar#
-#
-plot.sar <- function(x, ...) {#
-    plot(x[, 'A'], x[, 'S'], xlab='Area', #
-         ylab=sprintf('Number of %s', ifelse(attr(x, 'type') == 'ear', 'endemics', 'species')), #
-         type=ifelse(attr(x, 'source')=='empirical', 'p', 'l'), ...)	#
-}
 plot(anbo.obs.sar)
 anbo.sar <- meteSAR(anbo.new$spp, anbo.new$count, anbo.new$row, anbo.new$col, Amin=1, A0=16)
 traceback()
@@ -366,3 +359,6 @@ A/A0-1
 1.01*(n0*((A0-0.01)/A0-1)-1)/(n0*((A0-0.01)/A0-1))
 1.01*(n0*((A0-0.0001)/A0-1)-1)/(n0*((A0-0.0001)/A0-1))
 Q
+5*150
+library(poilog)
+?dpoilog
