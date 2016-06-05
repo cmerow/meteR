@@ -8,6 +8,16 @@ test_that('predicted SAR values are correct', {
   expect_true(all(round(bell.sar, 3) == round(newmanS, 3)))
 })
 
+test_that('SAR works for absolute and scaled area in the same way', {
+  expect_equal(meteSAR(S0=30, N0=1000, Amin=1, A0=16)$pred$S,
+               meteSAR(S0=30, N0=1000, Amin=1/16, A0=1)$pred$S)
+})
+
+test_that('EAR works for absolute and scaled area in the same way', {
+  expect_equal(meteSAR(S0=30, N0=1000, Amin=1, A0=16, EAR=TRUE)$pred$S,
+               meteSAR(S0=30, N0=1000, Amin=1/16, A0=1, EAR=TRUE)$pred$S)
+})
+
 
 test_that('predicted EAR values are correct', {
   areas <- 2^(-1*(0:8)) * 256 # Serpentine areas
