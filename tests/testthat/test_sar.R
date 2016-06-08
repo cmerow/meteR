@@ -30,7 +30,12 @@ test_that('predicted EAR values are correct', {
   rawMETE <- c(166, 492, 622, 746, 864, 970, 1070, 1170, 1268)
   actualMETE <- predict(lm(actualAxis ~ rawAxis), newdata=data.frame(rawAxis=rawMETE))
   
-  serpEAR <- downscaleSAR(meteESF(S0=S0, N0=N0), areas, A0=A0, EAR=TRUE)
+  this.esf <- meteESF(S0=S0, N0=N0, E0=10^10)
+  this.esf$La[1] <- this.esf$La[1] - (sum(this.esf$La) - 5.92e-05)
+  
+  
+  serpEAR <- downscaleSAR(meteESF(S0=S0, N0=N0, E0=10^9.1), areas, A0=A0, EAR=TRUE)
+  serpEAR$S
   log(serpEAR$S) - actualMETE
   
   this.esf <- meteESF(S0=S0, N0=N0, E0=10^10)
