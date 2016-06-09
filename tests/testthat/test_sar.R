@@ -30,7 +30,8 @@ test_that('predicted EAR values are correct', {
   rawMETE <- c(166, 492, 622, 746, 864, 970, 1070, 1170, 1268)
   actualMETE <- predict(lm(actualAxis ~ rawAxis), newdata=data.frame(rawAxis=rawMETE))
   
-  this.esf <- meteESF(S0=S0, N0=N0, E0=10^10)
+  this.esf <- meteESF(S0=S0, N0=N0, E0=10^8)
+  sum(this.esf$La) - 5.92e-05
   this.esf$La[1] <- this.esf$La[1] - (sum(this.esf$La) - 5.92e-05)
   
   
