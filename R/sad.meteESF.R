@@ -67,8 +67,7 @@ sad.meteESF <- function(x) {
     
     this.eq <- function(n, log=FALSE) {
       out <- metePhi(n=n,la1=x$La[1],la2=x$La[2],Z=x$Z,
-                     S0=x$state.var[1],N0=x$state.var[2],
-                     E0=ifelse(is.na(x$state.var[3]), x$state.var[2]*10^2, x$state.var[3]))
+                     S0=x$state.var[1],N0=x$state.var[2], E0=x$state.var[3])
 #      out=out/sum(out) # to address error below:  Error in distr::DiscreteDistribution(supp = 1:x$state.var["N0"], prob = this.eq(1:x$state.var["N0"])) : sum of 'prob' has to be (approximately) 1
       if(log) out <- log(out)
       return(out)
@@ -131,10 +130,13 @@ sad.meteESF <- function(x) {
 
 
 metePhi <- function(n, la1, la2, Z, S0, N0, E0) {
+  beta <- la1 + la2
+  if(missing('E0')) E0 <- NA
+  if(is.na(E0)) {
+    return(1/log(1/beta) * exp(-beta*n)/n)
+  } else {
     if(missing(Z)) Z <- .meteZ(la1, la2, S0, N0, E0)
-    
-    beta <- la1 + la2
     sigma <- la1 + E0*la2
-    
     return((exp(-beta*n) - exp(-sigma*n))/(la2*Z*n))
+  }
 }
