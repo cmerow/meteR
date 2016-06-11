@@ -25,41 +25,10 @@ test_that('predicted EAR values are correct', {
   N0 <- 37182
   A0 <- 256
   
-  rawAxis <- c(48, 192, 334, 476, 614, 760, 900, 1040, 1182, 1322, 1466)
-  actualAxis <- c(4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6)
-  rawMETE <- c(166, 492, 622, 746, 864, 970, 1070, 1170, 1268)
-  actualMETE <- predict(lm(actualAxis ~ rawAxis), newdata=data.frame(rawAxis=rawMETE))
+  actualEAR <- c(24, 2.463750688, 0.926066846, 0.383568393, 0.172749621, 
+                 0.081772281, 0.039729318, 0.01957142, 0.009711572)
   
-  this.esf <- meteESF(S0=S0, N0=N0, E0=10^8)
-  sum(this.esf$La) - 5.92e-05
-  this.esf$La[1] <- this.esf$La[1] - (sum(this.esf$La) - 5.92e-05)
-  
-  
-  serpEAR <- downscaleSAR(meteESF(S0=S0, N0=N0, E0=10^9.1), areas, A0=A0, EAR=TRUE)
-  serpEAR$S
-  log(serpEAR$S) - actualMETE
-  
-  this.esf <- meteESF(S0=S0, N0=N0, E0=10^10)
-  this.esf$La
-  
-  
-  
-  b <- 5.92e-05 #sum(this.esf$La)
-  n <- 1:N0
-  
-  eq7.74 <- sapply(areas, function(A) S0/log(1/b) * sum(exp(-b*n)/n * A0/(n*A + A0) * (n*A/(n*A + A0))^n))
-  log(eq7.74)
-  
-  earIdentity <- downscaleSAR(this.esf, A=A0, A0=A0)$S - downscaleSAR(this.esf, A0-areas[-1], A0=A0)$S
-  eq7.74[-1]
-  serpEAR$S[-1]
-  
-  par(mfrow=c(1, 4))
-  plot(actualMETE, log(eq7.74), xlim=c(-4, 2), ylim=c(-4, 2)); abline(0, 1)
-  plot(actualMETE, log(eq7.75), xlim=c(-4, 2), ylim=c(-4, 2)); abline(0, 1)
-  plot(actualMETE, log(eq7.76), xlim=c(-4, 2), ylim=c(-4, 2)); abline(0, 1)
-  plot(actualMETE, log(eq7.77), xlim=c(-4, 2), ylim=c(-4, 2)); abline(0, 1)
-  
-  plot(areas, actualMETE, log='x')
-  lines(areas, log(serpEAR$S))
+  this.esf <- meteESF(S0=S0, N0=N0)
+  serpEAR <- downscaleSAR(this.esf, areas, A0=A0, EAR=TRUE)
+  expect_true(all(abs(serpEAR$S - actualEAR) < actualEAR*0.005))
 })
