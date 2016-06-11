@@ -267,7 +267,7 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
       with(x, 
            metePhi(n0, La[1], La[2], Z, 
                    state.var['S0'], state.var['N0'], 
-                   ifelse(is.na(state.var['E0']), 1e+06, state.var['E0'])))
+                   ifelse(is.na(state.var['E0']), state.var['N0']*10^3, state.var['E0'])))
     
     return(x$state.var['S0'] * sum(probs))
   }
