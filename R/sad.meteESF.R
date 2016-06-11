@@ -131,12 +131,8 @@ sad.meteESF <- function(x) {
 
 metePhi <- function(n, la1, la2, Z, S0, N0, E0) {
   beta <- la1 + la2
-  if(missing('E0')) E0 <- NA
-  if(is.na(E0)) {
-    return(1/log(1/beta) * exp(-beta*n)/n)
-  } else {
-    if(missing(Z)) Z <- .meteZ(la1, la2, S0, N0, E0)
-    sigma <- la1 + E0*la2
-    return((exp(-beta*n) - exp(-sigma*n))/(la2*Z*n))
-  }
+  if(missing('E0') | is.na(E0)) E0 <- N0*10^3
+  if(missing(Z)) Z <- .meteZ(la1, la2, S0, N0, E0)
+  sigma <- la1 + E0*la2
+  return((exp(-beta*n) - exp(-sigma*n))/(la2*Z*n))
 }
