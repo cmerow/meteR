@@ -25,7 +25,6 @@ mseZ(x, ...)
 list with elements
 \describe{
    \item{z}{The z-score}
-   \item{obs}{Mean squared error}
    \item{sim}{\code{nrep} Simulated values}
 }
 }
@@ -33,7 +32,7 @@ list with elements
 \code{mseZ.meteDist} Compute z-score of mean squared error
 }
 \details{
-\code{mseZ.meteDist} simulates from a fitted METE distribution (e.g. a species abundance distribution or individual power distribution) and calculates the MSE between the simulated data sets and the METE prediction. The distribution of these values is compared against the MSE of the data to obtain a z-score.
+\code{mseZ.meteDist} simulates from a fitted METE distribution (e.g. a species abundance distribution or individual power distribution) and calculates the MSE between the simulated data sets and the METE prediction. The distribution of these values is compared against the MSE of the data to obtain a z-score in the same was as \code{logLikZ}; see that help document for more details.
 }
 \examples{
 esf1=meteESF(spp=arth$spp,
@@ -50,6 +49,6 @@ Andy Rominger <ajrominger@gmail.com>, Cory Merow
 Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 }
 \seealso{
-logLik.meteDist
+logLikZ
 }
 
