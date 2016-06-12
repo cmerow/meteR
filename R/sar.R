@@ -22,6 +22,20 @@
 #' number or desired rows and columns via the \code{row} and \code{col}
 #' arguments.
 #' 
+#' SARs and EARs can be predicted either interatively or non-iteratively. 
+#' In the non-iterative case the SAD and SSAD (which are used to calculate
+#' the SAR or EAR prediction) are derived from state variables at one 
+#' anchor scale. In the iterative approach state variables are re-calculated
+#' at each scale. Currently downscaling and upscaling are done differently (
+#' downscaling is only implemented in the non-iterative approach, whereas 
+#' upscaling is only implemented in the iterative approach). The reason is
+#' largely historical (downscaling as originally done non-iteratively while
+#' upscaling was first proposed in an iterative framework). Future implementations
+#' in \code{meteR} will allow for both iterative and non-iterative approaches
+#' to upscaling and downscaling.  While iterative and non-iterative methods lead to 
+#' slightly different predictions these are small in comparison to typical ranges of
+#' state variables (see Harte 2011).
+#' 
 #' 
 #' @param spp vector of species identities
 #' @param abund numberic vector abundances associated with each record
