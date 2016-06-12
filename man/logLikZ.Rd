@@ -22,8 +22,7 @@ logLikZ(x, ...)
 list with elements
 \describe{
    \item{z}{The z-score}
-   \item{obs}{The observed log-likelihood of the actual data set}
-   \item{sim}{\code{nrep} Simulated values if return.sim=TRUE, NULL otherwise}
+   \item{sim}{\code{nrep} Simulated values (scaled by mean and sd as is the z-score) if return.sim=TRUE, NULL otherwise}
 }
 }
 \description{
@@ -34,7 +33,10 @@ fitted METE distribution
 \code{logLikZ.meteDist} simulates from a fitted METE distribution (e.g. a species
 abundance distribution or individual power distribution) and calculates the
 likelihood of these simulated data sets. The distribution of these values is compared
-against the likelihood of the data to obtain a z-score.
+against the likelihood of the data to obtain a z-score, specifically
+z = ((logLik_obs - mean(logLik_sim)) / sd(logLik_sim))^2.
+This value is squared so that it will be approximately Chi-squared distributed and a
+goodness of fit test naturally arrises as \code{1 - pchisq(z, df=1)}.
 }
 \examples{
 data(arth)
@@ -49,8 +51,8 @@ ipd1 <- ipd(esf1)
 llz <- logLikZ(ipd1, nrep=100, return.sim=TRUE)
 
 plot(density(llz$sim),xlim=range(c(llz$sim,llz$obs)),
-     xlab='log(likelihood)',col='red')
-abline(v=llz$obs,lty=2)
+     xlab='scaled log(likelihood)^2',col='red')
+abline(v=llz$z,lty=2)
 legend('top',legend=c('data','simulated'),col=c('black','red'),
       lty=c(1,1),bty='n')
 }
