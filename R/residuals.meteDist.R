@@ -170,7 +170,7 @@ mseZ <- function(x, ...) {
 mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
                           type=c("rank","cumulative"), 
                           relative=TRUE, log=FALSE, ...) {
-  
+  type <- match.arg(type, c('rank', 'cumulative'))
   if(type=='rank') {
     rad <- meteDist2Rank(x)
     thr <- function(dat) {
