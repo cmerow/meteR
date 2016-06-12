@@ -23,7 +23,7 @@ columns \code{A} and \code{S} giving area and species richness, respectively
 Compute METE SAR by downscaling from some larger area \code{A0} to a smaller areas.
 }
 \details{
-Unlike the other SAR functions, downscaling can be computed for any arbitrary scale
+Downscaling is done non-iteratively (i.e. the SAD and SSAD are calculated based on state variables at the anchor scale A0) thus unlike the upscaling SAR function, downscaling can be computed for any arbitrary scale
 \eqn{\leq A_0}.
 }
 \examples{
