@@ -125,9 +125,12 @@ ipd.meteESF <- function(x,...) {
              y=seq(1, x$state.var[3], length=10000), yright=x$state.var[3], xout=p)$y
     }
     
+    assign('wtf', this.q.eq, envir=.GlobalEnv)
+    
     FUN <- distr::AbscontDistribution(d=this.eq, p=this.p.eq, q=this.q.eq,
                                       low1=1, low=1, up=x$state.var[3], up1=x$state.var[3],
-                                      ngrid=distr::getdistrOption('DefaultNrGridPoints')*10^0)
+                                      withgaps=FALSE)
+                                      # ngrid=distr::getdistrOption('DefaultNrGridPoints')*10^3)
     
     out <- list(type='ipd', data=X, 
                 d=this.eq, p=FUN@p, q=FUN@q, r=FUN@r,
