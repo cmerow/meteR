@@ -120,6 +120,11 @@ ipd.meteESF <- function(x,...) {
     #   return(out)
     # }
     
+    this.q.eq <- function(p, lower.tail=TRUE, log.p=FALSE) {
+      approx(x=this.p.eq(seq(1, x$state.var[3], length=10000), lower.tail, log.p), 
+             y=seq(1, x$state.var[3], length=10000), yright=x$state.var[3], xout=p)$y
+    }
+    
     FUN <- distr::AbscontDistribution(d=this.eq, p=this.p.eq, q=this.q.eq,
                                       low1=1, low=1, up=x$state.var[3], up1=x$state.var[3],
                                       ngrid=distr::getdistrOption('DefaultNrGridPoints')*10^0)
