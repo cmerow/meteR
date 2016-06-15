@@ -13,7 +13,7 @@ test_that('predicted rank ipd is correct', {
   newmanPsi <- predict(lm(yAct~yRaw), 
                        newdata=data.frame(yRaw=c(0.555, 0.637, 0.801, 1.171, 1.186, 
                                                  1.202, 1.217, 1.73, 1.766, 1.802, 
-                                                 1.843, 2.567, 2.603, 2.634)))
+                                                 1.843, 2.567, 2.603, 2.642)))
   newmanRank <- c(1, 2, 7, 65, 65, 65, 65, 605, 605, 605, 605, 877, 877, 877)
   
   this.ipd <- ipd(this.esf)
