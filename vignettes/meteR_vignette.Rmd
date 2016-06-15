@@ -114,7 +114,7 @@ plot(density(llz$sim, from=0),
 abline(v=quantile(llz$sim, 0.95), col='red')
 #== add observed likelihood
 abline(v=llz$z,lty=2)
-legend('topright',legend=c('data','simulated from METE'),
+legend('top',legend=c('data','simulated from METE'),
        col=c('black','red'), lty=c(2, 1), bg='white') 
 ```
 
@@ -139,17 +139,17 @@ msez.rank <- mseZ(sad1, nrep=100, return.sim=TRUE, type='rank')
 msez.rank$z
 #== plot the distributions
 plot(density(msez.rank$sim),
-     xlim=range(c(msez.rank$sim,msez.rank$obs)),
-     xlab='Mean squared error',col='red')
+     xlim=c(0.05, 10),
+     xlab='Scaled mean squared error',col='red', log='x')
 #== add 95% quantile region
-abline(v=quantile(msez.rank$sim, c(0.025, 0.975)), col='red')
+abline(v=quantile(msez.rank$sim, 0.95), col='red')
 #== add observed likelihood
-abline(v=msez.rank$obs,lty=2)
-legend('top',legend=c('data','simulated\nfrom METE'),
-       col=c('black','red'), lty=c(1,1),bty='n') 
+abline(v=msez.rank$z,lty=2)
+legend('top',legend=c('data','simulated from METE'),
+       col=c('black','red'), lty=c(2 ,1),bg='white') 
 ```
 
-Here again we fail to reject METE as the model that generated the observed data (the observed MSE is below the 95\% quantile region). We can also see that the distribution of errors is not as Gaussian shaped as the distribution of likelihoods. Thus although residuals can be useful (specifically we can see whether, e.g., common species are more or less common than predicted by METE) we recommend using likelihood for evaluating model fit.
+Here again we fail to reject METE as the model that generated the observed data (the observed MSE is below the 95\% quantile region). We can also see that the distribution of errors (which again uses the same square transformation as in `logLikZ`) is not as Chi-squared shaped as the distribution of likelihoods. Thus although residuals can be useful (specifically we can see whether, e.g., common species are more or less common than predicted by METE) we recommend using likelihood for evaluating model fit.
 
 <!--========================================================================-->
 <!--========================================================================-->
