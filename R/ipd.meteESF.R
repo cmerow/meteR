@@ -86,46 +86,10 @@ ipd.meteESF <- function(x,...) {
       return(out)
     }
     
-    ## below: good effort but doesn't work...should use approxfun as below
-    # this.q.eq <- function(p, lower.tail=TRUE, log.p=FALSE) {
-    #   if(log.p) p <- exp(p)
-    #   if(!lower.tail) p <- 1 - p
-    #   
-    #   b <- sum(x$La)
-    #   la1 <- x$La[1]
-    #   la2 <- x$La[2]
-    #   Z <- x$Z
-    #   S0 <- x$state.var[1]
-    #   N0 <- x$state.var[2]
-    #   E0 <- x$state.var[3]
-    #   
-    #   ## approximate q function
-    #   y <- la2*Z*N0*p/S0 + (exp(-(N0-1)*b) - 1)/(exp(b) - 1)
-    #   y[y > 0] <- 1/(1 - exp(la1+la2*E0))
-    #   out <- (log((y-1)/y) - la1) / la2
-    #   
-    #   ## where approx doesn't work use interpolation of p fun
-    #   if(any((N0-1) * (la1 + out*la2) < 30)) {
-    #     these.bad <- (N0-1) * (la1 + out*la2) < 30
-    #     
-    #     minquant <- 100
-    #     maxquant <- 10000
-    #     eseq <- seq(1, 1.1*max(out[these.bad]), 
-    #                 length=ceiling(minquant + (maxquant - minquant)*max(p[these.bad])))
-    #     
-    #     out[these.bad] <- approx(x=this.p.eq(eseq), y=eseq, 
-    #                              xout=p[these.bad], yright=x$state.var['E0'])$y
-    #   }
-    #   
-    #   return(out)
-    # }
-    
     this.q.eq <- function(p, lower.tail=TRUE, log.p=FALSE) {
-      approx(x=this.p.eq(seq(1, x$state.var[3], length=10000), lower.tail, log.p), 
+      approx(x=this.p.eq(seq(1, x$state.var[3], length=10000), lower.tail, log.p),
              y=seq(1, x$state.var[3], length=10000), yright=x$state.var[3], xout=p)$y
     }
-    
-    assign('wtf', this.q.eq, envir=.GlobalEnv)
     
     FUN <- distr::AbscontDistribution(d=this.eq, p=this.p.eq, q=this.q.eq,
                                       low1=1, low=1, up=x$state.var[3], up1=x$state.var[3],
