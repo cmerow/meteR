@@ -97,7 +97,7 @@ plot(sad1, ptype='rad', log='y')
 plot(sad1, ptype='cdf', log='x')
 ```
 
-`meter` provides functions to assess model fit based on likelihood and residuals. First, we illustrate likelihood methods:
+`meteR` provides functions to assess model fit based on likelihood and residuals. First, we illustrate likelihood methods:
 
 ```{r, fig.width=5, fig.cap="Likelihood-based z-score."}
 #== calculate the liklihood of the data, given the fitted model
@@ -107,18 +107,18 @@ logLik(sad1)
 llz <- logLikZ(sad1, nrep=100, return.sim=TRUE)
 llz$z
 #== plot the distributions
-plot(density(llz$sim),
-     xlim=range(c(llz$sim,llz$obs)),
-     xlab='log(likelihood)',col='red')
+plot(density(llz$sim, from=0),
+     xlim=range(c(llz$sim,llz$z)),
+     xlab='Scaled log(likelihood)',col='red')
 #== add 95% quantile region
-abline(v=quantile(llz$sim, c(0.025, 0.975)), col='red')
+abline(v=quantile(llz$sim, 0.95), col='red')
 #== add observed likelihood
-abline(v=llz$obs,lty=2)
-legend('top',legend=c('data','simulated\nfrom METE'),
-       col=c('black','red'), lty=c(1,1),bty='n') 
+abline(v=llz$z,lty=2)
+legend('topright',legend=c('data','simulated from METE'),
+       col=c('black','red'), lty=c(2, 1), bg='white') 
 ```
 
-Because the likelihood of the observed data falls within the 95\% quantile region of the simulated likelihoods, we have confidence that the model provides a good fit.
+Because the likelihood of the observed data falls within the 95\% quantile region of the simulated likelihoods, we have confidence that the model provides a good fit.  It should be noted that the z-score and associated simulation values are square-transformed such that the resulting null distribution approaches a Chi-squared distribution with d.f. = 1.  Specifically the z-score is $z = ((\text{logLik}_{obs} - mean(\text{logLik}_{sim})) / sd(\text{logLik}_{sim}))^2$.
 
 Note that other utilities that extract liklihoods from model objects are also useful, including AIC, thus opening up all model comparison capabilities in `R` and its contributed packages:
 ```{r}
@@ -135,7 +135,7 @@ head(residuals(sad1, type='cumulative', relative=FALSE))
 mse(sad1, type='rank', relative=FALSE)
 #== randomly generate 100 data sets from the fitted distribution and calculate
 #== the z-score of the data w.r.t. these simulations
-msez.rank=mseZ(sad1, nrep=100, return.sim=TRUE, type='rank')
+msez.rank <- mseZ(sad1, nrep=100, return.sim=TRUE, type='rank')
 msez.rank$z
 #== plot the distributions
 plot(density(msez.rank$sim),
