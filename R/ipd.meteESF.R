@@ -69,18 +69,27 @@ ipd.meteESF <- function(x,...) {
         return(out)
     }
 
-    this.p.eq <- Vectorize(function(epsilon, lower.tail=TRUE, log.p=FALSE) {
-        out <- integrate(this.eq,lower=1, upper=epsilon)$value
-        
-        if(!lower.tail) out <- 1 - out
-        
-        if(log.p) out <- log(out)
-        
-        return(out)
-    }, vectorize.args="epsilon")
+    this.p.eq <- function(epsilon, lower.tail=TRUE, log.p=FALSE) {
+      b <- sum(x$La)
+      la1 <- x$La[1]
+      la2 <- x$La[2]
+      Z <- x$Z
+      S0 <- x$state.var[1]
+      N0 <- x$state.var[2]
+      
+      out <- S0/(Z*N0*la2) * ((exp(-(N0-1) * (la1 + la2*epsilon)) - 1)/(exp(la1 + la2*epsilon) - 1) - 
+                                (exp(-(N0-1)*b) - 1)/(exp(b) - 1))
+      
+      if(!lower.tail) out <- 1 - out
+      if(log.p) out <- log(out)
+      
+      return(out)
+    }
     
-    FUN <- distr::AbscontDistribution(d=this.eq, p=this.p.eq,
-                                      low1=1, low=1, up=x$state.var[3], up1=x$state.var[3])
+    FUN <- distr::AbscontDistribution(d=this.eq, p=this.p.eq, #q=this.q.eq,
+                                      low1=1, low=1, up=x$state.var[3], up1=x$state.var[3],
+                                      withgaps=FALSE,
+                                      ngrid=distr::getdistrOption('DefaultNrGridPoints')*10^2)
     
     out <- list(type='ipd', data=X, 
                 d=this.eq, p=FUN@p, q=FUN@q, r=FUN@r,

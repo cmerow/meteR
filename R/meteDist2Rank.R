@@ -34,9 +34,10 @@
 meteDist2Rank <- function(x) {
   n <- switch(x$type, 
               'sad' = x$state.var['S0'],
-              'ssad' = floor(x$state.var['A0']/x$state.var['A']),
+              'ssad' = ifelse(length(x$data) == 0, floor(x$state.var['A0']/x$state.var['A']), length(x$data)),
               'ipd' = x$state.var['N0'],
-              'sipd' = x$state.var['n'])
+              'sipd' = x$state.var['n'],
+              'spd'= x$state.var['S0'])
   x$q(seq(1, 1/n, length=n) - 1/(2*n))
 }
 

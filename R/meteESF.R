@@ -153,34 +153,31 @@ meteESF <- function(spp, abund, power,
 #' @importFrom stats nlm
 
 .mete.lambda <- function(S0, N0, E0) {
-    ## reasonable starting values
-    init.la2 <- S0/(E0-N0)
-    beta.guess <- 0.01
-    
-    init.beta <- nlm(function(b) {
-        ## options set to surpress warning messages just for optimization
-        orig.warn <- options(warn=-1)
-        
-        out <- (b*log(1/b) - 1/2^8)^2
-        
-        return(out)
-    }, p=0.001)
-    
-    if(init.beta$code < 4) {	# was there some level of convergence?
-        init.beta <- init.beta$estimate
-    } else {
-        init.beta <- beta.guess
-    }
-    
-    init.la1 <- init.beta - init.la2
-    
-    ## the solution
-    la.sol <- nleqslv::nleqslv(x=c(la1 = init.la1, la2 = init.la2), 
-                               fn = .la.syst2, S0=S0,N0=N0,E0=E0)
-    
-    return(list(lambda=c(la1=la.sol$x[1], la2=la.sol$x[2]), 
-                syst.vals=la.sol$fvec, converg=la.sol$termcd,
-                mesage=la.sol$message, nFn.calc=la.sol$nfcnt, nJac.calc=la.sol$njcnt))
+  ## reasonable starting values
+  init.la2 <- S0/(E0-N0)
+  beta.guess <- 0.001
+  
+  ## uses eq 7.29 from Harte 2011, catches possible error and assigns a default guess
+  init.beta <- try(uniroot(function(b) {
+    (1 - exp(-b)) / (exp(-b) - exp(-b*(N0+1))) * log(1/b) - S0/N0
+  }, interval=c(1/N0, S0/N0)), silent=TRUE)
+  
+  if(class(init.beta) == 'try-error') {
+    init.beta <- beta.guess
+  } else {
+    init.beta <- init.beta$root
+  }
+  
+  init.la1 <- init.beta - init.la2
+  
+  ## the solution
+  la.sol <- nleqslv::nleqslv(x=c(la1 = init.la1, la2 = init.la2), 
+                             fn = .la.syst2, S0=S0,N0=N0,E0=E0,
+                             control=list(ftol=.Machine$double.eps))
+  
+  return(list(lambda=c(la1=la.sol$x[1], la2=la.sol$x[2]), 
+              syst.vals=la.sol$fvec, converg=la.sol$termcd,
+              mesage=la.sol$message, nFn.calc=la.sol$nfcnt, nJac.calc=la.sol$njcnt))
 }
 
 

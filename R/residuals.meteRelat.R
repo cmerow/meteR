@@ -72,10 +72,10 @@ residuals.meteRelat <- function(object, ...) {
 # # this documentation when the user looks them up from the command
 # # line.
 # # @family - a family name. All functions that have the same family tag will be linked in the documentation.
-# 
-# 
-# mse.meteRelat <- function(x) {
-#   resid <- residuals(x)
-#   
-#   return(mean(resid^2))
-# }
+
+
+mse.meteRelat <- function(x) {
+  resid <- residuals(x)
+  
+  return(mean(resid^2))
+}

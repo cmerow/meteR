@@ -128,7 +128,7 @@ mse.meteRelat <- function(x,...) {
 #' \code{mseZ.meteDist} Compute z-score of mean squared error
 #'
 #' @details
-#' \code{mseZ.meteDist} simulates from a fitted METE distribution (e.g. a species abundance distribution or individual power distribution) and calculates the MSE between the simulated data sets and the METE prediction. The distribution of these values is compared against the MSE of the data to obtain a z-score. 
+#' \code{mseZ.meteDist} simulates from a fitted METE distribution (e.g. a species abundance distribution or individual power distribution) and calculates the MSE between the simulated data sets and the METE prediction. The distribution of these values is compared against the MSE of the data to obtain a z-score in the same was as \code{logLikZ}; see that help document for more details. 
 #' 
 #' @param x a \code{meteDist} object
 #' @param nrep number of simulations from the fitted METE distribution 
@@ -148,12 +148,11 @@ mse.meteRelat <- function(x,...) {
 #' @return list with elements
 #' \describe{
 #'    \item{z}{The z-score}
-#'    \item{obs}{Mean squared error}
 #'    \item{sim}{\code{nrep} Simulated values}
 #' }
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
-#' @seealso logLik.meteDist
+#' @seealso logLikZ
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
 # @aliases - a list of additional topic names that will be mapped to
 # this documentation when the user looks them up from the command
@@ -170,7 +169,7 @@ mseZ <- function(x, ...) {
 mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
                           type=c("rank","cumulative"), 
                           relative=TRUE, log=FALSE, ...) {
-  
+  type <- match.arg(type, c('rank', 'cumulative'))
   if(type=='rank') {
     rad <- meteDist2Rank(x)
     thr <- function(dat) {
@@ -220,11 +219,10 @@ mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
   }
   
   if(return.sim) {
-    return(list(z=(mse.obs-mean(mse.sim))/sd(mse.sim), 
-                obs=mse.obs,
-                sim=mse.sim))
+    return(list(z=((mse.obs-mean(mse.sim))/sd(mse.sim))^2, 
+                sim=((mse.sim-mean(mse.sim))/sd(mse.sim))^2))
   } else {
-    return(list(z=(mse.obs-mean(mse.sim))/sd(mse.sim)))
+    return(list(z=(mse.obs-mean(mse.sim))/sd(mse.sim))^2)
   }
 }
 

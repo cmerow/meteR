@@ -22,6 +22,20 @@
 #' number or desired rows and columns via the \code{row} and \code{col}
 #' arguments.
 #' 
+#' SARs and EARs can be predicted either interatively or non-iteratively. 
+#' In the non-iterative case the SAD and SSAD (which are used to calculate
+#' the SAR or EAR prediction) are derived from state variables at one 
+#' anchor scale. In the iterative approach state variables are re-calculated
+#' at each scale. Currently downscaling and upscaling are done differently (
+#' downscaling is only implemented in the non-iterative approach, whereas 
+#' upscaling is only implemented in the iterative approach). The reason is
+#' largely historical (downscaling as originally done non-iteratively while
+#' upscaling was first proposed in an iterative framework). Future implementations
+#' in \code{meteR} will allow for both iterative and non-iterative approaches
+#' to upscaling and downscaling.  While iterative and non-iterative methods lead to 
+#' slightly different predictions these are small in comparison to typical ranges of
+#' state variables (see Harte 2011).
+#' 
 #' 
 #' @param spp vector of species identities
 #' @param abund numberic vector abundances associated with each record
@@ -217,7 +231,7 @@ empiricalSAR <- function(spp, abund, row, col, x, y, Amin, A0, EAR=FALSE) {
 #'
 #' @description Compute METE SAR by downscaling from some larger area \code{A0} to a smaller areas.
 #'
-#' @details Unlike the other SAR functions, downscaling can be computed for any arbitrary scale
+#' @details Downscaling is done non-iteratively (i.e. the SAD and SSAD are calculated based on state variables at the anchor scale A0) thus unlike the upscaling SAR function, downscaling can be computed for any arbitrary scale
 #' \eqn{\leq A_0}. 
 #' 
 #' @param x an object of class meteESF
@@ -267,7 +281,7 @@ downscaleSAR <- function(x, A, A0, EAR=FALSE) {
       with(x, 
            metePhi(n0, La[1], La[2], Z, 
                    state.var['S0'], state.var['N0'], 
-                   ifelse(is.na(state.var['E0']), 1e+06, state.var['E0'])))
+                   ifelse(is.na(state.var['E0']), state.var['N0']*10^3, state.var['E0'])))
     
     return(x$state.var['S0'] * sum(probs))
   }
