@@ -1,4 +1,4 @@
-#' @title Compute residuals between METE predictions and date of a meteDist object
+#' @title Compute residuals between METE predictions and data of a meteDist object
 #'
 #' @description
 #' \code{residuals.meteDist} computes residuals between METE predictions and 
@@ -144,7 +144,7 @@ mse.meteRelat <- function(x,...) {
 #'               power=arth$mass^(4/3),
 #'               minE=min(arth$mass^(4/3)))
 #' sad1=sad(esf1)
-#' mseZ(sad1, nrep=100)
+#' mseZ(sad1, nrep=100, type='rank',return.sim=TRUE)
 #' @return list with elements
 #' \describe{
 #'    \item{z}{The z-score}
@@ -163,10 +163,13 @@ mseZ <- function(x, ...) {
   UseMethod('mseZ')
 }
 
+
+#' @param relative logical; if true use relative MSE
+#' @param log logical; if TRUE calculate MSE on logged distirbution. If FALSE use arithmetic scale
 #' @rdname mseZ
 #' @export 
 #' @importFrom stats sd
-mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
+mseZ.meteDist <- function(x, nrep, return.sim=TRUE,
                           type=c("rank","cumulative"), 
                           relative=TRUE, log=FALSE, ...) {
   type <- match.arg(type, c('rank', 'cumulative'))
@@ -179,7 +182,8 @@ mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
       return(mean(res^2))
     }
   } else {
-    obs <- .ecdf(dat)
+    obs <- ecdf(x$data) # did you mean this? 6/20
+    #obs <- .ecdf(dat)
     thr <- function(dat) {
       if(log) obs[, 2] <- log(obs[, 2])
       pred <- x$p(obs[, 1], log.p=log)
@@ -221,8 +225,8 @@ mseZ.meteDist <- function(x, nrep, return.sim=FALSE,
   if(return.sim) {
     return(list(z=((mse.obs-mean(mse.sim))/sd(mse.sim))^2, 
                 sim=((mse.sim-mean(mse.sim))/sd(mse.sim))^2))
-  } else {
-    return(list(z=(mse.obs-mean(mse.sim))/sd(mse.sim))^2)
-  }
+  } #else {
+  #  return(list(z=((mse.obs-mean(mse.sim))/sd(mse.sim))^2))
+  #}
 }
 

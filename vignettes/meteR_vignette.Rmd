@@ -36,7 +36,8 @@ FIX latex
 -->
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(cache=TRUE)
+knitr::opts_chunk$set(cache=FALSE)
+# note that setting this to true causes problems with R CMD CHECK
 ```
 
 <!--========================================================================-->
@@ -91,7 +92,7 @@ sad1$q(seq(0,1,length=10))
 ```
 
 `meteR` readily plots the SAD as either a rank-abundance distribution (`ptype=rad`) or a cumulative distribution (`ptype=cdf`) (and other predicted distributions):
-```{r fig.width=6.5, fig.cap="Different ways of plotting the SAD"}
+```{r sad_plot,fig.width=6.5, fig.cap="Different ways of plotting the SAD"}
 par(mfrow=c(1,2))
 plot(sad1, ptype='rad', log='y')
 plot(sad1, ptype='cdf', log='x')

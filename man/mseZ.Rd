@@ -7,7 +7,7 @@
 \usage{
 mseZ(x, ...)
 
-\method{mseZ}{meteDist}(x, nrep, return.sim = FALSE, type = c("rank",
+\method{mseZ}{meteDist}(x, nrep, return.sim = TRUE, type = c("rank",
   "cumulative"), relative = TRUE, log = FALSE, ...)
 }
 \arguments{
@@ -20,6 +20,10 @@ mseZ(x, ...)
 \item{return.sim}{logical; return the simulated liklihood values}
 
 \item{type}{either "rank" or "cumulative"}
+
+\item{relative}{logical; if true use relative MSE}
+
+\item{log}{logical; if TRUE calculate MSE on logged distirbution. If FALSE use arithmetic scale}
 }
 \value{
 list with elements
@@ -40,7 +44,7 @@ esf1=meteESF(spp=arth$spp,
               power=arth$mass^(4/3),
               minE=min(arth$mass^(4/3)))
 sad1=sad(esf1)
-mseZ(sad1, nrep=100)
+mseZ(sad1, nrep=100, type='rank',return.sim=TRUE)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>, Cory Merow

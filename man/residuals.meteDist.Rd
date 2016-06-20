@@ -2,7 +2,7 @@
 % Please edit documentation in R/residuals.meteDist.R
 \name{residuals.meteDist}
 \alias{residuals.meteDist}
-\title{Compute residuals between METE predictions and date of a meteDist object}
+\title{Compute residuals between METE predictions and data of a meteDist object}
 \usage{
 \method{residuals}{meteDist}(object, type = c("rank", "cumulative"),
   relative = TRUE, log = FALSE, ...)
