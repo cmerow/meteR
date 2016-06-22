@@ -22,8 +22,6 @@
 #' 
 #' 
 #' @keywords lagrange multiplier, METE, MaxEnt
-#'
-#'  @export
 #' 
 #' @examples
 #' data(anbo)
@@ -42,6 +40,7 @@
 #' @author Andy Rominger <ajrominger@@gmail.com>, Cory Merow
 #' @seealso metePi
 #' @references Harte, J. 2011. Maximum entropy and ecology: a theory of abundance, distribution, and energetics. Oxford University Press.
+#' @export
 
 meteSSF <- function(spp, sppID, abund, row, col, x, y, n0=sum(abund), A, A0) {
   ## get grid regardless of starting input but only if spp and abund are given
