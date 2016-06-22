@@ -182,19 +182,18 @@ mseZ.meteDist <- function(x, nrep, return.sim=TRUE,
       return(mean(res^2))
     }
   } else {
-    obs <- ecdf(x$data) # did you mean this? 6/20
-    #obs <- .ecdf(dat)
     thr <- function(dat) {
+      obs <- .ecdf(dat)
       if(log) obs[, 2] <- log(obs[, 2])
       pred <- x$p(obs[, 1], log.p=log)
       res <- obs[, 2] - pred
       if(relative) res <- res/abs(pred)
-      
       return(mean(res^2))
     }
   }
   
-  mse.obs <- mse.meteDist(x, type, relative, log)
+  mse.obs <- mse(x, type, relative, log)
+  
   state.var <- sum(x$data)
 
   mse.sim <- c()
@@ -219,14 +218,14 @@ mseZ.meteDist <- function(x, nrep, return.sim=TRUE,
   } else {
     warning(sprintf('%s (not %s as desired) simulated replicates found that match the state variables', 
                     length(lik.sim), nrep))
-    lik.sim <- c(mse.sim, mse.obs)
+    mse.sim <- c(mse.sim, mse.obs)
   }
   
   if(return.sim) {
     return(list(z=((mse.obs-mean(mse.sim))/sd(mse.sim))^2, 
                 sim=((mse.sim-mean(mse.sim))/sd(mse.sim))^2))
-  } #else {
-  #  return(list(z=((mse.obs-mean(mse.sim))/sd(mse.sim))^2))
-  #}
+  } else {
+    return(list(z=((mse.obs-mean(mse.sim))/sd(mse.sim))^2))
+  }
 }
 
