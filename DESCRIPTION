@@ -18,8 +18,10 @@ Depends:
     R (>= 2.10)
 Imports:
     nleqslv,
-    distr
+    distr,
+    Rcpp
 Suggests:
     testthat,
     knitr
 RoxygenNote: 5.0.1
+LinkingTo: Rcpp
