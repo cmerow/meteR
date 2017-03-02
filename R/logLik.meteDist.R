@@ -127,14 +127,15 @@ logLikZ.meteDist <- function(x, nrep=999, return.sim=FALSE, ...) {
   z <- ((lik.obs-mean(lik.sim))/sd(lik.sim))^2
   
   if(return.sim) {
-    lik.sim <- ((lik.sim - mean(lik.sim))/sd(lik.sim))^2
+    # lik.sim <- ((lik.sim - mean(lik.sim))/sd(lik.sim))^2
+    lik.sim <- lik.sim
   } else {
     lik.sim <- NULL
   }
   
-  return(list(z=z, 
-              # obs=z,
-              sim=lik.sim
+  return(list(z = z, 
+              obs = lik.obs,
+              sim = lik.sim
          ))
   
 }
