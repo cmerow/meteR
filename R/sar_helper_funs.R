@@ -58,12 +58,14 @@
                 rowPos <- X[2] - rowEndPoints
                 colPos <- X[1] - colEndPoints
                 rowPos[rowPos > 0] <- min(rowPos) - 1
-                colPos[colPos > 0] <- min(rowPos) - 1
+                colPos[colPos > 0] <- min(colPos) - 1
                 r <- which.max(rowPos)
                 c <- which.max(colPos)
 
                 return(c(r, c))
             })
+            
+            
             
             row <- rowcol[1, ]
             col <- rowcol[2, ]
